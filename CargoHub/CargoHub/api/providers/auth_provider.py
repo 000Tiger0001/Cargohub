@@ -94,15 +94,18 @@ USERS = [
 
 _users = None
 
+
 def init():
     global _users
     _users = USERS
+
 
 def get_user(api_key):
     for x in _users:
         if x["api_key"] == api_key:
             return x
     return None
+
 
 def has_access(user, path, method):
     access = user["endpoint_access"]
