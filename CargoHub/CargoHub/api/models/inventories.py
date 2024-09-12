@@ -6,27 +6,27 @@ INVENTORIES = []
 
 
 class Inventories(Base):
-    def __init__(self, root_path, is_debug=False):
+    def __init__(self, root_path, is_debug=False) -> None:
         self.data_path = root_path + "inventories.json"
         self.load(is_debug)
 
-    def get_inventories(self):
+    def get_inventories(self) -> list:
         return self.data
 
-    def get_inventory(self, inventory_id):
+    def get_inventory(self, inventory_id) -> dict or None:  # type: ignore
         for x in self.data:
             if x["id"] == inventory_id:
                 return x
         return None
 
-    def get_inventories_for_item(self, item_id):
+    def get_inventories_for_item(self, item_id) -> list:
         result = []
         for x in self.data:
             if x["item_id"] == item_id:
                 result.append(x)
         return result
 
-    def get_inventory_totals_for_item(self, item_id):
+    def get_inventory_totals_for_item(self, item_id) -> dict:
         result = {
             "total_expected": 0,
             "total_ordered": 0,
@@ -41,24 +41,24 @@ class Inventories(Base):
                 result["total_available"] += x["total_available"]
         return result
 
-    def add_inventory(self, inventory):
+    def add_inventory(self, inventory) -> None:
         inventory["created_at"] = self.get_timestamp()
         inventory["updated_at"] = self.get_timestamp()
         self.data.append(inventory)
 
-    def update_inventory(self, inventory_id, inventory):
+    def update_inventory(self, inventory_id, inventory) -> None:
         inventory["updated_at"] = self.get_timestamp()
         for i in range(len(self.data)):
             if self.data[i]["id"] == inventory_id:
                 self.data[i] = inventory
                 break
 
-    def remove_inventory(self, inventory_id):
+    def remove_inventory(self, inventory_id) -> None:
         for x in self.data:
             if x["id"] == inventory_id:
                 self.data.remove(x)
 
-    def load(self, is_debug):
+    def load(self, is_debug) -> None:
         if is_debug:
             self.data = INVENTORIES
         else:
@@ -66,7 +66,7 @@ class Inventories(Base):
             self.data = json.load(f)
             f.close()
 
-    def save(self):
+    def save(self) -> None:
         f = open(self.data_path, "w")
         json.dump(self.data, f)
         f.close()
