@@ -10,10 +10,12 @@ from models.suppliers import Suppliers
 from models.orders import Orders
 from models.clients import Clients
 from models.shipments import Shipments
+import os
 
-DEBUG = True
+DEBUG = False
 
-ROOT_PATH = "./data/"
+# was eerst: ROOT_PATH = "./data/"
+ROOT_PATH = os.path.abspath("CargoHub/CargoHub/data/") + "/"
 
 _warehouses = None
 _locations = None
