@@ -54,11 +54,13 @@ class Inventories(Base):
                 break
 
     def remove_inventory(self, inventory_id) -> None:
+        # removes a inventory
         for x in self.data:
             if x["id"] == inventory_id:
                 self.data.remove(x)
 
     def load(self, is_debug) -> None:
+        # sets self.data to INVENTORIES if debug is true or loads from file if debug is false
         if is_debug:
             self.data = INVENTORIES
         else:
@@ -67,6 +69,7 @@ class Inventories(Base):
             f.close()
 
     def save(self) -> None:
+        # saves self.data to file
         f = open(self.data_path, "w")
         json.dump(self.data, f)
         f.close()

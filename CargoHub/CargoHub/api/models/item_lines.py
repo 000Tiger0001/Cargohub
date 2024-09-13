@@ -32,11 +32,13 @@ class ItemLines(Base):
                 break
 
     def remove_item_line(self, item_line_id) -> None:
+        # removes a item_line
         for x in self.data:
             if x["id"] == item_line_id:
                 self.data.remove(x)
 
     def load(self, is_debug) -> None:
+        # sets self.data to ITEM_LINES if debug is true or loads from file if debug is false
         if is_debug:
             self.data = ITEM_LINES
         else:
@@ -45,6 +47,7 @@ class ItemLines(Base):
             f.close()
 
     def save(self) -> None:
+        # saves self.data to file
         f = open(self.data_path, "w")
         json.dump(self.data, f)
         f.close()
