@@ -12,6 +12,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
     def handle_get_version_1(self, path, user) -> None:
         # checks if the user has access to the requested endpoint, so here it checks if the user has access to the get endpoint
         if not auth_provider.has_access(user, path, "get"):
+            # if the user does not have access, it returns a 403 (Forbidden)
             self.send_response(403)
             self.end_headers()
             return
@@ -21,6 +22,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all warehouses and returns it to the user
                     warehouses = data_provider.fetch_warehouse_pool().get_warehouses()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -39,6 +41,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         warehouse_id = int(path[1])
                         locations = data_provider.fetch_location_pool(
                         ).get_locations_in_warehouse(warehouse_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -57,6 +60,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all locations and returns it to the user
                     locations = data_provider.fetch_location_pool().get_locations()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -65,6 +69,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # fetches a specific location with a specific id and returns it to the user
                     location_id = int(path[1])
                     location = data_provider.fetch_location_pool().get_location(location_id)
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -79,6 +84,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all transfers and returns it to the user
                     transfers = data_provider.fetch_transfer_pool().get_transfers()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -87,6 +93,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # fetches a specific transfer with a specific id and returns it to the user
                     transfer_id = int(path[1])
                     transfer = data_provider.fetch_transfer_pool().get_transfer(transfer_id)
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -96,6 +103,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         # fetches all items in a specific transfer and returns it to the user
                         transfer_id = int(path[1])
                         items = data_provider.fetch_transfer_pool().get_items_in_transfer(transfer_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -114,6 +122,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all items and returns it to the user
                     items = data_provider.fetch_item_pool().get_items()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -122,6 +131,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # fetches a specific item with a specific id and returns it to the user
                     item_id = path[1]
                     item = data_provider.fetch_item_pool().get_item(item_id)
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -131,6 +141,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         # fetches all inventories with a specific item and returns it to the user
                         item_id = path[1]
                         inventories = data_provider.fetch_inventory_pool().get_inventories_for_item(item_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -145,6 +156,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         # fetches all inventory totals with a specific item and returns it to the user
                         item_id = path[1]
                         totals = data_provider.fetch_inventory_pool().get_inventory_totals_for_item(item_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -165,6 +177,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all item lines and returns it to the user
                     item_lines = data_provider.fetch_item_line_pool().get_item_lines()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -173,6 +186,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # fetches a specific item line with a specific id and returns it to the user
                     item_line_id = int(path[1])
                     item_line = data_provider.fetch_item_line_pool().get_item_line(item_line_id)
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -182,6 +196,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         # fetches all items in a specific item line and returns it to the user
                         item_line_id = int(path[1])
                         items = data_provider.fetch_item_pool().get_items_for_item_line(item_line_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -200,6 +215,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all item groups and returns it to the user
                     item_groups = data_provider.fetch_item_group_pool().get_item_groups()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -208,6 +224,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # fetches a specific item group with a specific id and returns it to the user
                     item_group_id = int(path[1])
                     item_group = data_provider.fetch_item_group_pool().get_item_group(item_group_id)
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -217,6 +234,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         # fetches all items in a specific item group and returns it to the user
                         item_group_id = int(path[1])
                         items = data_provider.fetch_item_pool().get_items_for_item_group(item_group_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -235,6 +253,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all item types and returns it to the user
                     item_types = data_provider.fetch_item_type_pool().get_item_types()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -243,6 +262,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # fetches a specific item type with a specific id and returns it to the user
                     item_type_id = int(path[1])
                     item_type = data_provider.fetch_item_type_pool().get_item_type(item_type_id)
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -252,6 +272,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         # fetches all items in a specific item type and returns it to the user
                         item_type_id = int(path[1])
                         items = data_provider.fetch_item_pool().get_items_for_item_type(item_type_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -270,6 +291,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all inventories and returns it to the user
                     inventories = data_provider.fetch_inventory_pool().get_inventories()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -278,6 +300,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # fetches a specific inventory with a specific id and returns it to the user
                     inventory_id = int(path[1])
                     inventory = data_provider.fetch_inventory_pool().get_inventory(inventory_id)
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -292,6 +315,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all suppliers and returns it to the user
                     suppliers = data_provider.fetch_supplier_pool().get_suppliers()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -300,6 +324,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # fetches a specific supplier with a specific id and returns it to the user
                     supplier_id = int(path[1])
                     supplier = data_provider.fetch_supplier_pool().get_supplier(supplier_id)
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -309,6 +334,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         # fetches all items from a specific supplier and returns it to the user
                         supplier_id = int(path[1])
                         items = data_provider.fetch_item_pool().get_items_for_supplier(supplier_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -327,6 +353,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all orders and returns it to the user
                     orders = data_provider.fetch_order_pool().get_orders()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -335,6 +362,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # fetches a specific order with a specific id and returns it to the user
                     order_id = int(path[1])
                     order = data_provider.fetch_order_pool().get_order(order_id)
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -344,6 +372,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         # fetches all items in a specific order and returns it to the user
                         order_id = int(path[1])
                         items = data_provider.fetch_order_pool().get_items_in_order(order_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -362,6 +391,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all clients and returns it to the user
                     clients = data_provider.fetch_client_pool().get_clients()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -370,6 +400,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # fetches a specific client with a specific id and returns it to the user
                     client_id = int(path[1])
                     client = data_provider.fetch_client_pool().get_client(client_id)
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -379,6 +410,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         # fetches all orders from a specific client and returns it to the user
                         client_id = int(path[1])
                         orders = data_provider.fetch_order_pool().get_orders_for_client(client_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -397,6 +429,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 case 1:
                     # fetches all shipments and returns it to the user
                     shipments = data_provider.fetch_shipment_pool().get_shipments()
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -405,6 +438,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # fetches a specific shipment with a specific id and returns it to the user
                     shipment_id = int(path[1])
                     shipment = data_provider.fetch_shipment_pool().get_shipment(shipment_id)
+                    # if the request is successful, it returns a 200 (OK)
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
@@ -414,6 +448,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         # fetches all orders in a specific shipment and returns it to the user
                         shipment_id = int(path[1])
                         orders = data_provider.fetch_order_pool().get_orders_in_shipment(shipment_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -422,6 +457,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         # fetches all items in a specific shipment and returns it to the user
                         shipment_id = int(path[1])
                         items = data_provider.fetch_shipment_pool().get_items_in_shipment(shipment_id)
+                        # if the request is successful, it returns a 200 (OK)
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -465,66 +501,111 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
 
     def handle_post_version_1(self, path, user) -> None:
+        # checks if the user has access to the requested endpoint, so here it checks if the user has access to the post endpoint
         if not auth_provider.has_access(user, path, "post"):
+            # if the user does not have access, it returns a 403 (Forbidden)
             self.send_response(403)
             self.end_headers()
             return
         if path[0] == "warehouses":
+            # gets the content length from the headers
             content_length = int(self.headers["Content-Length"])
+            # reads the post data
             post_data = self.rfile.read(content_length)
+            # loads json data to python dictionary
             new_warehouse = json.loads(post_data.decode())
+            # adds the new warehouse to the list of all warehouses
             data_provider.fetch_warehouse_pool().add_warehouse(new_warehouse)
+            # saves the warehouses to the json file
             data_provider.fetch_warehouse_pool().save()
+            # if the request is successful, it returns a 201 (Created)
             self.send_response(201)
             self.end_headers()
         elif path[0] == "locations":
+            # gets the content length from the headers
             content_length = int(self.headers["Content-Length"])
+            # reads the post data
             post_data = self.rfile.read(content_length)
+            # loads json data to python dictionary
             new_location = json.loads(post_data.decode())
+            # adds the new location to the list of all locations
             data_provider.fetch_location_pool().add_location(new_location)
+            # saves the locations to the json file
             data_provider.fetch_location_pool().save()
+            # if the request is successful, it returns a 201 (Created)
             self.send_response(201)
             self.end_headers()
         elif path[0] == "transfers":
+            # gets the content length from the headers
             content_length = int(self.headers["Content-Length"])
+            # reads the post data
             post_data = self.rfile.read(content_length)
+            # loads json data to python dictionary
             new_transfer = json.loads(post_data.decode())
+            # adds the new transfer to the list of all transfers
             data_provider.fetch_transfer_pool().add_transfer(new_transfer)
+            # saves the transfers to the json file
             data_provider.fetch_transfer_pool().save()
+            # sends a notification to the notification processor and eventualy to the user
             notification_processor.push(
                 f"Scheduled batch transfer {new_transfer['id']}")
+            # if the request is successful, it returns a 201 (Created)
             self.send_response(201)
             self.end_headers()
         elif path[0] == "items":
+            # gets the content length from the headers
             content_length = int(self.headers["Content-Length"])
+            # reads the post data
             post_data = self.rfile.read(content_length)
+            # loads json data to python dictionary
             new_item = json.loads(post_data.decode())
+            # adds the new item to the list of all items
             data_provider.fetch_item_pool().add_item(new_item)
+            # saves the items to the json file
             data_provider.fetch_item_pool().save()
+            # if the request is successful, it returns a 201 (Created)
             self.send_response(201)
             self.end_headers()
         elif path[0] == "inventories":
+            # gets the content length from the headers
             content_length = int(self.headers["Content-Length"])
+            # reads the post data
             post_data = self.rfile.read(content_length)
+            # loads json data to python dictionary
             new_inventory = json.loads(post_data.decode())
+            # adds the new inventory to the list of all inventories
             data_provider.fetch_inventory_pool().add_inventory(new_inventory)
+            # saves the inventories to the json file
             data_provider.fetch_inventory_pool().save()
+            # if the request is successful, it returns a 201 (Created)
             self.send_response(201)
             self.end_headers()
         elif path[0] == "suppliers":
+            # gets the content length from the headers
             content_length = int(self.headers["Content-Length"])
+            # reads the post data
             post_data = self.rfile.read(content_length)
+            # loads json data to python dictionary
             new_supplier = json.loads(post_data.decode())
+            # adds the new supplier to the list of all suppliers
             data_provider.fetch_supplier_pool().add_supplier(new_supplier)
+            # saves the suppliers to the json file
             data_provider.fetch_supplier_pool().save()
+            # if the request is successful, it returns a 201 (Created)
             self.send_response(201)
             self.end_headers()
         elif path[0] == "orders":
+            # gets the content length from the headers
             content_length = int(self.headers["Content-Length"])
+            # reads the post data
             post_data = self.rfile.read(content_length)
+            # loads json data to python dictionary
             new_order = json.loads(post_data.decode())
+            # adds the new order to the list of all orders
             data_provider.fetch_order_pool().add_order(new_order)
+            # saves the orders to the json file
             data_provider.fetch_order_pool().save()
+            # if the request is successful, it returns a 201 (Created)
             self.send_response(201)
             self.end_headers()
         elif path[0] == "clients":
@@ -533,6 +614,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
             new_client = json.loads(post_data.decode())
             data_provider.fetch_client_pool().add_client(new_client)
             data_provider.fetch_client_pool().save()
+            # if the request is successful, it returns a 201 (Created)
             self.send_response(201)
             self.end_headers()
         elif path[0] == "shipments":
@@ -541,6 +623,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
             new_shipment = json.loads(post_data.decode())
             data_provider.fetch_shipment_pool().add_shipment(new_shipment)
             data_provider.fetch_shipment_pool().save()
+            # if the request is successful, it returns a 201 (Created)
             self.send_response(201)
             self.end_headers()
         else:
@@ -551,6 +634,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
         api_key = self.headers.get("API_KEY")
         user = auth_provider.get_user(api_key)
         if user == None:
+            # if the user is None (user doesn't exist), it returns a 401 (unauthorized)
             self.send_response(401)
             self.end_headers()
         else:
@@ -559,10 +643,12 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 if len(path) > 3 and path[1] == "api" and path[2] == "v1":
                     self.handle_post_version_1(path[3:], user)
             except Exception:
+                # if an exception occurs, it returns a 500 (Internal Server Error)
                 self.send_response(500)
                 self.end_headers()
 
     def handle_put_version_1(self, path, user) -> None:
+        # checks if the user has access to the requested endpoint, so here it checks if the user has access to the put endpoint
         if not auth_provider.has_access(user, path, "put"):
             self.send_response(403)
             self.end_headers()
@@ -792,6 +878,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
 
     def handle_delete_version_1(self, path, user) -> None:
+        # checks if the user has access to the requested endpoint, so here it checks if the user has access to the delete endpoint
         if not auth_provider.has_access(user, path, "delete"):
             self.send_response(403)
             self.end_headers()
