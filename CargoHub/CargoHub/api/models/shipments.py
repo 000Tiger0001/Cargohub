@@ -81,11 +81,13 @@ class Shipments(Base):
         self.update_shipment(shipment_id, shipment)
 
     def remove_shipment(self, shipment_id) -> None:
+        # removes a shipment
         for x in self.data:
             if x["id"] == shipment_id:
                 self.data.remove(x)
 
     def load(self, is_debug) -> None:
+        # sets self.data to SHIPMENTS if debug is true or loads from file if debug is false
         if is_debug:
             self.data = SHIPMENTS
         else:
@@ -94,6 +96,7 @@ class Shipments(Base):
             f.close()
 
     def save(self) -> None:
+        # saves self.data to file
         f = open(self.data_path, "w")
         json.dump(self.data, f)
         f.close()

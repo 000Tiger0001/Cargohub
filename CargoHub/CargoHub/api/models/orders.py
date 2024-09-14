@@ -109,11 +109,13 @@ class Orders(Base):
             self.update_order(x, order)
 
     def remove_order(self, order_id) -> None:
+        # removes a order
         for x in self.data:
             if x["id"] == order_id:
                 self.data.remove(x)
 
     def load(self, is_debug) -> None:
+        # sets self.data to ORDERS if debug is true or loads from file if debug is false
         if is_debug:
             self.data = ORDERS
         else:
@@ -122,6 +124,7 @@ class Orders(Base):
             f.close()
 
     def save(self) -> None:
+        # saves self.data to file
         f = open(self.data_path, "w")
         json.dump(self.data, f)
         f.close()

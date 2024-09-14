@@ -32,11 +32,13 @@ class ItemTypes(Base):
                 break
 
     def remove_item_type(self, item_type_id) -> None:
+        # removes a item_type
         for x in self.data:
             if x["id"] == item_type_id:
                 self.data.remove(x)
 
     def load(self, is_debug) -> None:
+        # sets self.data to ITEM_TYPES if debug is true or loads from file if debug is false
         if is_debug:
             self.data = ITEM_TYPES
         else:
@@ -45,6 +47,7 @@ class ItemTypes(Base):
             f.close()
 
     def save(self) -> None:
+        # saves self.data to file
         f = open(self.data_path, "w")
         json.dump(self.data, f)
         f.close()

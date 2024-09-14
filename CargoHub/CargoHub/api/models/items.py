@@ -60,11 +60,13 @@ class Items(Base):
                 break
 
     def remove_item(self, item_id) -> None:
+        # removes a item
         for x in self.data:
             if x["uid"] == item_id:
                 self.data.remove(x)
 
     def load(self, is_debug) -> None:
+        # sets self.data to ITEMS if debug is true or loads from file if debug is false
         if is_debug:
             self.data = ITEMS
         else:
@@ -73,6 +75,7 @@ class Items(Base):
             f.close()
 
     def save(self) -> None:
+        # saves self.data to file
         f = open(self.data_path, "w")
         json.dump(self.data, f)
         f.close()
