@@ -1,3 +1,4 @@
+import os
 from models.warehouses import Warehouses
 from models.locations import Locations
 from models.transfers import Transfers
@@ -13,7 +14,7 @@ from models.shipments import Shipments
 
 DEBUG = False
 
-ROOT_PATH = "./data/"
+ROOT_PATH = os.path.abspath("./CargoHub/data/") + "\\"
 
 _warehouses = None
 _locations = None
