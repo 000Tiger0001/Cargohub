@@ -15,7 +15,7 @@ import os
 DEBUG = False
 
 # was eerst: ROOT_PATH = "./data/"
-ROOT_PATH = os.path.abspath(os.getcwd()) + "/CargoHub/CargoHub/data/"
+ROOT_PATH = os.path.abspath(os.getcwd()) + "./data/"
 
 _warehouses = None
 _locations = None
