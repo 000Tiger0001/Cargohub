@@ -7,38 +7,38 @@ SHIPMENTS = []
 
 
 class Shipments(Base):
-    def __init__(self, root_path, is_debug=False):
+    def __init__(self, root_path, is_debug=False) -> None:
         self.data_path = root_path + "shipments.json"
         self.load(is_debug)
 
-    def get_shipments(self):
+    def get_shipments(self) -> list:
         return self.data
 
-    def get_shipment(self, shipment_id):
+    def get_shipment(self, shipment_id) -> dict or None:  # type: ignore
         for x in self.data:
             if x["id"] == shipment_id:
                 return x
         return None
 
-    def get_items_in_shipment(self, shipment_id):
+    def get_items_in_shipment(self, shipment_id) -> list or None:  # type: ignore
         for x in self.data:
             if x["id"] == shipment_id:
                 return x["items"]
         return None
 
-    def add_shipment(self, shipment):
+    def add_shipment(self, shipment) -> None:
         shipment["created_at"] = self.get_timestamp()
         shipment["updated_at"] = self.get_timestamp()
         self.data.append(shipment)
 
-    def update_shipment(self, shipment_id, shipment):
+    def update_shipment(self, shipment_id, shipment) -> None:
         shipment["updated_at"] = self.get_timestamp()
         for i in range(len(self.data)):
             if self.data[i]["id"] == shipment_id:
                 self.data[i] = shipment
                 break
 
-    def update_items_in_shipment(self, shipment_id, items):
+    def update_items_in_shipment(self, shipment_id, items) -> None:
         shipment = self.get_shipment(shipment_id)
         current = shipment["items"]
         for x in current:
@@ -48,7 +48,8 @@ class Shipments(Base):
                     found = True
                     break
             if not found:
-                inventories = data_provider.fetch_inventory_pool().get_inventories_for_item(x["item_id"])
+                inventories = data_provider.fetch_inventory_pool(
+                ).get_inventories_for_item(x["item_id"])
                 max_ordered = -1
                 max_inventory
                 for z in inventories:
@@ -56,12 +57,15 @@ class Shipments(Base):
                         max_ordered = z["total_ordered"]
                         max_inventory = z
                 max_inventory["total_ordered"] -= x["amount"]
-                max_inventory["total_expected"] = y["total_on_hand"] + y["total_ordered"]
-                data_provider.fetch_inventory_pool().update_inventory(max_inventory["id"], max_inventory)
+                max_inventory["total_expected"] = y["total_on_hand"] + \
+                    y["total_ordered"]
+                data_provider.fetch_inventory_pool().update_inventory(
+                    max_inventory["id"], max_inventory)
         for x in current:
             for y in items:
                 if x["item_id"] == y["item_id"]:
-                    inventories = data_provider.fetch_inventory_pool().get_inventories_for_item(x["item_id"])
+                    inventories = data_provider.fetch_inventory_pool(
+                    ).get_inventories_for_item(x["item_id"])
                     max_ordered = -1
                     max_inventory
                     for z in inventories:
@@ -69,17 +73,21 @@ class Shipments(Base):
                             max_ordered = z["total_ordered"]
                             max_inventory = z
                     max_inventory["total_ordered"] += y["amount"] - x["amount"]
-                    max_inventory["total_expected"] = y["total_on_hand"] + y["total_ordered"]
-                    data_provider.fetch_inventory_pool().update_inventory(max_inventory["id"], max_inventory)
+                    max_inventory["total_expected"] = y["total_on_hand"] + \
+                        y["total_ordered"]
+                    data_provider.fetch_inventory_pool().update_inventory(
+                        max_inventory["id"], max_inventory)
         shipment["items"] = items
         self.update_shipment(shipment_id, shipment)
 
-    def remove_shipment(self, shipment_id):
+    def remove_shipment(self, shipment_id) -> None:
+        # removes a shipment
         for x in self.data:
             if x["id"] == shipment_id:
                 self.data.remove(x)
 
-    def load(self, is_debug):
+    def load(self, is_debug) -> None:
+        # sets self.data to SHIPMENTS if debug is true or loads from file if debug is false
         if is_debug:
             self.data = SHIPMENTS
         else:
@@ -87,7 +95,8 @@ class Shipments(Base):
             self.data = json.load(f)
             f.close()
 
-    def save(self):
+    def save(self) -> None:
+        # saves self.data to file
         f = open(self.data_path, "w")
         json.dump(self.data, f)
         f.close()

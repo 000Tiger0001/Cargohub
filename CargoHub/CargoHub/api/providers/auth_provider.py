@@ -94,17 +94,23 @@ USERS = [
 
 _users = None
 
-def init():
+
+def init() -> None:
+    # initializes the users
     global _users
     _users = USERS
 
-def get_user(api_key):
+
+def get_user(api_key) -> bool or None:  # type: ignore
+    # returns user if api_key is valid, otherwise None
     for x in _users:
         if x["api_key"] == api_key:
             return x
     return None
 
-def has_access(user, path, method):
+
+def has_access(user, path, method) -> bool:
+    # checks first if user has full access, if not checks if user has access to the specific endpoint
     access = user["endpoint_access"]
     if access["full"]:
         return True

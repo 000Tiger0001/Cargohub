@@ -6,37 +6,39 @@ ITEM_TYPES = []
 
 
 class ItemTypes(Base):
-    def __init__(self, root_path, is_debug=False):
+    def __init__(self, root_path, is_debug=False) -> None:
         self.data_path = root_path + "item_types.json"
         self.load(is_debug)
 
-    def get_item_types(self):
+    def get_item_types(self) -> list:
         return self.data
 
-    def get_item_type(self, item_type_id):
+    def get_item_type(self, item_type_id) -> dict or None:  # type: ignore
         for x in self.data:
             if x["id"] == item_type_id:
                 return x
         return None
 
-    def add_item_type(self, item_type):
+    def add_item_type(self, item_type) -> None:
         item_type["created_at"] = self.get_timestamp()
         item_type["updated_at"] = self.get_timestamp()
         self.data.append(item_type)
 
-    def update_item_type(self, item_type_id, item_type):
+    def update_item_type(self, item_type_id, item_type) -> None:
         item_type["updated_at"] = self.get_timestamp()
         for i in range(len(self.data)):
             if self.data[i]["id"] == item_type_id:
                 self.data[i] = item_type
                 break
 
-    def remove_item_type(self, item_type_id):
+    def remove_item_type(self, item_type_id) -> None:
+        # removes a item_type
         for x in self.data:
             if x["id"] == item_type_id:
                 self.data.remove(x)
 
-    def load(self, is_debug):
+    def load(self, is_debug) -> None:
+        # sets self.data to ITEM_TYPES if debug is true or loads from file if debug is false
         if is_debug:
             self.data = ITEM_TYPES
         else:
@@ -44,7 +46,8 @@ class ItemTypes(Base):
             self.data = json.load(f)
             f.close()
 
-    def save(self):
+    def save(self) -> None:
+        # saves self.data to file
         f = open(self.data_path, "w")
         json.dump(self.data, f)
         f.close()

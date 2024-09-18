@@ -11,10 +11,12 @@ from models.suppliers import Suppliers
 from models.orders import Orders
 from models.clients import Clients
 from models.shipments import Shipments
+import os
 
 DEBUG = False
 
-ROOT_PATH = os.path.abspath("./CargoHub/data/") + "\\"
+# was eerst: ROOT_PATH = "./data/"
+ROOT_PATH = os.path.abspath(os.getcwd()) + "/CargoHub/CargoHub/data/"
 
 _warehouses = None
 _locations = None
@@ -30,7 +32,7 @@ _shipments = None
 _clients = None
 
 
-def init():
+def init() -> None:
     global _warehouses
     _warehouses = Warehouses(ROOT_PATH, DEBUG)
     global _locations
@@ -57,49 +59,49 @@ def init():
     _shipments = Shipments(ROOT_PATH, DEBUG)
 
 
-def fetch_warehouse_pool():
+def fetch_warehouse_pool() -> Warehouses:
     return _warehouses
 
 
-def fetch_location_pool():
+def fetch_location_pool() -> Locations:
     return _locations
 
 
-def fetch_transfer_pool():
+def fetch_transfer_pool() -> Transfers:
     return _transfers
 
 
-def fetch_item_pool():
+def fetch_item_pool() -> Items:
     return _items
 
 
-def fetch_item_line_pool():
+def fetch_item_line_pool() -> ItemLines:
     return _item_lines
 
 
-def fetch_item_group_pool():
+def fetch_item_group_pool() -> ItemGroups:
     return _item_groups
 
 
-def fetch_item_type_pool():
+def fetch_item_type_pool() -> ItemTypes:
     return _item_types
 
 
-def fetch_inventory_pool():
+def fetch_inventory_pool() -> Inventories:
     return _inventories
 
 
-def fetch_supplier_pool():
+def fetch_supplier_pool() -> Suppliers:
     return _suppliers
 
 
-def fetch_order_pool():
+def fetch_order_pool() -> Orders:
     return _orders
 
 
-def fetch_client_pool():
+def fetch_client_pool() -> Clients:
     return _clients
 
 
-def fetch_shipment_pool():
+def fetch_shipment_pool() -> Shipments:
     return _shipments
