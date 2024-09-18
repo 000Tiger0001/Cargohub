@@ -496,11 +496,10 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # calls the handle_get_version_1 function with the path and the user
                     # the part of the path passed to the function does not include 'api'and 'v1'
                     self.handle_get_version_1(path[3:], user)
-            except Exception as ex:
+            except Exception:
                 # if an exception occurs, it returns a 500 (Internal Server Error)
                 self.send_response(500)
                 self.end_headers()
-                print(ex.with_traceback())
 
     def handle_post_version_1(self, path, user) -> None:
         # checks if the user has access to the requested endpoint, so here it checks if the user has access to the post endpoint
