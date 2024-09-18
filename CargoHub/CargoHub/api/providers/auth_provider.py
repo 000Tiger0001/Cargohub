@@ -101,7 +101,7 @@ def init() -> None:
     _users = USERS
 
 
-def get_user(api_key) -> bool or None:  # type: ignore
+def get_user(api_key) -> dict or None:  # type: ignore
     # returns user if api_key is valid, otherwise None
     for x in _users:
         if x["api_key"] == api_key:
@@ -115,4 +115,4 @@ def has_access(user, path, method) -> bool:
     if access["full"]:
         return True
     else:
-        return access[path][method]
+        return access[path[0]][method]

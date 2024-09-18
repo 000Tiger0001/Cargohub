@@ -128,7 +128,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.end_headers()
                     self.wfile.write(json.dumps(items).encode("utf-8"))
                 case 2:
-                    # fetches a specific item with a specific id and returns it to the user
+                    # fetches a specific item with a specific id (in items cas the "uid") and returns it to the user
                     item_id = path[1]
                     item = data_provider.fetch_item_pool().get_item(item_id)
                     # if the request is successful, it returns a 200 (OK)
@@ -171,8 +171,6 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.end_headers()
         elif path[0] == "item_lines":
             paths = len(path)
-            print(paths, path)
-
             match paths:
                 case 1:
                     # fetches all item lines and returns it to the user
@@ -357,6 +355,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # writes the orders to json file
                     self.wfile.write(json.dumps(orders).encode("utf-8"))
                 case 2:
                     # fetches a specific order with a specific id and returns it to the user
@@ -366,6 +365,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # writes the specific order of the id to the json file
                     self.wfile.write(json.dumps(order).encode("utf-8"))
                 case 3:
                     if path[2] == "items":
@@ -376,6 +376,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # writes items from the specific order to the json file
                         self.wfile.write(json.dumps(items).encode("utf-8"))
                     else:
                         # if the third part of the path is not items, it returns a 404 (Page Not Found)
@@ -495,10 +496,11 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     # calls the handle_get_version_1 function with the path and the user
                     # the part of the path passed to the function does not include 'api'and 'v1'
                     self.handle_get_version_1(path[3:], user)
-            except Exception:
+            except Exception as ex:
                 # if an exception occurs, it returns a 500 (Internal Server Error)
                 self.send_response(500)
                 self.end_headers()
+                print(ex.with_traceback())
 
     def handle_post_version_1(self, path, user) -> None:
         # checks if the user has access to the requested endpoint, so here it checks if the user has access to the post endpoint
