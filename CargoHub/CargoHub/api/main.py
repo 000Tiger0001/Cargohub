@@ -479,10 +479,8 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         # gets the api_key from the headers
         api_key = self.headers.get("API_KEY")
-        print(api_key)
         # gets the user from the api_key
         user = auth_provider.get_user(api_key)
-        print(user)
         if user == None:
             # if the user is None (user doesn't exist), it returns a 401 (unauthorized)
             self.send_response(401)
