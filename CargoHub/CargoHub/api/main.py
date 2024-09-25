@@ -26,6 +26,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(warehouses).encode("utf-8"))
                 case 2:
                     # fetches a specific warehouse with a specific id and returns it to the user
@@ -34,6 +35,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(warehouse).encode("utf-8"))
                 case 3:
                     # fetches all locations in a specific warehouse and returns it to the user
@@ -45,6 +47,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(locations).encode("utf-8"))
                     else:
                         # if the last part of the path is not locations or it can not find the warehouse, it returns a 404 (Page Not Found)
@@ -64,6 +67,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(locations).encode("utf-8"))
                 case 2:
                     # fetches a specific location with a specific id and returns it to the user
@@ -73,6 +77,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(location).encode("utf-8"))
                 case _:
                     # if the path length is longer than 2 or shorter than 1, it returns a 404 (Page Not Found)
@@ -88,6 +93,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(transfers).encode("utf-8"))
                 case 2:
                     # fetches a specific transfer with a specific id and returns it to the user
@@ -97,6 +103,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(transfer).encode("utf-8"))
                 case 3:
                     if path[2] == "items":
@@ -107,6 +114,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(items).encode("utf-8"))
                     else:
                         # if the last part of the path is not items or it can not find the warehouse, it returns a 404 (Page Not Found)
@@ -126,6 +134,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(items).encode("utf-8"))
                 case 2:
                     # fetches a specific item with a specific id (in items cas the "uid") and returns it to the user
@@ -135,6 +144,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(item).encode("utf-8"))
                 case 3:
                     if path[2] == "inventory":
@@ -145,6 +155,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(
                             inventories).encode("utf-8"))
                     else:
@@ -160,6 +171,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(totals).encode("utf-8"))
                     else:
                         # if the third part of the path is not inventory and the fourth part is not totals, it returns a 404 (Page Not Found)
@@ -179,6 +191,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(item_lines).encode("utf-8"))
                 case 2:
                     # fetches a specific item line with a specific id and returns it to the user
@@ -188,6 +201,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(item_line).encode("utf-8"))
                 case 3:
                     if path[2] == "items":
@@ -198,6 +212,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(items).encode("utf-8"))
                     else:
                         # if the third part of the path is not items, it returns a 404 (Page Not Found)
@@ -217,6 +232,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(item_groups).encode("utf-8"))
                 case 2:
                     # fetches a specific item group with a specific id and returns it to the user
@@ -226,6 +242,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(item_group).encode("utf-8"))
                 case 3:
                     if path[2] == "items":
@@ -236,6 +253,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(items).encode("utf-8"))
                     else:
                         # if the third part of the path is not items, it returns a 404 (Page Not Found)
@@ -255,6 +273,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(item_types).encode("utf-8"))
                 case 2:
                     # fetches a specific item type with a specific id and returns it to the user
@@ -264,6 +283,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(item_type).encode("utf-8"))
                 case 3:
                     if path[2] == "items":
@@ -274,6 +294,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(items).encode("utf-8"))
                     else:
                         # if the third part of the path is not items, it returns a 404 (Page Not Found)
@@ -293,6 +314,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(inventories).encode("utf-8"))
                 case 2:
                     # fetches a specific inventory with a specific id and returns it to the user
@@ -302,6 +324,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(inventory).encode("utf-8"))
                 case _:
                     # if the path length is longer than 2 or shorter than 1, it returns a 404 (Page Not Found)
@@ -317,6 +340,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(suppliers).encode("utf-8"))
                 case 2:
                     # fetches a specific supplier with a specific id and returns it to the user
@@ -326,6 +350,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(supplier).encode("utf-8"))
                 case 3:
                     if path[2] == "items":
@@ -336,6 +361,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(items).encode("utf-8"))
                     else:
                         # if the third part of the path is not items, it returns a 404 (Page Not Found)
@@ -355,7 +381,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
-                    # writes the orders to json file
+                   # why is this in the get function?
                     self.wfile.write(json.dumps(orders).encode("utf-8"))
                 case 2:
                     # fetches a specific order with a specific id and returns it to the user
@@ -365,7 +391,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
-                    # writes the specific order of the id to the json file
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(order).encode("utf-8"))
                 case 3:
                     if path[2] == "items":
@@ -376,7 +402,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
-                        # writes items from the specific order to the json file
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(items).encode("utf-8"))
                     else:
                         # if the third part of the path is not items, it returns a 404 (Page Not Found)
@@ -396,6 +422,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(clients).encode("utf-8"))
                 case 2:
                     # fetches a specific client with a specific id and returns it to the user
@@ -405,6 +432,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(client).encode("utf-8"))
                 case 3:
                     if path[2] == "orders":
@@ -415,6 +443,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(orders).encode("utf-8"))
                     else:
                         # if the third part of the path is not orders, it returns a 404 (Page Not Found)
@@ -434,6 +463,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(shipments).encode("utf-8"))
                 case 2:
                     # fetches a specific shipment with a specific id and returns it to the user
@@ -443,6 +473,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-type", "application/json")
                     self.end_headers()
+                    # why is this in the get function?
                     self.wfile.write(json.dumps(shipment).encode("utf-8"))
                 case 3:
                     if path[2] == "orders":
@@ -453,6 +484,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(orders).encode("utf-8"))
                     elif path[2] == "items":
                         # fetches all items in a specific shipment and returns it to the user
@@ -462,6 +494,7 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
+                        # why is this in the get function?
                         self.wfile.write(json.dumps(items).encode("utf-8"))
                     else:
                         # if the third part of the path is not orders or items, it returns a 404 (Page Not Found)
