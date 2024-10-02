@@ -42,7 +42,7 @@ class Warehouses(Base):
                 self.data.remove(x)
 
     def load(self, is_debug) -> None:
-        # sets self.data to WARHOUSES if debug is true or loads from file if debug is false
+        # sets self.data to WAREHOUSES if debug is true or loads from file if debug is false
         if is_debug:
             self.data = WAREHOUSES
         else:
