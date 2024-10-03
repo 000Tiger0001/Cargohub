@@ -86,6 +86,35 @@ class TestWarehouses(unittest.TestCase):
         self.assertEqual(warehouses, [self.test_warehouse])
         self.assertEqual(self.warehouse.get_warehouses(), [])
     
+    def test_add_warehouse_with_duplicate_id(self) -> None:
+        test_warehouse_with_duplicate_id = {
+        "id": 1,
+        "code": "YQZZNL56",
+        "name": "Heemskerk cargo hub",
+        "address": "Karlijndreef 281",
+        "zip": "4002 AS",
+        "city": "Heemskerk",
+        "province": "Friesland",
+        "country": "NL",
+        "contact": {
+            "name": "Fem Keijzer",
+            "phone": "(078) 0013363",
+            "email": "blamore@example.net"
+        },
+        "created_at": "1983-04-13 04:59:55",
+        "updated_at": "2007-02-08 20:11:00"
+        }
+        self.warehouse.add_warehouse(self.test_warehouse)
+        self.assertEqual(self.warehouse.get_warehouses(), [self.test_warehouse])
+        self.warehouse.add_warehouse(test_warehouse_with_duplicate_id)
+        warehouses = self.warehouse.get_warehouses().copy()
+        if len(warehouses) > 0:
+            self.warehouse.remove_warehouse(1)
+            self.warehouse.remove_warehouse(1)
+        self.assertEqual(warehouses, [self.test_warehouse])
+        self.assertEqual(self.warehouse.get_warehouses(), [])
+        
+    
     def test_get_warehouse(self) -> None:
         self.warehouse.add_warehouse(self.test_warehouse)
         self.assertEqual(self.warehouse.get_warehouse(1), self.test_warehouse)
@@ -115,6 +144,52 @@ class TestWarehouses(unittest.TestCase):
         self.assertEqual(self.warehouse.get_warehouse(1), test_update_warehouse)
         self.assertNotEqual(self.warehouse.get_warehouse(1), self.test_warehouse)
         self.warehouse.remove_warehouse(1)
+    
+    def test_update_warehouse_to_duplicate_id(self) -> None:
+        test_add_second_warehouse = {
+        "id": 2,
+        "code": "GIOMNL90",
+        "name": "Petten longterm hub",
+        "address": "Owenweg 731",
+        "zip": "4615 RB",
+        "city": "Petten",
+        "province": "Noord-Holland",
+        "country": "NL",
+        "contact": {
+            "name": "Maud Adryaens",
+            "phone": "+31836 752702",
+            "email": "nickteunissen@example.com"
+        },
+        "created_at": "2008-02-22 19:55:39",
+        "updated_at": "2009-08-28 23:15:50"
+        }
+        test_update_warehouse_to_duplicate_id = {
+        "id": 1,
+        "code": "GIOMNL90",
+        "name": "Petten longterm hub",
+        "address": "Owenweg 731",
+        "zip": "4615 RB",
+        "city": "Petten",
+        "province": "Noord-Holland",
+        "country": "NL",
+        "contact": {
+            "name": "Maud Adryaens",
+            "phone": "+31836 752702",
+            "email": "nickteunissen@example.com"
+        },
+        "created_at": "2008-02-22 19:55:39",
+        "updated_at": "2009-08-28 23:15:50"
+        }
+        self.warehouse.add_warehouse(self.test_warehouse)
+        self.assertEqual(self.warehouse.get_warehouse(1), self.test_warehouse)
+        self.warehouse.add_warehouse(test_add_second_warehouse)
+        self.assertEqual(self.warehouse.get_warehouses(), [self.test_warehouse, test_add_second_warehouse])
+        self.warehouse.update_warehouse(2, test_update_warehouse_to_duplicate_id)
+        warehouses = self.warehouse.get_warehouses().copy()
+        if len(warehouses) > 0:
+            self.warehouse.remove_warehouse(1)
+            self.warehouse.remove_warehouse(2)
+        self.assertEqual(warehouses, [self.test_warehouse, test_add_second_warehouse])
 
 if __name__ == '__main__':
     unittest.main()
