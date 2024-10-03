@@ -79,6 +79,16 @@ class test_transfers(unittest.TestCase):
         self.transfers.remove_transfer(1)
         self.assertEqual(transfers, [])
         self.assertEqual(self.transfers.get_transfers(), [])
+    
+    def test_add_duplicate_transfer(self) -> None:
+        self.transfers.add_transfer(self.test_transfer)
+        self.assertEqual(self.transfers.get_transfers(), [self.test_transfer])
+        self.transfers.add_transfer(self.test_transfer)
+        transfers = self.transfers.get_transfers().copy()
+        self.transfers.remove_transfer(2)
+        self.transfers.remove_transfer(2)
+        self.assertEqual(transfers, [self.test_transfer])
+        self.assertEqual(self.transfers.get_transfers(), [])
         
     def test_add_transfer_with_duplicate_id(self) -> None:
         test_transfer = {
@@ -169,6 +179,12 @@ class test_transfers(unittest.TestCase):
         self.transfers.remove_transfer(2)
         self.transfers.remove_transfer(2)
         self.assertEqual(transfers, [self.test_transfer, test_transfer])
+        self.assertEqual(self.transfers.get_transfers(), [])
+    
+    def test_remove_transfer(self) -> None:
+        self.transfers.add_transfer(self.test_transfer)
+        self.assertEqual(self.transfers.get_transfers(), [self.test_transfer])
+        self.transfers.remove_transfer(2)
         self.assertEqual(self.transfers.get_transfers(), [])
 
 if __name__ == '__main__':

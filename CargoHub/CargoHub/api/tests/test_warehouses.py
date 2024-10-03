@@ -114,7 +114,6 @@ class TestWarehouses(unittest.TestCase):
         self.assertEqual(warehouses, [self.test_warehouse])
         self.assertEqual(self.warehouse.get_warehouses(), [])
         
-    
     def test_get_warehouse(self) -> None:
         self.warehouse.add_warehouse(self.test_warehouse)
         self.assertEqual(self.warehouse.get_warehouse(1), self.test_warehouse)
