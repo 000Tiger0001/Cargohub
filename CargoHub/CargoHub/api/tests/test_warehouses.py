@@ -33,32 +33,47 @@ class TestWarehouses(unittest.TestCase):
         
     def test_get_warehouses(self) -> None:
         self.assertEqual(self.warehouse.get_warehouses(), [])
-    
-    def test_remove_warehouse(self) -> None:
         self.warehouse.add_warehouse(self.test_warehouse)
         self.assertEqual(self.warehouse.get_warehouses(), [self.test_warehouse])
         self.warehouse.remove_warehouse(1)
         self.assertEqual(self.warehouse.get_warehouses(), [])
     
+    def test_remove_warehouse(self) -> None:
+        self.warehouse.add_warehouse(self.test_warehouse)
+        self.assertEqual(self.warehouse.get_warehouse(1), self.test_warehouse)
+        self.warehouse.remove_warehouse(1)
+        self.assertEqual(self.warehouse.get_warehouses(), [])
+    
     def test_add_warehouse_good(self) -> None:
+        self.assertEqual(self.warehouse.get_warehouses(), [])
         self.warehouse.add_warehouse(self.test_warehouse)
         self.assertEqual(self.warehouse.get_warehouses(), [self.test_warehouse])
         self.warehouse.remove_warehouse(1)
+        self.assertEqual(self.warehouse.get_warehouses(), [])
 
     
     def test_add_warehouse_bad(self) -> None:
-        test_item_group = {
-        "id": 0,
-        "name": "Electronics",
-        "description": "",
-        "created_at": "1998-05-15 19:52:53",
-        "updated_at": "2000-11-20 08:37:56"
+        test_client = {
+        "id": 1,
+        "name": "Raymond Inc",
+        "address": "1296 Daniel Road Apt. 349",
+        "city": "Pierceview",
+        "zip_code": "28301",
+        "province": "Colorado",
+        "country": "United States",
+        "contact_name": "Bryan Clark",
+        "contact_phone": "242.732.3483x2573",
+        "contact_email": "robertcharles@example.net",
+        "created_at": "2010-04-28 02:22:53",
+        "updated_at": "2022-02-09 20:22:35"
         }
-        self.warehouse.add_warehouse(test_item_group)
+        self.assertEqual(self.warehouse.get_warehouses(), [])
+        self.warehouse.add_warehouse(test_client)
         warehouses = self.warehouse.get_warehouses().copy()
         if len(warehouses) > 0:
-            self.warehouse.remove_warehouse(0)
+            self.warehouse.remove_warehouse(1)
         self.assertEqual(warehouses, [])
+        self.assertEqual(self.warehouse.get_warehouses(), [])
     
     def test_add_duplicate_warehouse(self) -> None:
         self.warehouse.add_warehouse(self.test_warehouse)
@@ -68,13 +83,15 @@ class TestWarehouses(unittest.TestCase):
         if len(warehouses) > 0:
             self.warehouse.remove_warehouse(1)
             self.warehouse.remove_warehouse(1)
-        self.assertEqual(self.warehouse.get_warehouses(), [self.test_warehouse])
+        self.assertEqual(warehouses, [self.test_warehouse])
+        self.assertEqual(self.warehouse.get_warehouses(), [])
     
     def test_get_warehouse(self) -> None:
         self.warehouse.add_warehouse(self.test_warehouse)
         self.assertEqual(self.warehouse.get_warehouse(1), self.test_warehouse)
         self.assertEqual(self.warehouse.get_warehouse(0), None)
         self.warehouse.remove_warehouse(1)
+        self.assertEqual(self.warehouse.get_warehouse(1), None)
     
     def test_update_warehouse(self) -> None:
         test_update_warehouse = {"id": 1,
@@ -96,6 +113,7 @@ class TestWarehouses(unittest.TestCase):
         self.assertEqual(self.warehouse.get_warehouse(1), self.test_warehouse)
         self.warehouse.update_warehouse(1, test_update_warehouse)
         self.assertEqual(self.warehouse.get_warehouse(1), test_update_warehouse)
+        self.assertNotEqual(self.warehouse.get_warehouse(1), self.test_warehouse)
         self.warehouse.remove_warehouse(1)
 
 if __name__ == '__main__':
