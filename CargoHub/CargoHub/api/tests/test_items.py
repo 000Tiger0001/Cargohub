@@ -13,7 +13,7 @@ class test_items(unittest.TestCase):
     def setUp(self) -> None:
         self.items = data_provider.Items("", True)
 
-    def test_get_transfers(self) -> None:
+    def test_get_items(self) -> None:
         self.assertEqual(self.items.get_items(), [])
 
 if __name__ == '__main__':

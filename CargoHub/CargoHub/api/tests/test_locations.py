@@ -22,7 +22,7 @@ class test_locations(unittest.TestCase):
                             "updated_at": "1992-05-15 03:21:32"
                                             }
 
-    def test_get_transfers(self) -> None:
+    def test_get_locations(self) -> None:
         self.assertEqual(self.locations.get_locations(), [])
         self.locations.add_location(self.location)
         self.assertEqual(self.locations.get_locations(), [self.location])

@@ -13,7 +13,7 @@ class test_clients(unittest.TestCase):
     def setUp(self) -> None:
         self.clients = data_provider.Clients("", True)
 
-    def test_get_transfers(self) -> None:
+    def test_get_clients(self) -> None:
         self.assertEqual(self.clients.get_clients(), [])
 
 if __name__ == '__main__':
