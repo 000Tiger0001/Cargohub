@@ -9,11 +9,12 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from providers import auth_provider
 from providers import data_provider
 
-def setUp(self) -> None:
-    self.item_types = data_provider.ItemTypes("", True)
+class test_item_types(unittest.TestCase):
+    def setUp(self) -> None:
+        self.item_types = data_provider.ItemTypes("", True)
 
-def test_get_transfers(self) -> None:
-        self.assertEqual(self.transfers.get_transfers(), [])
+    def test_get_transfers(self) -> None:
+        self.assertEqual(self.item_types.get_item_types(), [])
 
 if __name__ == '__main__':
     unittest.main()

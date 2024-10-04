@@ -9,11 +9,12 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from providers import auth_provider
 from providers import data_provider
 
-def setUp(self) -> None:
-    self.inventories = data_provider.Inventories("", True)
+class test_inventories(unittest.TestCase):
+    def setUp(self) -> None:
+        self.inventories = data_provider.Inventories("", True)
 
-def test_get_transfers(self) -> None:
-        self.assertEqual(self.transfers.get_transfers(), [])
+    def test_get_inventories(self) -> None:
+        self.assertEqual(self.inventories.get_inventories(), [])
 
 if __name__ == '__main__':
     unittest.main()
