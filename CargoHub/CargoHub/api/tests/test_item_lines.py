@@ -104,6 +104,38 @@ class test_item_lines(unittest.TestCase):
         self.assertEqual(self.item_lines.get_item_line(1), test_item_line)
         self.assertNotEqual(self.item_lines.get_item_line(1), self.item_line)
         self.item_lines.remove_item_line(1)
+        
+    def test_update_item_line_to_duplicate_id(self) -> None:
+        test_item_line = {
+        "id": 2,
+        "name": "Office Supplies",
+        "description": "",
+        "created_at": "2009-07-18 08:13:40",
+        "updated_at": "2020-01-12 14:32:49"
+        }
+        test_updated_item_line = {
+        "id": 1,
+        "name": "Office Supplies",
+        "description": "",
+        "created_at": "2009-07-18 08:13:40",
+        "updated_at": "2020-01-12 14:32:49"
+        }
+        self.item_lines.add_item_line(self.item_line)
+        self.assertEqual(self.item_lines.get_item_lines(), [self.item_line])
+        self.item_lines.add_item_line(test_item_line)
+        self.assertEqual(self.item_lines.get_item_lines(), [self.item_line, test_item_line])
+        self.item_lines.update_item_line(2, test_updated_item_line)
+        item_lines = self.item_lines.get_item_lines().copy()
+        self.item_lines.remove_item_line(1)
+        self.item_lines.remove_item_line(1)
+        self.assertEqual(item_lines, [self.item_line, test_item_line])
+        self.assertEqual(self.item_lines.get_item_lines(), [])
+    
+    def test_remove_item_line(self) -> None:
+        self.item_lines.add_item_line(self.item_line)
+        self.assertEqual(self.item_lines.get_item_lines(), [self.item_line])
+        self.item_lines.remove_item_line(1)
+        self.assertEqual(self.item_lines.get_item_lines(), [])
 
 if __name__ == '__main__':
     unittest.main()
