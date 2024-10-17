@@ -54,7 +54,6 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                         self.send_response(404)
                         self.end_headers()
                 case _:
-                    # if the path length is longer than 3 or shorter than 1, it returns a 404 (Page Not Found)
                     self.send_response(404)
                     self.end_headers()
         elif path[0] == "locations":
