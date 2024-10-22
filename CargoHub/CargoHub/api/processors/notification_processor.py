@@ -12,6 +12,9 @@ def push(notification) -> None:
 
 
 def send() -> None:
+    """
+    This sends the first notification from the queue to the console and then starts a timer to send the next notification
+    """
     if len(_queue) > 0:
         # deletes the first notification from the queue and saves it in a variable
         notification = _queue.pop(0)
