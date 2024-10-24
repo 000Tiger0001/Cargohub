@@ -15,6 +15,7 @@ public class Clients
 
     public Clients(string name, string address, string city, string zipCode, string province, string country, string contactName, string contactPhone, string contactemail, DateTime createdAt, DateTime updatedAt)
     {
+        Id = Guid.NewGuid();
         Name = name;
         Address = address;
         City = city;

@@ -15,6 +15,7 @@ public class Inventories
 
     public Inventories(Guid itemId, string description, string itemReference, List<Guid> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable, DateTime createdAt, DateTime updatedAt)
     {
+        Id = Guid.NewGuid();
         ItemId = itemId;
         Description = description;
         ItemReference = itemReference;
