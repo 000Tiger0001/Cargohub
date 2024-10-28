@@ -2,7 +2,7 @@ import requests
 import concurrent.futures
 import time
 
-# to run test: pytest test_perfomance.py -s
+# to run test: pytest test_response_time.py -s
 
 # Define the URLs for your API endpoints
 API_URLS = [
