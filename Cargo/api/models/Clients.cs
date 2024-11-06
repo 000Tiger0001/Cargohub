@@ -10,10 +10,10 @@ public class Clients
     public string ContactName { get; set; }
     public string ContactPhone { get; set; }
     public string ContactEmail { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Clients(string name, string address, string city, string zipCode, string province, string country, string contactName, string contactPhone, string contactemail, DateTime createdAt, DateTime updatedAt)
+    public Clients(string name, string address, string city, string zipCode, string province, string country, string contactName, string contactPhone, string contactemail)
     {
         Id = Guid.NewGuid();
         Name = name;
@@ -25,7 +25,5 @@ public class Clients
         ContactName = contactName;
         ContactPhone = contactPhone;
         ContactEmail = contactemail;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
     }
 }

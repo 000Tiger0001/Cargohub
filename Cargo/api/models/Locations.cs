@@ -4,16 +4,14 @@ public class Locations
     public Guid WarehouseId { get; set; }
     public string Code { get; set; }
     public string Name { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Locations(Guid warehouseId, string code, string name, DateTime createdAt, DateTime updatedAt)
+    public Locations(Guid warehouseId, string code, string name)
     {
         Id = Guid.NewGuid();
         WarehouseId = warehouseId;
         Code = code;
         Name = name;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
     }
 }

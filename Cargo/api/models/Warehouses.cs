@@ -9,10 +9,10 @@ public class Warehouses
     public string Province { get; set; }
     public string Country { get; set; }
     public Dictionary<string, string> Contact { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Warehouses(string code, string name, string address, string zip, string city, string province, string country, Dictionary<string, string> contact, DateTime createdAt, DateTime updatedAt)
+    public Warehouses(string code, string name, string address, string zip, string city, string province, string country, Dictionary<string, string> contact)
     {
         Code = code;
         Name = name;
@@ -22,7 +22,5 @@ public class Warehouses
         Province = province;
         Country = country;
         Contact = contact;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
     }
 }

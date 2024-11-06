@@ -12,10 +12,10 @@ public class Suppliers
     public string ContactName { get; set; }
     public string Phonenumber { get; set; }
     public string Reference { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Suppliers(string code, string name, string address, string addressExtra, string city, string zipCode, string province, string country, string contactName, string phonenumber, string reference, DateTime createdAt, DateTime updatedAt)
+    public Suppliers(string code, string name, string address, string addressExtra, string city, string zipCode, string province, string country, string contactName, string phonenumber, string reference)
     {
         Id = Guid.NewGuid();
         Code = code;
@@ -29,7 +29,5 @@ public class Suppliers
         ContactName = contactName;
         Phonenumber = phonenumber;
         Reference = reference;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
     }
 }

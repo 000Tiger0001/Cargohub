@@ -16,10 +16,10 @@ public class Items
     public Guid SupplierId { get; set; }
     public string SupplierCode { get; set; }
     public string SupplierPartNumber { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Items(string code, string description, string shortDescription, string upcCode, string modelNumber, string commodityCode, Guid itemLineId, Guid itemGroupId, Guid itemTypeId, int unitPurchaseQuantity, int unitOrderQuantity, int packOrderQuantity, Guid supplierId, string supplierCode, string supplierPartNumber, DateTime createdAt, DateTime updatedAt)
+    public Items(string code, string description, string shortDescription, string upcCode, string modelNumber, string commodityCode, Guid itemLineId, Guid itemGroupId, Guid itemTypeId, int unitPurchaseQuantity, int unitOrderQuantity, int packOrderQuantity, Guid supplierId, string supplierCode, string supplierPartNumber)
     {
         Id = Guid.NewGuid();
         Code = code;
@@ -37,7 +37,5 @@ public class Items
         SupplierId = supplierId;
         SupplierCode = supplierCode;
         SupplierPartNumber = supplierPartNumber;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
     }
 }

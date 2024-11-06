@@ -10,10 +10,10 @@ public class Inventories
     public int TotalOrdered { get; set; }
     public int TotalAllocated { get; set; }
     public int TotalAvailable { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Inventories(Guid itemId, string description, string itemReference, List<Guid> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable, DateTime createdAt, DateTime updatedAt)
+    public Inventories(Guid itemId, string description, string itemReference, List<Guid> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable)
     {
         Id = Guid.NewGuid();
         ItemId = itemId;
@@ -25,7 +25,5 @@ public class Inventories
         TotalOrdered = totalOrdered;
         TotalAllocated = totalAllocated;
         TotalAvailable = totalAvailable;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
     }
 }

@@ -16,11 +16,11 @@ public class Shipments
     public string TransferMode { get; set; }
     public int TotalPackageCount { get; set; }
     public double TotalPackageWeight { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
     public List<Guid> Items { get; set; }
 
-    public Shipments(List<Guid> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, DateTime createdAt, DateTime updatedAt, List<Guid> items)
+    public Shipments(List<Guid> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<Guid> items)
     {
         Id = Guid.NewGuid();
         OrderIds = orderIds;
@@ -38,8 +38,6 @@ public class Shipments
         TransferMode = transerMode;
         TotalPackageCount = totalPackageCount;
         TotalPackageWeight = totalPackageWeight;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
         Items = items;
     }
 }
