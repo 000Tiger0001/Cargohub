@@ -1,4 +1,4 @@
-public class Suppliers
+public class Suppliers : IHasId
 {
     public Guid Id { get; set; }
     public string Code { get; set; }

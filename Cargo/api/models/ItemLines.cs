@@ -1,4 +1,4 @@
-public class ItemLines
+public class ItemLines : IHasId
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

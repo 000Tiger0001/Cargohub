@@ -1,4 +1,4 @@
-public class Orders
+public class Orders : IHasId
 {
     public Guid Id { get; set; }
     public int SourceId { get; set; }

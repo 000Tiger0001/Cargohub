@@ -1,4 +1,4 @@
-public class Locations
+public class Locations : IHasId
 {
     public Guid Id { get; set; }
     public Guid WarehouseId { get; set; }

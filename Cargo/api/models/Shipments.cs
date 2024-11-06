@@ -1,4 +1,4 @@
-public class Shipments
+public class Shipments : IHasId
 {
     public Guid Id { get; set; }
     public List<Guid> OrderIds { get; set; }

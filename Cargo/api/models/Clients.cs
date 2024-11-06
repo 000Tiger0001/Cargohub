@@ -1,4 +1,4 @@
-public class Clients
+public class Clients : IHasId
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

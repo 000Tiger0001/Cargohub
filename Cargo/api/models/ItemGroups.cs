@@ -1,4 +1,4 @@
-public class ItemGroups
+public class ItemGroups : IHasId
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

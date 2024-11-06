@@ -1,4 +1,4 @@
-public class Warehouses
+public class Warehouses : IHasId
 {
     public Guid Id { get; set; }
     public string Code { get; set; }
@@ -14,6 +14,7 @@ public class Warehouses
 
     public Warehouses(string code, string name, string address, string zip, string city, string province, string country, Dictionary<string, string> contact)
     {
+        Id = Guid.NewGuid();
         Code = code;
         Name = name;
         Address = address;
