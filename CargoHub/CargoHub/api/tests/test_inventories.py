@@ -153,6 +153,116 @@ class test_inventories(unittest.TestCase):
         self.inventories.remove_inventory(1)
         self.assertEqual(inventories, [self.inventory_1])
         self.assertEqual(self.inventories.get_inventories(), [])
+    
+    def test_add_duplicate_inventory_id(self) -> None:
+        test_inventory = {
+                "id": 1,
+                "item_id": "P000002",
+                "description": "Focused transitional alliance",
+                "item_reference": "nyg48736S",
+                "locations": [
+                    19800,
+                    23653,
+                    3068,
+                    3334,
+                    20477,
+                    20524,
+                    17579,
+                    2271,
+                    2293,
+                    22717
+                ],
+                "total_on_hand": 194,
+                "total_expected": 0,
+                "total_ordered": 139,
+                "total_allocated": 0,
+                "total_available": 55,
+                "created_at": "2020-05-31 16:00:08",
+                "updated_at": "2020-11-08 12:49:21"
+            }
+        self.inventories.add_inventory(self.inventory_1)
+        self.assertEqual(self.inventories.get_inventories(), [self.inventory_1])
+        self.inventories.add_inventory(test_inventory)
+        item_groups = self.inventories.get_inventories().copy()
+        self.inventories.remove_inventory(1)
+        self.inventories.remove_inventory(1)
+        self.assertEqual(item_groups, [self.inventory_1])
+        self.assertEqual(self.inventories.get_inventories(), [])
+
+    def test_update_inventory_good(self) -> None:
+        test_inventory = {
+            "id": 1,
+            "item_id": "P000002",
+            "description": "Focused transitional alliance",
+            "item_reference": "nyg48736S",
+            "locations": [
+                19800,
+                23653,
+                3068,
+                3334,
+                20477,
+                20524,
+                17579,
+                2271,
+                2293,
+                22717
+            ],
+            "total_on_hand": 194,
+            "total_expected": 0,
+            "total_ordered": 139,
+            "total_allocated": 0,
+            "total_available": 55,
+            "created_at": "2020-05-31 16:00:08",
+            "updated_at": "2020-11-08 12:49:21"
+        }
+        self.inventories.add_inventory(self.inventory_1)
+        self.assertEqual(self.inventories.get_inventories(), [self.inventory_1])
+        self.inventories.update_inventory(1, test_inventory)
+        self.assertEqual(self.inventories.get_inventories(), [test_inventory])
+        self.assertNotEqual(self.inventories.get_inventories(), [self.inventory_1])
+        self.inventories.remove_inventory(1)
+    
+    def test_update_inventory_with_duplicate_id(self) -> None:
+        test_inventory = {
+            "id": 1,
+            "item_id": "P000002",
+            "description": "Focused transitional alliance",
+            "item_reference": "nyg48736S",
+            "locations": [
+                19800,
+                23653,
+                3068,
+                3334,
+                20477,
+                20524,
+                17579,
+                2271,
+                2293,
+                22717
+            ],
+            "total_on_hand": 194,
+            "total_expected": 0,
+            "total_ordered": 139,
+            "total_allocated": 0,
+            "total_available": 55,
+            "created_at": "2020-05-31 16:00:08",
+            "updated_at": "2020-11-08 12:49:21"
+        }
+        self.inventories.add_inventory(self.inventory_1)
+        self.assertEqual(self.inventories.get_inventories(), [self.inventory_1])
+        self.inventories.add_inventory(self.inventory_2)
+        self.assertEqual(self.inventories.get_inventories(), [self.inventory_1, self.inventory_2])
+        self.inventories.update_inventory(2, test_inventory)
+        inventories = self.inventories.get_inventories().copy()
+        self.inventories.remove_inventory(1)
+        self.inventories.remove_inventory(1)
+        self.assertEqual(self.inventories.get_inventories(), inventories)
+        
+    def test_remove_inventory_good(self) -> None:
+        self.inventories.add_inventory(self.inventory_1)
+        self.assertEqual(self.inventories.get_inventories(), [self.inventory_1])
+        self.inventories.remove_inventory(1)
+        self.assertEqual(self.inventories.get_inventories(), [])
 
 if __name__ == '__main__':
     unittest.main()
