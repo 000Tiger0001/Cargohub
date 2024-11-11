@@ -1,4 +1,4 @@
-public class Suppliers : IHasId
+public class Supplier : IHasId
 {
     public Guid Id { get; set; }
     public string Code { get; set; }
@@ -15,7 +15,7 @@ public class Suppliers : IHasId
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Suppliers(string code, string name, string address, string addressExtra, string city, string zipCode, string province, string country, string contactName, string phonenumber, string reference)
+    public Supplier(string code, string name, string address, string addressExtra, string city, string zipCode, string province, string country, string contactName, string phonenumber, string reference)
     {
         Id = Guid.NewGuid();
         Code = code;

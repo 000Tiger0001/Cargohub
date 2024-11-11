@@ -1,4 +1,4 @@
-public class Warehouses : IHasId
+public class Warehouse : IHasId
 {
     public Guid Id { get; set; }
     public string Code { get; set; }
@@ -12,7 +12,7 @@ public class Warehouses : IHasId
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Warehouses(string code, string name, string address, string zip, string city, string province, string country, Dictionary<string, string> contact)
+    public Warehouse(string code, string name, string address, string zip, string city, string province, string country, Dictionary<string, string> contact)
     {
         Id = Guid.NewGuid();
         Code = code;

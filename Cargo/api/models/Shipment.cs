@@ -1,4 +1,4 @@
-public class Shipments : IHasId
+public class Shipment : IHasId
 {
     public Guid Id { get; set; }
     public List<Guid> OrderIds { get; set; }
@@ -20,7 +20,7 @@ public class Shipments : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
     public List<Guid> Items { get; set; }
 
-    public Shipments(List<Guid> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<Guid> items)
+    public Shipment(List<Guid> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<Guid> items)
     {
         Id = Guid.NewGuid();
         OrderIds = orderIds;

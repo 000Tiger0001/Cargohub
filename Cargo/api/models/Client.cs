@@ -1,4 +1,4 @@
-public class Clients : IHasId
+public class Client : IHasId
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
@@ -13,7 +13,7 @@ public class Clients : IHasId
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Clients(string name, string address, string city, string zipCode, string province, string country, string contactName, string contactPhone, string contactemail)
+    public Client(string name, string address, string city, string zipCode, string province, string country, string contactName, string contactPhone, string contactemail)
     {
         Id = Guid.NewGuid();
         Name = name;

@@ -1,4 +1,4 @@
-public class Items : IHasId
+public class Item : IHasId
 {
     public Guid Id { get; set; }
     public string Code { get; set; }
@@ -19,7 +19,7 @@ public class Items : IHasId
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Items(string code, string description, string shortDescription, string upcCode, string modelNumber, string commodityCode, Guid itemLineId, Guid itemGroupId, Guid itemTypeId, int unitPurchaseQuantity, int unitOrderQuantity, int packOrderQuantity, Guid supplierId, string supplierCode, string supplierPartNumber)
+    public Item(string code, string description, string shortDescription, string upcCode, string modelNumber, string commodityCode, Guid itemLineId, Guid itemGroupId, Guid itemTypeId, int unitPurchaseQuantity, int unitOrderQuantity, int packOrderQuantity, Guid supplierId, string supplierCode, string supplierPartNumber)
     {
         Id = Guid.NewGuid();
         Code = code;

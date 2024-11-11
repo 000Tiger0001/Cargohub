@@ -1,4 +1,4 @@
-public class Inventories : IHasId
+public class Inventory : IHasId
 {
     public Guid Id { get; set; }
     public Guid ItemId { get; set; }
@@ -13,7 +13,7 @@ public class Inventories : IHasId
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Inventories(Guid itemId, string description, string itemReference, List<Guid> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable)
+    public Inventory(Guid itemId, string description, string itemReference, List<Guid> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable)
     {
         Id = Guid.NewGuid();
         ItemId = itemId;

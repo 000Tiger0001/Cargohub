@@ -1,4 +1,4 @@
-public class Orders : IHasId
+public class Order : IHasId
 {
     public Guid Id { get; set; }
     public int SourceId { get; set; }
@@ -20,9 +20,9 @@ public class Orders : IHasId
     public double TotalSurcharge { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    public List<Items> Items { get; set; }
+    public List<Item> Items { get; set; }
 
-    public Orders(int sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, Guid warehouseId, Guid shipTo, Guid billTo, Guid shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, List<Items> items)
+    public Order(int sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, Guid warehouseId, Guid shipTo, Guid billTo, Guid shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, List<Item> items)
     {
         Id = Guid.NewGuid();
         SourceId = sourceId;
