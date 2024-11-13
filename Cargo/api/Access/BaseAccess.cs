@@ -30,6 +30,11 @@ public abstract class BaseAccess<T> where T : class, IHasId
     public async Task<bool> Add(T entity)
     {
         if (entity == null) return false;
+        var existingEntity = await GetById(entity.Id);
+        if (existingEntity != null)
+        {
+            return false;
+        }
         await DB.AddAsync(entity);
         var changes = await _context.SaveChangesAsync();
         return changes > 0;
