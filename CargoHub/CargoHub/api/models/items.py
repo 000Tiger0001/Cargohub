@@ -60,7 +60,7 @@ class Items(Base):
                 break
 
     def remove_item(self, item_id) -> None:
-        # removes a item
+        # removes an item
         for x in self.data:
             if x["uid"] == item_id:
                 self.data.remove(x)
