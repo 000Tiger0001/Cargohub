@@ -20,7 +20,7 @@ builder.Services.AddTransient<TransferServices>();
 builder.Services.AddTransient<WarehouseServices>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 WebApplication app = builder.Build();
