@@ -22,4 +22,47 @@ public abstract class BaseAccess<T> where T : class, IHasId
     {
         return await DB.FirstOrDefaultAsync(entity => entity.Id == id);
     }
+
+
+    //When you call await _context.SaveChangesAsync(), it returns an integer 
+    //representing the number of rows affected by the changes you attempted to persist to the database.
+    
+    public async Task<bool> Add(T entity)
+    {
+        if (entity == null) return false;
+        await DB.AddAsync(entity);
+        var changes = await _context.SaveChangesAsync();
+        return changes > 0;
+    }
+
+    public async Task<bool> Update(T entity)
+    {
+        if (entity == null) return false;
+
+        // Check if the entity exists before updating
+        var existingEntity = await GetById(entity.Id);
+        if (existingEntity == null)
+        {
+            return false;
+        }
+        DB.Update(entity);
+        var changes = await _context.SaveChangesAsync();
+
+        // Return true if the entity was successfully updated
+        return changes > 0;
+    }
+
+    public async Task<bool> Delete(Guid id)
+    {
+        var entity = await GetById(id);
+        // Retrieve entity to ensure it exists
+        if (entity != null)
+        {
+            DB.Remove(entity);
+            var changes = await _context.SaveChangesAsync();
+            // Return true if the entity was successfully deleted
+            return changes > 0;
+        }
+        return false;
+    }
 }
