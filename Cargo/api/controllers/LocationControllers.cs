@@ -4,16 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 public class LocationControllers : Controller
 {
     LocationServices LS;
+    private readonly LocationAccess _locationAccess;
 
-    public LocationControllers(LocationServices ls)
+    public LocationControllers(LocationServices ls, LocationAccess locationAccess)
     {
         LS = ls;
+        _locationAccess = locationAccess;
     }
 
-    [HttpGet("/locations")]
+    [HttpGet("locations")]
     public async Task<IActionResult> GetAllLocations()
     {
-        List<Location> locations = await LS.GetLocations();
+        List<Location> locations = await _locationAccess.GetAll();
         return Ok(locations);
     }
 

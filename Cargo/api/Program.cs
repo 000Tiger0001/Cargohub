@@ -6,6 +6,7 @@ builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+
 builder.Services.AddTransient<ClientServices>();
 builder.Services.AddTransient<InventoryServices>();
 builder.Services.AddTransient<ItemGroupServices>();
@@ -19,8 +20,11 @@ builder.Services.AddTransient<SupplierServices>();
 builder.Services.AddTransient<TransferServices>();
 builder.Services.AddTransient<WarehouseServices>();
 
+builder.Services.AddTransient<LocationAccess>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 
 WebApplication app = builder.Build();
@@ -37,6 +41,6 @@ app.UseRouting();
 app.MapControllers();
 
 app.UseAuthorization();
-app.Urls.Add("http://localhost:6000");
+app.Urls.Add("http://localhost:3000");
 
 app.Run();
