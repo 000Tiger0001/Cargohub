@@ -20,6 +20,8 @@ public class Shipment : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
     public List<Guid> Items { get; set; }
 
+    public Shipment() { }
+    
     public Shipment(List<Guid> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<Guid> items)
     {
         Id = Guid.NewGuid();

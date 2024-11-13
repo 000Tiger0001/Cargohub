@@ -22,5 +22,6 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configure entities and relationships here if needed
+        base.OnModelCreating(modelBuilder);
     }
 }

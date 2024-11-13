@@ -7,6 +7,8 @@ public class Location : IHasId
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
+    public Location() { }
+    
     public Location(Guid warehouseId, string code, string name)
     {
         Id = Guid.NewGuid();

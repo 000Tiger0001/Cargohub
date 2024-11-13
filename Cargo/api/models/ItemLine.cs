@@ -6,6 +6,8 @@ public class ItemLine : IHasId
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
+    public ItemLine() { }
+    
     public ItemLine(string name, string description)
     {
         Id = Guid.NewGuid();

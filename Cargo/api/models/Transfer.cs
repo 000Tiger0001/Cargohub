@@ -9,6 +9,7 @@ public class Transfer : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
     public List<Item> Items { get; set; }
 
+    public Transfer() { }
     public Transfer(string reference, Guid transferFrom, Guid transferTo, string transferStatus, List<Item> items)
     {
         Id = Guid.NewGuid();

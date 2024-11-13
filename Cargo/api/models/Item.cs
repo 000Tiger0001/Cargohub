@@ -19,6 +19,8 @@ public class Item : IHasId
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
+    public Item() { }
+
     public Item(string code, string description, string shortDescription, string upcCode, string modelNumber, string commodityCode, Guid itemLineId, Guid itemGroupId, Guid itemTypeId, int unitPurchaseQuantity, int unitOrderQuantity, int packOrderQuantity, Guid supplierId, string supplierCode, string supplierPartNumber)
     {
         Id = Guid.NewGuid();

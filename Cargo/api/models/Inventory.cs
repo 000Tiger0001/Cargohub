@@ -13,6 +13,8 @@ public class Inventory : IHasId
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
+    public Inventory() { }
+
     public Inventory(Guid itemId, string description, string itemReference, List<Guid> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable)
     {
         Id = Guid.NewGuid();

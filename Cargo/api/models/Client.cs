@@ -13,6 +13,8 @@ public class Client : IHasId
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
+    public Client() { }
+
     public Client(string name, string address, string city, string zipCode, string province, string country, string contactName, string contactPhone, string contactemail)
     {
         Id = Guid.NewGuid();

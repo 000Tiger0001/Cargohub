@@ -8,11 +8,14 @@ public class Warehouse : IHasId
     public string City { get; set; }
     public string Province { get; set; }
     public string Country { get; set; }
-    public Dictionary<string, string> Contact { get; set; }
+    public string ContactName { get; set; }
+    public string ContactPhone { get; set; }
+    public string ContactEmail { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Warehouse(string code, string name, string address, string zip, string city, string province, string country, Dictionary<string, string> contact)
+    public Warehouse() { }
+    public Warehouse(string code, string name, string address, string zip, string city, string province, string country, string contactName, string contactPhone, string contactEmail)
     {
         Id = Guid.NewGuid();
         Code = code;
@@ -22,6 +25,8 @@ public class Warehouse : IHasId
         City = city;
         Province = province;
         Country = country;
-        Contact = contact;
+        ContactName = contactName;
+        ContactPhone = contactPhone;
+        ContactEmail = contactEmail;
     }
 }

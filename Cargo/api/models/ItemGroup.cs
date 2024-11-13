@@ -6,6 +6,8 @@ public class ItemGroup : IHasId
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
+    public ItemGroup() { }
+    
     public ItemGroup(string name, string description)
     {
         Id = Guid.NewGuid();
