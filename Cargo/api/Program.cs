@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using Newtonsoft.Json;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,7 @@ builder.Services.AddTransient<TransferServices>();
 builder.Services.AddTransient<WarehouseServices>();
 
 builder.Services.AddTransient<LocationAccess>();
+builder.Services.AddTransient<ClientAccess>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -44,6 +46,8 @@ app.UseAuthorization();
 app.Urls.Add("http://localhost:3000");
 
 
+using var scope = app.Services.CreateScope();
+var clientAccess = scope.ServiceProvider.GetRequiredService<ClientAccess>();
 
 string folderPath = "data";
 string path = $"{folderPath}/clients.json";
@@ -51,20 +55,38 @@ string path = $"{folderPath}/clients.json";
 // Ensure the folder exists, create otherwise
 if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
+
 StreamReader reader;
-List<Client> items = [];
+List<Client> items = new();
 
 if (File.Exists(path))
 {
     reader = new(path);
     string content = await reader.ReadToEndAsync();
+    // Optionally decode any Unicode escape sequences if required
+    content = DecodeUnicodeEscapeSequences(content);
     items = JsonConvert.DeserializeObject<List<Client>>(content) ?? new List<Client>();
     reader.Close();
     reader.Dispose();
 }
-Console.WriteLine(items);
+
 foreach (var item in items)
 {
-    Console.WriteLine(item.Name);
+    Console.WriteLine($"Client ID: {item.Id}, Name: {item.Name}");
+    clientAccess.Add(item);
+    if (clientAccess.GetById(item.Id) == null)
+    {
+        Console.WriteLine(item.Id);
+        break;
+    } 
 }
+
+
+static string DecodeUnicodeEscapeSequences(string input)
+{
+    byte[] byteArray = Encoding.Default.GetBytes(input);
+    return Encoding.UTF8.GetString(byteArray);
+}
+
+
 app.Run();
