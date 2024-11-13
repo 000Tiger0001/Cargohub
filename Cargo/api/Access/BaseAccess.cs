@@ -17,4 +17,9 @@ public abstract class BaseAccess<T> where T : class, IHasId
     {
         return await DB.ToListAsync();
     }
+
+    public async Task<T> GetById(Guid id)
+    {
+        return await DB.FirstOrDefaultAsync(entity => entity.Id == id);
+    }
 }

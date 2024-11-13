@@ -19,10 +19,10 @@ public class LocationControllers : Controller
         return Ok(locations);
     }
 
-    [HttpGet("/location")]
+    [HttpGet("location")]
     public async Task<IActionResult> GetLocation([FromQuery] Guid locationId)
     {
-        Location location = await LS.GetLocation(locationId);
+        Location location = await _locationAccess.GetById(locationId);
         if (location is not null) return Ok(location);
         return BadRequest("There is no location with the given id. ");
     }
