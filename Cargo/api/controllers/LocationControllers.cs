@@ -30,7 +30,7 @@ public class LocationControllers : Controller
     {
         List<Location> locations = await LS.GetLocationsInWarehouse(warehouseId);
         if (locations.Count > 0) return Ok(locations);
-        return BadRequest("There are locations with the given warehouse id. ");
+        return BadRequest("There are no locations with the given warehouse id. ");
     }
 
     [HttpPost("/add-location")]
