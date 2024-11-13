@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
@@ -15,6 +18,10 @@ builder.Services.AddTransient<ShipmentServices>();
 builder.Services.AddTransient<SupplierServices>();
 builder.Services.AddTransient<TransferServices>();
 builder.Services.AddTransient<WarehouseServices>();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 WebApplication app = builder.Build();
 
