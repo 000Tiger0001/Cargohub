@@ -1,6 +1,6 @@
-public class Client : IHasId
+public class Client
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public string Address { get; set; }
     public string City { get; set; }
@@ -15,9 +15,9 @@ public class Client : IHasId
 
     public Client() { }
 
-    public Client(string name, string address, string city, string zipCode, string province, string country, string contactName, string contactPhone, string contactemail)
+    public Client(int id, string name, string address, string city, string zipCode, string province, string country, string contactName, string contactPhone, string contactemail)
     {
-        Id = Guid.NewGuid();
+        Id = id;
         Name = name;
         Address = address;
         City = city;

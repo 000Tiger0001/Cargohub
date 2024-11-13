@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-
+using Newtonsoft.Json;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
@@ -43,4 +43,28 @@ app.MapControllers();
 app.UseAuthorization();
 app.Urls.Add("http://localhost:3000");
 
+
+
+string folderPath = "data";
+string path = $"{folderPath}/clients.json";
+
+// Ensure the folder exists, create otherwise
+if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+
+StreamReader reader;
+List<Client> items = [];
+
+if (File.Exists(path))
+{
+    reader = new(path);
+    string content = await reader.ReadToEndAsync();
+    items = JsonConvert.DeserializeObject<List<Client>>(content) ?? new List<Client>();
+    reader.Close();
+    reader.Dispose();
+}
+Console.WriteLine(items);
+foreach (var item in items)
+{
+    Console.WriteLine(item.Name);
+}
 app.Run();
