@@ -28,7 +28,7 @@ else
 app.UseStaticFiles();
 app.UseRouting();
 app.MapControllers();
-
+//app.UseSession();
 app.UseAuthorization();
 app.Urls.Add("http://localhost:6000");
 

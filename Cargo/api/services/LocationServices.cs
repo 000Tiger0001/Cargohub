@@ -25,7 +25,7 @@ public class LocationServices
         List<Location> locations = await AccessJson.ReadJson<Location>();
         Location doubleLocation = locations.FirstOrDefault(l => l.Code == location.Code && l.Name == location.Name && l.WarehouseId == location.WarehouseId)!;
         if (doubleLocation is not null) return false;
-        locations.Add(location);
+        AccessJson.WriteJson(location);
         return true;
     }
 
@@ -34,7 +34,9 @@ public class LocationServices
         List<Location> locations = await AccessJson.ReadJson<Location>();
         int foundLocationIndex = locations.FindIndex(l => l.Id == location.Id);
         if (foundLocationIndex == -1) return false;
+        location.UpdatedAt = DateTime.Now;
         locations[foundLocationIndex] = location;
+        AccessJson.WriteJsonList(locations);
         return true;
     }
 
@@ -44,6 +46,7 @@ public class LocationServices
         Location foundLocation = locations.FirstOrDefault(l => l.Id == locationId)!;
         if (foundLocation is null) return false;
         locations.Remove(foundLocation);
+        AccessJson.WriteJsonList(locations);
         return true;
     }
 }
