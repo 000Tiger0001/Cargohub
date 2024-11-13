@@ -1,6 +1,6 @@
 public class Warehouse : IHasId
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Code { get; set; }
     public string Name { get; set; }
     public string Address { get; set; }
@@ -15,9 +15,9 @@ public class Warehouse : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public Warehouse() { }
-    public Warehouse(string code, string name, string address, string zip, string city, string province, string country, string contactName, string contactPhone, string contactEmail)
+    public Warehouse(int id, string code, string name, string address, string zip, string city, string province, string country, string contactName, string contactPhone, string contactEmail)
     {
-        Id = Guid.NewGuid();
+        Id = id;
         Code = code;
         Name = name;
         Address = address;

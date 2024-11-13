@@ -18,7 +18,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
         return await DB.ToListAsync();
     }
 
-    public async Task<T> GetById(Guid id)
+    public async Task<T> GetById(int id)
     {
         return await DB.FirstOrDefaultAsync(entity => entity.Id == id);
     }
@@ -57,7 +57,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
         return changes > 0;
     }
 
-    public async Task<bool> Delete(Guid id)
+    public async Task<bool> Delete(int id)
     {
         var entity = await GetById(id);
         // Retrieve entity to ensure it exists

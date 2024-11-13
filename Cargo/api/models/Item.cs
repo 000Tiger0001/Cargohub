@@ -1,19 +1,19 @@
 public class Item : IHasId
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Code { get; set; }
     public string Description { get; set; }
     public string ShortDescription { get; set; }
     public string UpcCode { get; set; }
     public string ModelNumber { get; set; }
     public string CommodityCode { get; set; }
-    public Guid ItemLineId { get; set; }
-    public Guid ItemGroupId { get; set; }
-    public Guid ItemTypeId { get; set; }
+    public int ItemLineId { get; set; }
+    public int ItemGroupId { get; set; }
+    public int ItemTypeId { get; set; }
     public int UnitPurchaseQuantity { get; set; }
     public int UnitOrderQuantity { get; set; }
     public int PackOrderQuantity { get; set; }
-    public Guid SupplierId { get; set; }
+    public int SupplierId { get; set; }
     public string SupplierCode { get; set; }
     public string SupplierPartNumber { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
@@ -21,9 +21,9 @@ public class Item : IHasId
 
     public Item() { }
 
-    public Item(string code, string description, string shortDescription, string upcCode, string modelNumber, string commodityCode, Guid itemLineId, Guid itemGroupId, Guid itemTypeId, int unitPurchaseQuantity, int unitOrderQuantity, int packOrderQuantity, Guid supplierId, string supplierCode, string supplierPartNumber)
+    public Item(int id, string code, string description, string shortDescription, string upcCode, string modelNumber, string commodityCode, int itemLineId, int itemGroupId, int itemTypeId, int unitPurchaseQuantity, int unitOrderQuantity, int packOrderQuantity, int supplierId, string supplierCode, string supplierPartNumber)
     {
-        Id = Guid.NewGuid();
+        Id = id;
         Code = code;
         Description = description;
         ShortDescription = shortDescription;

@@ -1,7 +1,7 @@
 public class Shipment : IHasId
 {
-    public Guid Id { get; set; }
-    public List<Guid> OrderIds { get; set; }
+    public int Id { get; set; }
+    public List<int> OrderIds { get; set; }
     public int SourceId { get; set; }
     public DateTime OrderDate { get; set; }
     public DateTime RequestDate { get; set; }
@@ -18,13 +18,13 @@ public class Shipment : IHasId
     public double TotalPackageWeight { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    public List<Guid> Items { get; set; }
+    public List<int> Items { get; set; }
 
     public Shipment() { }
     
-    public Shipment(List<Guid> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<Guid> items)
+    public Shipment(int id, List<int> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<int> items)
     {
-        Id = Guid.NewGuid();
+        Id = id;
         OrderIds = orderIds;
         SourceId = sourceId;
         OrderDate = orderDate;

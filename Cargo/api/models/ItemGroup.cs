@@ -1,6 +1,6 @@
 public class ItemGroup : IHasId
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
@@ -8,9 +8,9 @@ public class ItemGroup : IHasId
 
     public ItemGroup() { }
     
-    public ItemGroup(string name, string description)
+    public ItemGroup(int id,string name, string description)
     {
-        Id = Guid.NewGuid();
+        Id = id;
         Name = name;
         Description = description;
     }

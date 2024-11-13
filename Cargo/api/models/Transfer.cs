@@ -1,18 +1,18 @@
 public class Transfer : IHasId
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Reference { get; set; }
-    public Guid TransferFrom { get; set; }
-    public Guid TransferTo { get; set; }
+    public int TransferFrom { get; set; }
+    public int TransferTo { get; set; }
     public string TransferStatus { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
     public List<Item> Items { get; set; }
 
     public Transfer() { }
-    public Transfer(string reference, Guid transferFrom, Guid transferTo, string transferStatus, List<Item> items)
+    public Transfer(int id, string reference, int transferFrom, int transferTo, string transferStatus, List<Item> items)
     {
-        Id = Guid.NewGuid();
+        Id = id;
         Reference = reference;
         TransferFrom = transferFrom;
         TransferTo = transferTo;

@@ -1,6 +1,6 @@
 public class LocationServices
 {
-    public async Task<List<Location>> GetLocationsInWarehouse(Guid warehouseId)
+    public async Task<List<Location>> GetLocationsInWarehouse(int warehouseId)
     {
         List<Location> locations = await AccessJson.ReadJson<Location>();
         List<Location> locationsInWarehouse = locations.FindAll(l => l.WarehouseId == warehouseId);
@@ -25,7 +25,7 @@ public class LocationServices
         return true;
     }
 
-    public async Task<bool> RemoveLocation(Guid locationId)
+    public async Task<bool> RemoveLocation(int locationId)
     {
         List<Location> locations = await AccessJson.ReadJson<Location>();
         Location foundLocation = locations.FirstOrDefault(l => l.Id == locationId)!;
