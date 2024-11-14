@@ -23,14 +23,20 @@ builder.Services.AddTransient<WarehouseServices>();
 
 // Access to DB
 builder.Services.AddTransient<ClientAccess>();
-builder.Services.AddTransient<LocationAccess>();
 builder.Services.AddTransient<InventoryAccess>();
 builder.Services.AddTransient<ItemAccess>();
+builder.Services.AddTransient<ItemGroupAccess>();
+builder.Services.AddTransient<ItemLineAccess>();
+builder.Services.AddTransient<ItemTypeAccess>();
+builder.Services.AddTransient<LocationAccess>();
+builder.Services.AddTransient<OrderAccess>();
+builder.Services.AddTransient<ShipmentAccess>();
+builder.Services.AddTransient<SupplierAccess>();
+builder.Services.AddTransient<TransferAccess>();
+builder.Services.AddTransient<WarehouseAccess>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
 
 WebApplication app = builder.Build();
 
