@@ -10,14 +10,14 @@ public class LocationControllers : Controller
         LS = ls;
     }
 
-    [HttpGet("/locations")]
+    [HttpGet("locations")]
     public async Task<IActionResult> GetAllLocations()
     {
         List<Location> locations = await LS.GetLocations();
         return Ok(locations);
     }
 
-    [HttpGet("/location")]
+    [HttpGet("location")]
     public async Task<IActionResult> GetLocation([FromQuery] Guid locationId)
     {
         Location location = await LS.GetLocation(locationId);
@@ -25,7 +25,7 @@ public class LocationControllers : Controller
         return BadRequest("There is no location with the given id. ");
     }
 
-    [HttpGet("/locations-from-warehouse")]
+    [HttpGet("locations-from-warehouse")]
     public async Task<IActionResult> GetLocationsFromWarehouse([FromQuery] Guid warehouseId)
     {
         List<Location> locations = await LS.GetLocationsInWarehouse(warehouseId);
@@ -33,7 +33,7 @@ public class LocationControllers : Controller
         return BadRequest("There are no locations with the given warehouse id. ");
     }
 
-    [HttpPost("/add-location")]
+    [HttpPost("add-location")]
     public async Task<IActionResult> AddLocation([FromBody] Location location)
     {
         location.Id = Guid.NewGuid();
@@ -44,7 +44,7 @@ public class LocationControllers : Controller
         return Ok("Location added. ");
     }
 
-    [HttpPut("/update-location")]
+    [HttpPut("update-location")]
     public async Task<IActionResult> UpdateLocation([FromBody] Location location)
     {
         if (location.Id == Guid.Empty) return BadRequest("Location doesn't have an id. ");
@@ -54,7 +54,7 @@ public class LocationControllers : Controller
         return Ok("Location updated. ");
     }
 
-    [HttpDelete("/remove-location")]
+    [HttpDelete("remove-location")]
     public async Task<IActionResult> RemoveLocation([FromQuery] Guid locationId)
     {
         if (locationId == Guid.Empty) return BadRequest("Cannot remove location with empty id. ");

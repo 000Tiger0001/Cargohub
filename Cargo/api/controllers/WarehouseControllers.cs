@@ -10,14 +10,14 @@ public class WarehouseControllers : Controller
         WS = ws;
     }
 
-    [HttpGet("/warehouses")]
+    [HttpGet("warehouses")]
     public async Task<IActionResult> GetWarehouses()
     {
         List<Warehouse> warehouses = await WS.GetWarehouses();
         return Ok(warehouses);
     }
 
-    [HttpGet("/warehouse")]
+    [HttpGet("warehouse")]
     public async Task<IActionResult> GetWarehouse([FromQuery] Guid warehouseId)
     {
         Warehouse warehouse = await WS.GetWarehouse(warehouseId);
@@ -25,7 +25,7 @@ public class WarehouseControllers : Controller
         return BadRequest("No warehouse found with this id. ");
     }
 
-    [HttpPost("/add-warehouse")]
+    [HttpPost("add-warehouse")]
     public async Task<IActionResult> AddWarehouse([FromBody] Warehouse warehouse)
     {
         if (warehouse is null || warehouse.Code == default(string) || warehouse.Name == default(string) || warehouse.Address == default(string) || warehouse.Zip == default(string) || warehouse.City == default(string) || warehouse.Province == default(string) || warehouse.Country == default(string)) return BadRequest("Not enough info given");
@@ -35,7 +35,7 @@ public class WarehouseControllers : Controller
         return Ok("Warehouse added. ");
     }
 
-    [HttpPut("/update-warehouse")]
+    [HttpPut("update-warehouse")]
     public async Task<IActionResult> UpdateWarehouse([FromBody] Warehouse warehouse)
     {
         if (warehouse is null || warehouse.Id == Guid.Empty) return BadRequest("Warehouse doesn't have an id. ");
@@ -45,7 +45,7 @@ public class WarehouseControllers : Controller
         return Ok("Warehouse updated. ");
     }
 
-    [HttpDelete("/remove-warehouse")]
+    [HttpDelete("remove-warehouse")]
     public async Task<IActionResult> RemoveWarehouse([FromQuery] Guid warehouseId)
     {
         if (warehouseId == Guid.Empty) return BadRequest("Cannot remove warehouse with empty id. ");

@@ -10,14 +10,14 @@ public class InventoryControllers : Controller
         IS = invs;
     }
 
-    [HttpGet("/inventories")]
+    [HttpGet("inventories")]
     public async Task<IActionResult> GetInventories()
     {
         List<Inventory> inventories = await IS.GetInventories();
         return Ok(inventories);
     }
 
-    [HttpGet("/inventory")]
+    [HttpGet("inventory")]
     public async Task<IActionResult> GetInventory([FromQuery] Guid inventoryId)
     {
         if (inventoryId == Guid.Empty) return BadRequest("Cannot proccess empty id. ");
@@ -26,7 +26,7 @@ public class InventoryControllers : Controller
         return Ok(inventory);
     }
 
-    [HttpGet("/get-inventories-for-item")]
+    [HttpGet("get-inventories-for-item")]
     public async Task<IActionResult> GetInventoriesforItem([FromQuery] Guid itemId)
     {
         if (itemId == Guid.Empty) return BadRequest("Cannot proccess empty id. ");
@@ -35,7 +35,7 @@ public class InventoryControllers : Controller
         return Ok(inventories);
     }
 
-    [HttpGet("/get-inventory-totals-for-item")]
+    [HttpGet("get-inventory-totals-for-item")]
     public async Task<IActionResult> GetInventoryTotalsForItem([FromQuery] Guid itemId)
     {
         if (itemId == Guid.Empty) return BadRequest("Cannot proccess empty id. ");
@@ -44,32 +44,32 @@ public class InventoryControllers : Controller
         return Ok(result);
     }
 
-    [HttpPost("/add-inventory")]
+    [HttpPost("add-inventory")]
     public async Task<IActionResult> AddInventory([FromBody] Inventory inventory)
     {
-        if (inventory is null || inventory.Description == default(string) || inventory.ItemReference == default(string) || inventory.ItemId == Guid.Empty) BadRequest("Not enough info given. ");
+        if (inventory is null || inventory.Description == default || inventory.ItemReference == default || inventory.ItemId == Guid.Empty) BadRequest("Not enough info given. ");
         
-        bool IsAdded = await IS.AddInventory(inventory);
+        bool IsAdded = await IS.AddInventory(inventory!);
         if (!IsAdded) return BadRequest("Inventory not saved. ");
         return Ok("Inventory added. ");
     }
 
-    [HttpPut("/update-inventory")]
+    [HttpPut("update-inventory")]
     public async Task<IActionResult> UpdateInventory([FromBody] Inventory inventory)
     {
         if (inventory is null || inventory.Id == Guid.Empty || inventory.ItemId == Guid.Empty) BadRequest("Not enough info given. ");
         
-        bool IsUpdated = await IS.UpdateInventory(inventory);
+        bool IsUpdated = await IS.UpdateInventory(inventory!);
         if (!IsUpdated) return BadRequest("Inventory not updated. ");
         return Ok("Inventory updated. ");
     }
 
-    [HttpDelete("/remove-inventory")]
-    public async Task<IActionResult> RemoveInventory(Guid inventoryId)
+    [HttpDelete("remove-inventory")]
+    public async Task<IActionResult> RemoveInventory([FromQuery] Guid inventoryId)
     {
         if (inventoryId == Guid.Empty) return BadRequest("Cannot proccess empty id. ");
 
-        bool IsRemoved = IS.RemoveInventory(inventoryId);
+        bool IsRemoved = await IS.RemoveInventory(inventoryId);
         if (!IsRemoved) BadRequest("Inventory with given id doesn't exist. ");
         return Ok("Inventory removed. ");
     }
