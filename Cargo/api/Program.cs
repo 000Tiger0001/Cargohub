@@ -21,8 +21,11 @@ builder.Services.AddTransient<SupplierServices>();
 builder.Services.AddTransient<TransferServices>();
 builder.Services.AddTransient<WarehouseServices>();
 
-builder.Services.AddTransient<LocationAccess>();
+// Access to DB
 builder.Services.AddTransient<ClientAccess>();
+builder.Services.AddTransient<LocationAccess>();
+builder.Services.AddTransient<InventoryAccess>();
+builder.Services.AddTransient<ItemAccess>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
