@@ -2,9 +2,9 @@ public class Inventory : IHasId
 {
     public int Id { get; set; }
     public int ItemId { get; set; }
-    public string Description { get; set; }
-    public string ItemReference { get; set; }
-    public List<int> Locations { get; set; }
+    public string? Description { get; set; }
+    public string? ItemReference { get; set; }
+    public List<int>? Locations { get; set; }
     public int TotalOnHand { get; set; }
     public int TotalExpected { get; set; }
     public int TotalOrdered { get; set; }
@@ -15,7 +15,7 @@ public class Inventory : IHasId
 
     public Inventory() { }
 
-    public Inventory(int id,int itemId, string description, string itemReference, List<int> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable)
+    public Inventory(int id, int itemId, string description, string itemReference, List<int> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable)
     {
         Id = id;
         ItemId = itemId;
