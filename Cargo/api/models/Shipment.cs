@@ -18,9 +18,9 @@ public class Shipment : IHasId
     public double TotalPackageWeight { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    public List<Guid> Items { get; set; }
+    public Dictionary<Guid, int> Items { get; set; }
 
-    public Shipment(List<Guid> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<Guid> items)
+    public Shipment(List<Guid> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, Dictionary<Guid, int> items)
     {
         Id = Guid.NewGuid();
         OrderIds = orderIds;

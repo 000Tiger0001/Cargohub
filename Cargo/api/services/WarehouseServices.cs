@@ -15,10 +15,11 @@ public class WarehouseServices
     public async Task<bool> AddWarehouse(Warehouse warehouse)
     {
         List<Warehouse> warehouses = await AccessJson.ReadJson<Warehouse>();
+        warehouse.Id = Guid.NewGuid();
         Warehouse doubleWarehouse = warehouses.FirstOrDefault(w => w.Code == warehouse.Code && w.Name == warehouse.Name && w.Address == warehouse.Address && w.Zip == warehouse.Zip && w.City == warehouse.City && w.Province == warehouse.Province && w.Country == warehouse.Country);
-        if (doubleWarehouse is null) return false;
+        if (doubleWarehouse is not null) return false;
         AccessJson.WriteJson(warehouse);
-        return false;
+        return true;
     }
     public async Task<bool> UpdateWarehouse(Warehouse warehouse)
     {
