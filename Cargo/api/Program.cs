@@ -73,12 +73,12 @@ if (File.Exists(path))
 foreach (var item in items)
 {
     Console.WriteLine($"Client ID: {item.Id}, Name: {item.Name}");
-    clientAccess.Add(item);
+    await clientAccess.Add(item);
     if (clientAccess.GetById(item.Id) == null)
     {
         Console.WriteLine(item.Id);
         break;
-    } 
+    }
 }
 
 

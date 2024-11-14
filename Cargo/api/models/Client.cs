@@ -6,31 +6,31 @@ public class Client : IHasId
     public int Id { get; set; }
 
     [JsonProperty("name")]
-    public string Name { get; set; }
-    
+    public string? Name { get; set; }
+
     [JsonProperty("address")]
-    public string Address { get; set; }
+    public string? Address { get; set; }
 
     [JsonProperty("city")]
-    public string City { get; set; }
+    public string? City { get; set; }
 
     [JsonProperty("zip_code")]
-    public string ZipCode { get; set; }
+    public string? ZipCode { get; set; }
 
     [JsonProperty("province")]
     public string? Province { get; set; }
 
     [JsonProperty("country")]
-    public string Country { get; set; }
+    public string? Country { get; set; }
 
     [JsonProperty("contact_name")]
-    public string ContactName { get; set; }
+    public string? ContactName { get; set; }
 
     [JsonProperty("contact_phone")]
-    public string ContactPhone { get; set; }
+    public string? ContactPhone { get; set; }
 
     [JsonProperty("contact_email")]
-    public string ContactEmail { get; set; }
+    public string? ContactEmail { get; set; }
 
     [JsonProperty("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;

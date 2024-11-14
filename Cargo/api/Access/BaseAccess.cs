@@ -26,7 +26,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
     //When you call await _context.SaveChangesAsync(), it returns an integer 
     //representing the number of rows affected by the changes you attempted to persist to the database.
-    
+
     public async Task<bool> Add(T entity)
     {
         if (entity == null) return false;
