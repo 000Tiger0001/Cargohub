@@ -7,9 +7,9 @@ public class Transfer : IHasId
     public string TransferStatus { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    public List<Item> Items { get; set; }
+    public Dictionary<Guid, int> Items { get; set; }
 
-    public Transfer(string reference, Guid transferFrom, Guid transferTo, string transferStatus, List<Item> items)
+    public Transfer(string reference, Guid transferFrom, Guid transferTo, string transferStatus, Dictionary<Guid, int> items)
     {
         Id = Guid.NewGuid();
         Reference = reference;

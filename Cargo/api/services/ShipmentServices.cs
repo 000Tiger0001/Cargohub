@@ -23,19 +23,26 @@ public class ShipmentServices
 
     public async Task<bool> AddShipment(Shipment shipment)
     {
+        if (shipment is null) return false;
+
         List<Shipment> shipments = await GetShipments();
         shipment.Id = Guid.NewGuid();
+
         Shipment doubleShipment = shipments.FirstOrDefault(s => s.OrderIds == shipment.OrderIds && s.SourceId == shipment.SourceId && s.OrderDate == shipment.OrderDate && s.RequestDate == shipment.RequestDate && s.ShipmentDate == shipment.ShipmentDate && s.ShipmentType == shipment.ShipmentType && s.Notes == shipment.Notes && s.CarrierCode == shipment.CarrierCode && s.CarrierDescription == shipment.CarrierDescription && s.ServiceCode == shipment.ServiceCode && s.PaymentType == shipment.PaymentType && s.TransferMode == shipment.TransferMode && s.TotalPackageCount == shipment.TotalPackageCount && s.TotalPackageWeight == shipment.TotalPackageWeight && s.Items == shipment.Items)!;
         if (doubleShipment is not null) return false;
+
         await AccessJson.WriteJson(shipment);
         return true;
     }
 
     public async Task<bool> UpdateShipment(Shipment shipment)
     {
+        if (shipment is null) return false;
+
         List<Shipment> shipments = await GetShipments();
         int shipmentIndex = shipments.FindIndex(s => s.Id == shipment.Id);
         if (shipmentIndex == -1) return false;
+
         shipment.UpdatedAt = DateTime.Now;
         shipments[shipmentIndex] = shipment;
         AccessJson.WriteJsonList(shipments);
@@ -84,6 +91,7 @@ public class ShipmentServices
         List<Shipment> shipments = await GetShipments();
         Shipment shipmentToRemove = shipments.FirstOrDefault(s => s.Id == shipmentId)!;
         if (shipmentToRemove is null) return false;
+
         shipments.Remove(shipmentToRemove);
         AccessJson.WriteJsonList(shipments);
         return true;

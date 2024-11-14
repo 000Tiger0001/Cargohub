@@ -28,7 +28,7 @@ public class WarehouseControllers : Controller
     [HttpPost("add-warehouse")]
     public async Task<IActionResult> AddWarehouse([FromBody] Warehouse warehouse)
     {
-        if (warehouse is null || warehouse.Code == default(string) || warehouse.Name == default(string) || warehouse.Address == default(string) || warehouse.Zip == default(string) || warehouse.City == default(string) || warehouse.Province == default(string) || warehouse.Country == default(string)) return BadRequest("Not enough info given");
+        if (warehouse is null || warehouse.Code == "" || warehouse.Name == "" || warehouse.Address == "" || warehouse.Zip == "" || warehouse.City == "" || warehouse.Province == "" || warehouse.Country == "") return BadRequest("Not enough info given");
 
         bool IsAdded = await WS.AddWarehouse(warehouse);
         if (!IsAdded) return BadRequest("This warehouse cannot be added. ");
