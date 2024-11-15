@@ -55,40 +55,101 @@ app.UseAuthorization();
 app.Urls.Add("http://localhost:3000");
 
 
+
+List<string> dataTypes = new List<string>()
+{
+    "client",
+    // "Inventorie",
+    // "Item",
+    // "ItemGroup",
+    // "ItemLine",
+    // "ItemType",
+    "Location",
+    // "Order",
+    // "Shipment",
+    // "Supplier",
+    // "Transfer",
+    // "Warehouse"
+};
+
+List<Type> classes = new List<Type>()
+{
+    typeof(Client),
+    // typeof(Inventorie),
+    // typeof(Item),
+    // typeof(ItemGroup),
+    // typeof(ItemLine),
+    // typeof(ItemType),
+    typeof(Location),
+    // typeof(Order),
+    // typeof(Shipment),
+    // typeof(Supplier),
+    // typeof(Transfer),
+    // typeof(Warehouse)
+};
+
 using var scope = app.Services.CreateScope();
-var clientAccess = scope.ServiceProvider.GetRequiredService<ClientAccess>();
 
+// Folder path for data files
 string folderPath = "data";
-string path = $"{folderPath}/clients.json";
-
-// Ensure the folder exists, create otherwise
+// Ensure the folder exists
 if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
-
-StreamReader reader;
-List<Client> items = new();
-
-if (File.Exists(path))
+// Loop through all data types
+for (int i = 0; i < dataTypes.Count; i++)
 {
-    reader = new(path);
-    string content = await reader.ReadToEndAsync();
-    // Optionally decode any Unicode escape sequences if required
-    content = DecodeUnicodeEscapeSequences(content);
-    items = JsonConvert.DeserializeObject<List<Client>>(content) ?? new List<Client>();
-    reader.Close();
-    reader.Dispose();
-}
+    string dataType = dataTypes[i];
 
-foreach (var item in items)
-{
-    Console.WriteLine($"Client ID: {item.Id}, Name: {item.Name}");
-    await clientAccess.Add(item);
-    if (clientAccess.GetById(item.Id) == null)
+    // Dynamically construct the file path
+    string path = $"{folderPath}/{dataType.ToLower()}s.json";
+
+    // Use reflection to get the service for each data type
+    var accessType = Type.GetType($"{dataType}Access"); // Assuming "ClientAccess", "ItemAccess", etc., are the service names
+    if (accessType == null) continue;
+
+    dynamic access = scope.ServiceProvider.GetRequiredService(accessType);
+
+    // Check if the file exists and deserialize if it does
+    if (File.Exists(path))
     {
-        Console.WriteLine(item.Id);
-        break;
+        using StreamReader reader = new(path);
+        string content = await reader.ReadToEndAsync();
+        content = DecodeUnicodeEscapeSequences(content);
+
+        // Dynamically determine the item type to deserialize based on the dataType
+        Type itemType = classes[i]; // Corresponding item type from the 'classes' list
+
+        Type listType = typeof(List<>).MakeGenericType(itemType);
+        var items = JsonConvert.DeserializeObject(content, listType);
+
+        Console.WriteLine(access);
+        if (items != null)
+        {
+            foreach (var item in (IEnumerable<object>)items!)
+            {
+                var typedItem = Convert.ChangeType(item, itemType);
+
+                // Call Add() with the correct type
+                try
+                {
+                    // If the Add method expects a specific type, pass the typedItem
+                    var addMethod = access.GetType().GetMethod("Add");
+                    if (addMethod != null)
+                    {
+                        var result = await (Task<bool>)addMethod.Invoke(access, new object[] { typedItem });
+                        Console.WriteLine($"Add result: {result}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error adding item: {ex.Message}");
+                }
+            }
+        }
     }
 }
+
+
 
 
 static string DecodeUnicodeEscapeSequences(string input)

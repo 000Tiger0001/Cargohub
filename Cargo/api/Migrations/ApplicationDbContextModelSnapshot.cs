@@ -23,34 +23,27 @@ namespace api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ContactEmail")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ContactName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ContactPhone")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Province")
@@ -60,7 +53,6 @@ namespace api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ZipCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -78,18 +70,15 @@ namespace api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ItemId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ItemReference")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.PrimitiveCollection<string>("Locations")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TotalAllocated")
@@ -122,18 +111,15 @@ namespace api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CommodityCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ItemGroupId")
@@ -146,7 +132,6 @@ namespace api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModelNumber")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("OrderId")
@@ -156,18 +141,15 @@ namespace api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ShortDescription")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SupplierCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SupplierId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SupplierPartNumber")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("TransferId")
@@ -180,7 +162,6 @@ namespace api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UpcCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -205,11 +186,9 @@ namespace api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -230,11 +209,9 @@ namespace api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -255,11 +232,9 @@ namespace api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -277,14 +252,12 @@ namespace api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -311,26 +284,21 @@ namespace api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ExtraReference")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("OrderStatus")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PickingNotes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Reference")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("RequestDate")
@@ -343,7 +311,6 @@ namespace api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ShippingNotes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SourceId")
@@ -379,47 +346,39 @@ namespace api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CarrierCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CarrierDescription")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.PrimitiveCollection<string>("Items")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("TEXT");
 
                     b.PrimitiveCollection<string>("OrderIds")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PaymentType")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ServiceCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ShipmentDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ShipmentStatus")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<char>("ShipmentType")
@@ -435,7 +394,6 @@ namespace api.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<string>("TransferMode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -453,53 +411,42 @@ namespace api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AddressExtra")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ContactName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Phonenumber")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Province")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Reference")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ZipCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -517,14 +464,12 @@ namespace api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Reference")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TransferFrom")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("TransferStatus")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TransferTo")
@@ -545,49 +490,39 @@ namespace api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ContactEmail")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ContactName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ContactPhone")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Province")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Zip")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
