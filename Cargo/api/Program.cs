@@ -69,7 +69,7 @@ List<string> dataTypes = new List<string>()
     // "Shipment",
     // "Supplier",
     // "Transfer",
-    // "Warehouse"
+    "Warehouse"
 };
 
 List<Type> classes = new List<Type>()
@@ -85,7 +85,7 @@ List<Type> classes = new List<Type>()
     // typeof(Shipment),
     // typeof(Supplier),
     // typeof(Transfer),
-    // typeof(Warehouse)
+    typeof(Warehouse)
 };
 
 using var scope = app.Services.CreateScope();
@@ -104,7 +104,7 @@ for (int i = 0; i < dataTypes.Count; i++)
     string path = $"{folderPath}/{dataType.ToLower()}s.json";
 
     // Use reflection to get the service for each data type
-    var accessType = Type.GetType($"{dataType}Access"); // Assuming "ClientAccess", "ItemAccess", etc., are the service names
+    var accessType = Type.GetType($"{dataType}Access");
     if (accessType == null) continue;
 
     dynamic access = scope.ServiceProvider.GetRequiredService(accessType);
@@ -117,7 +117,7 @@ for (int i = 0; i < dataTypes.Count; i++)
         content = DecodeUnicodeEscapeSequences(content);
 
         // Dynamically determine the item type to deserialize based on the dataType
-        Type itemType = classes[i]; // Corresponding item type from the 'classes' list
+        Type itemType = classes[i];
 
         Type listType = typeof(List<>).MakeGenericType(itemType);
         var items = JsonConvert.DeserializeObject(content, listType);
