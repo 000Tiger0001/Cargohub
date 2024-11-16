@@ -1,9 +1,20 @@
+using Newtonsoft.Json;
+
 public class ItemGroup : IHasId
 {
+    [JsonProperty("id")]
     public int Id { get; set; }
+
+    [JsonProperty("name")]
     public string? Name { get; set; }
+
+    [JsonProperty("description")]
     public string? Description { get; set; }
+
+    [JsonProperty("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    [JsonProperty("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public ItemGroup() { }
