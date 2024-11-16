@@ -59,34 +59,34 @@ app.Urls.Add("http://localhost:3000");
 
 List<string> dataTypes = new List<string>()
 {
-    // "client",
+    "client",
     "Inventorie",
     // "Item",
-    // "ItemGroup",
-    // "ItemLine",
-    // "ItemType",
-    // "Location",
+    "ItemGroup",
+    "ItemLine",
+    "ItemType",
+    "Location",
     // "Order",
     // "Shipment",
     // "Supplier",
     // "Transfer",
-    // "Warehouse"
+    "Warehouse"
 };
 
 List<Type> classes = new List<Type>()
 {
-    // typeof(Client),
+    typeof(Client),
     typeof(Inventory),
     // typeof(Item),
-    // typeof(ItemGroup),
-    // typeof(ItemLine),
-    // typeof(ItemType),
-    // typeof(Location),
+    typeof(ItemGroup),
+    typeof(ItemLine),
+    typeof(ItemType),
+    typeof(Location),
     // typeof(Order),
     // typeof(Shipment),
     // typeof(Supplier),
     // typeof(Transfer),
-    // typeof(Warehouse)
+    typeof(Warehouse)
 };
 
 using var scope = app.Services.CreateScope();
