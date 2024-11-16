@@ -61,7 +61,7 @@ List<string> dataTypes = new List<string>()
 {
     "client",
     "Inventorie",
-    // "Item",
+    "Item",
     "ItemGroup",
     "ItemLine",
     "ItemType",
@@ -77,7 +77,7 @@ List<Type> classes = new List<Type>()
 {
     typeof(Client),
     typeof(Inventory),
-    // typeof(Item),
+    typeof(Item),
     typeof(ItemGroup),
     typeof(ItemLine),
     typeof(ItemType),

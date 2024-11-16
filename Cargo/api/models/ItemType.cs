@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 public class ItemType : IHasId
 {
     [JsonProperty("id")]
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     [JsonProperty("name")]
     public string? Name { get; set; }
@@ -18,7 +18,7 @@ public class ItemType : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public ItemType() { }
-    public ItemType(int id, string name, string description)
+    public ItemType(string id, string name, string description)
     {
         Id = id;
         Name = name;

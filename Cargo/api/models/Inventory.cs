@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 public class Inventory : IHasId
 {
     [JsonProperty("id")]
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     [JsonProperty("item_id")]
     public string? ItemId { get; set; }
@@ -40,7 +40,7 @@ public class Inventory : IHasId
 
     public Inventory() { }
 
-    public Inventory(int id, string itemId, string description, string itemReference, List<int> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable)
+    public Inventory(string id, string itemId, string description, string itemReference, List<int> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable)
     {
         Id = id;
         ItemId = itemId;

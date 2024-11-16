@@ -1,7 +1,7 @@
 public class Shipment : IHasId
 {
-    public int Id { get; set; }
-    public List<int>? OrderIds { get; set; }
+    public string? Id { get; set; }
+    public List<string>? OrderIds { get; set; }
     public int SourceId { get; set; }
     public DateTime OrderDate { get; set; }
     public DateTime RequestDate { get; set; }
@@ -22,7 +22,7 @@ public class Shipment : IHasId
 
     public Shipment() { }
 
-    public Shipment(int id, List<int> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<int> items)
+    public Shipment(string id, List<string> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<int> items)
     {
         Id = id;
         OrderIds = orderIds;

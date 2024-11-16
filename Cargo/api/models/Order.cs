@@ -1,6 +1,6 @@
 public class Order : IHasId
 {
-    public int Id { get; set; }
+    public string? Id { get; set; }
     public int SourceId { get; set; }
     public DateTime OrderDate { get; set; }
     public DateTime RequestDate { get; set; }
@@ -24,7 +24,7 @@ public class Order : IHasId
 
     public Order() { }
 
-    public Order(int id, int sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, int warehouseId, int shipTo, int billTo, int shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, List<Item> items)
+    public Order(string id, int sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, int warehouseId, int shipTo, int billTo, int shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, List<Item> items)
     {
         Id = id;
         SourceId = sourceId;

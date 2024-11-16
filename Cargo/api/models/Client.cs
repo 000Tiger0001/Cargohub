@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 public class Client : IHasId
 {
     [JsonProperty("id")]
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     [JsonProperty("name")]
     public string? Name { get; set; }
@@ -40,7 +40,7 @@ public class Client : IHasId
 
     public Client() { }
 
-    public Client(int id, string name, string address, string city, string zipCode, string? province, string country, string contactName, string contactPhone, string contactemail)
+    public Client(string id, string name, string address, string city, string zipCode, string? province, string country, string contactName, string contactPhone, string contactemail)
     {
         Id = id;
         Name = name;

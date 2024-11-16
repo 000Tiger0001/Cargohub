@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 public class ItemGroup : IHasId
 {
     [JsonProperty("id")]
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     [JsonProperty("name")]
     public string? Name { get; set; }
@@ -19,7 +19,7 @@ public class ItemGroup : IHasId
 
     public ItemGroup() { }
 
-    public ItemGroup(int id, string name, string description)
+    public ItemGroup(string id, string name, string description)
     {
         Id = id;
         Name = name;

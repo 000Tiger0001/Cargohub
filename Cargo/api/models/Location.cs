@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 public class Location : IHasId
 {
     [JsonProperty("id")]
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     [JsonProperty("warehouse_id")]
     public int WarehouseId { get; set; }
@@ -22,7 +22,7 @@ public class Location : IHasId
 
     public Location() { }
 
-    public Location(int id, int warehouseId, string code, string name)
+    public Location(string id, int warehouseId, string code, string name)
     {
         Id = id;
         WarehouseId = warehouseId;

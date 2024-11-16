@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 public class Warehouse : IHasId
 {
     [JsonProperty("id")]
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     [JsonProperty("code")]
     public string? Code { get; set; }
@@ -82,7 +82,7 @@ public class Warehouse : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public Warehouse() { }
-    public Warehouse(int id, string code, string name, string address, string zip, string city, string province, string country, string contactName, string contactPhone, string contactEmail)
+    public Warehouse(string id, string code, string name, string address, string zip, string city, string province, string country, string contactName, string contactPhone, string contactEmail)
     {
         Id = id;
         Code = code;

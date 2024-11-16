@@ -18,9 +18,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("Client", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Address")
                         .HasColumnType("TEXT");
@@ -62,9 +61,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("Inventory", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -106,9 +104,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("Item", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Code")
                         .HasColumnType("TEXT");
@@ -134,8 +131,8 @@ namespace api.Migrations
                     b.Property<string>("ModelNumber")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("OrderId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("PackOrderQuantity")
                         .HasColumnType("INTEGER");
@@ -152,8 +149,8 @@ namespace api.Migrations
                     b.Property<string>("SupplierPartNumber")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("TransferId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("TransferId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UnitOrderQuantity")
                         .HasColumnType("INTEGER");
@@ -178,9 +175,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("ItemGroup", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -201,9 +197,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("ItemLine", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -224,9 +219,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("ItemType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -247,9 +241,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("Location", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Code")
                         .HasColumnType("TEXT");
@@ -273,9 +266,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("Order", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("BillTo")
                         .HasColumnType("INTEGER");
@@ -341,9 +333,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("Shipment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CarrierCode")
                         .HasColumnType("TEXT");
@@ -406,9 +397,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("Supplier", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Address")
                         .HasColumnType("TEXT");
@@ -456,9 +446,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("Transfer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -485,9 +474,8 @@ namespace api.Migrations
 
             modelBuilder.Entity("Warehouse", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Address")
                         .HasColumnType("TEXT");

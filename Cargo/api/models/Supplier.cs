@@ -1,6 +1,6 @@
 public class Supplier : IHasId
 {
-    public int Id { get; set; }
+    public string? Id { get; set; }
     public string? Code { get; set; }
     public string? Name { get; set; }
     public string? Address { get; set; }
@@ -16,7 +16,7 @@ public class Supplier : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public Supplier() { }
-    public Supplier(int id, string code, string name, string address, string addressExtra, string city, string zipCode, string province, string country, string contactName, string phonenumber, string reference)
+    public Supplier(string id, string code, string name, string address, string addressExtra, string city, string zipCode, string province, string country, string contactName, string phonenumber, string reference)
     {
         Id = id;
         Code = code;
