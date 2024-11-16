@@ -72,8 +72,8 @@ namespace api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("ItemId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ItemReference")
                         .HasColumnType("TEXT");

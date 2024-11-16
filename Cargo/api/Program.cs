@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
@@ -129,10 +130,15 @@ for (int i = 0; i < dataTypes.Count; i++)
 
         Type listType = typeof(List<>).MakeGenericType(itemType);
         var items = JsonConvert.DeserializeObject(content, listType);
+        var data = (IEnumerable<object>)items!;
 
-        if (items != null)
+        if (!await ((dynamic)access).IsTableEmpty())
         {
-            foreach (var item in (IEnumerable<object>)items!)
+            Console.WriteLine($"Table for {dataType} is not empty, skipping add operation.");
+        }
+        else
+        {
+            foreach (var item in data)
             {
                 var typedItem = Convert.ChangeType(item, itemType);
 
@@ -164,14 +170,6 @@ static string DecodeUnicodeEscapeSequences(string input)
     byte[] byteArray = Encoding.Default.GetBytes(input);
     return Encoding.UTF8.GetString(byteArray);
 }
-
-
-static void JsonToDB()
-{
-    Console.WriteLine("q");
-}
-
-JsonToDB();
 
 
 app.Run();

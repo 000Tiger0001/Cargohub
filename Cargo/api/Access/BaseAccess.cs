@@ -68,4 +68,10 @@ public abstract class BaseAccess<T> where T : class, IHasId
         }
         return false;
     }
+
+    // Check if the table is empty
+    public async Task<bool> IsTableEmpty()
+    {
+        return !await DB.AnyAsync();
+    }
 }
