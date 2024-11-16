@@ -132,7 +132,7 @@ for (int i = 0; i < dataTypes.Count; i++)
         var items = JsonConvert.DeserializeObject(content, listType);
         var data = (IEnumerable<object>)items!;
 
-        if (!await ((dynamic)access).IsTableEmpty())
+        if (!await access.IsTableEmpty())
         {
             Console.WriteLine($"Table for {dataType} is not empty, skipping add operation.");
         }
