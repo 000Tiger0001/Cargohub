@@ -58,35 +58,34 @@ app.Urls.Add("http://localhost:3000");
 
 List<string> dataTypes = new List<string>()
 {
-    "client",
-    // "Inventorie",
+    // "client",
+    "Inventorie",
     // "Item",
-
-    "ItemGroup",
-    "ItemLine",
-    "ItemType",
-    "Location",
+    // "ItemGroup",
+    // "ItemLine",
+    // "ItemType",
+    // "Location",
     // "Order",
     // "Shipment",
     // "Supplier",
     // "Transfer",
-    "Warehouse"
+    // "Warehouse"
 };
 
 List<Type> classes = new List<Type>()
 {
-    typeof(Client),
-    // typeof(Inventorie),
+    // typeof(Client),
+    typeof(Inventory),
     // typeof(Item),
-    typeof(ItemGroup),
-    typeof(ItemLine),
-    typeof(ItemType),
-    typeof(Location),
+    // typeof(ItemGroup),
+    // typeof(ItemLine),
+    // typeof(ItemType),
+    // typeof(Location),
     // typeof(Order),
     // typeof(Shipment),
     // typeof(Supplier),
     // typeof(Transfer),
-    typeof(Warehouse)
+    // typeof(Warehouse)
 };
 
 using var scope = app.Services.CreateScope();
@@ -104,8 +103,16 @@ for (int i = 0; i < dataTypes.Count; i++)
     // Dynamically construct the file path
     string path = $"{folderPath}/{dataType.ToLower()}s.json";
 
-    // Use reflection to get the service for each data type
-    var accessType = Type.GetType($"{dataType}Access");
+    Type? accessType;
+    if (dataType == "Inventorie")
+    {
+        accessType = Type.GetType($"InventoryAccess");
+    }
+    else
+    {
+        // Use reflection to get the service for each data type
+        accessType = Type.GetType($"{dataType}Access");
+    }
     if (accessType == null) continue;
 
     dynamic access = scope.ServiceProvider.GetRequiredService(accessType);
@@ -157,6 +164,14 @@ static string DecodeUnicodeEscapeSequences(string input)
     byte[] byteArray = Encoding.Default.GetBytes(input);
     return Encoding.UTF8.GetString(byteArray);
 }
+
+
+static void JsonToDB()
+{
+    Console.WriteLine("q");
+}
+
+JsonToDB();
 
 
 app.Run();
