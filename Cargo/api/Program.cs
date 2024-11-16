@@ -58,41 +58,35 @@ app.Urls.Add("http://localhost:3000");
 
 List<string> dataTypes = new List<string>()
 {
-    // +
-    // "client",
+    "client",
     // "Inventorie",
     // "Item",
 
     "ItemGroup",
-    // "ItemLine",
-    // "ItemType",
-    // +
-    // "Location",
+    "ItemLine",
+    "ItemType",
+    "Location",
     // "Order",
     // "Shipment",
     // "Supplier",
     // "Transfer",
-    // +
-    // "Warehouse"
+    "Warehouse"
 };
 
 List<Type> classes = new List<Type>()
 {
-    // +
-    // typeof(Client),
+    typeof(Client),
     // typeof(Inventorie),
     // typeof(Item),
     typeof(ItemGroup),
-    // typeof(ItemLine),
-    // typeof(ItemType),
-    // +
-    // typeof(Location),
+    typeof(ItemLine),
+    typeof(ItemType),
+    typeof(Location),
     // typeof(Order),
     // typeof(Shipment),
     // typeof(Supplier),
     // typeof(Transfer),
-    // +
-    // typeof(Warehouse)
+    typeof(Warehouse)
 };
 
 using var scope = app.Services.CreateScope();
@@ -109,8 +103,6 @@ for (int i = 0; i < dataTypes.Count; i++)
 
     // Dynamically construct the file path
     string path = $"{folderPath}/{dataType.ToLower()}s.json";
-
-    Console.WriteLine(path);
 
     // Use reflection to get the service for each data type
     var accessType = Type.GetType($"{dataType}Access");
@@ -131,7 +123,6 @@ for (int i = 0; i < dataTypes.Count; i++)
         Type listType = typeof(List<>).MakeGenericType(itemType);
         var items = JsonConvert.DeserializeObject(content, listType);
 
-        Console.WriteLine(access);
         if (items != null)
         {
             foreach (var item in (IEnumerable<object>)items!)
