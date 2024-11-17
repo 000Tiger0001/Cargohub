@@ -146,9 +146,6 @@ namespace api.Migrations
                     b.Property<string>("SupplierPartNumber")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("TransferId")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("UnitOrderQuantity")
                         .HasColumnType("INTEGER");
 
@@ -162,8 +159,6 @@ namespace api.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TransferId");
 
                     b.ToTable("Items");
                 });
@@ -210,33 +205,6 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ItemLines");
-                });
-
-            modelBuilder.Entity("ItemMovement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ItemId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("OrderId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ShipmentId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ShipmentId");
-
-                    b.ToTable("ItemMovement");
                 });
 
             modelBuilder.Entity("ItemType", b =>
@@ -353,6 +321,28 @@ namespace api.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("OrderItemMovement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ItemId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OrderId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItemMovement");
+                });
+
             modelBuilder.Entity("Shipment", b =>
                 {
                     b.Property<string>("Id")
@@ -412,6 +402,28 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Shipments");
+                });
+
+            modelBuilder.Entity("ShipmentItemMovement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ItemId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ShipmentId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShipmentId");
+
+                    b.ToTable("ShipmentItemMovement");
                 });
 
             modelBuilder.Entity("Supplier", b =>
@@ -474,13 +486,13 @@ namespace api.Migrations
                     b.Property<string>("Reference")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TransferFrom")
+                    b.Property<int?>("TransferFrom")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("TransferStatus")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TransferTo")
+                    b.Property<int?>("TransferTo")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -489,6 +501,28 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Transfers");
+                });
+
+            modelBuilder.Entity("TransferItemMovement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ItemId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TransferId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TransferId");
+
+                    b.ToTable("TransferItemMovement");
                 });
 
             modelBuilder.Entity("Warehouse", b =>
@@ -537,22 +571,25 @@ namespace api.Migrations
                     b.ToTable("Warehouses");
                 });
 
-            modelBuilder.Entity("Item", b =>
-                {
-                    b.HasOne("Transfer", null)
-                        .WithMany("Items")
-                        .HasForeignKey("TransferId");
-                });
-
-            modelBuilder.Entity("ItemMovement", b =>
+            modelBuilder.Entity("OrderItemMovement", b =>
                 {
                     b.HasOne("Order", null)
                         .WithMany("Items")
                         .HasForeignKey("OrderId");
+                });
 
+            modelBuilder.Entity("ShipmentItemMovement", b =>
+                {
                     b.HasOne("Shipment", null)
                         .WithMany("Items")
                         .HasForeignKey("ShipmentId");
+                });
+
+            modelBuilder.Entity("TransferItemMovement", b =>
+                {
+                    b.HasOne("Transfer", null)
+                        .WithMany("Items")
+                        .HasForeignKey("TransferId");
                 });
 
             modelBuilder.Entity("Order", b =>

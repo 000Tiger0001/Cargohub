@@ -26,6 +26,7 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<ShipmentItemMovement>().HasKey(s => s.Id);
         modelBuilder.Entity<OrderItemMovement>().HasKey(o => o.Id);
+        modelBuilder.Entity<TransferItemMovement>().HasKey(t => t.Id);
 
         // Configure entities and relationships here if needed
         base.OnModelCreating(modelBuilder);
