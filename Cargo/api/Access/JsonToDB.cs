@@ -15,7 +15,7 @@ public class JsonToDb
             "ItemType",
             "Location",
             "Order",
-            // "Shipment",
+            "Shipment",
             "Supplier",
             // "Transfer",
             "Warehouse"
@@ -31,7 +31,7 @@ public class JsonToDb
             typeof(ItemType),
             typeof(Location),
             typeof(Order),
-            // typeof(Shipment),
+            typeof(Shipment),
             typeof(Supplier),
             // typeof(Transfer),
             typeof(Warehouse)

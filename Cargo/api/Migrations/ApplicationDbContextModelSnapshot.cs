@@ -227,9 +227,14 @@ namespace api.Migrations
                     b.Property<string>("OrderId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ShipmentId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ShipmentId");
 
                     b.ToTable("ItemMovement");
                 });
@@ -362,16 +367,13 @@ namespace api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.PrimitiveCollection<string>("Items")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Notes")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("TEXT");
 
-                    b.PrimitiveCollection<string>("OrderIds")
+                    b.Property<string>("OrderId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PaymentType")
@@ -547,9 +549,18 @@ namespace api.Migrations
                     b.HasOne("Order", null)
                         .WithMany("Items")
                         .HasForeignKey("OrderId");
+
+                    b.HasOne("Shipment", null)
+                        .WithMany("Items")
+                        .HasForeignKey("ShipmentId");
                 });
 
             modelBuilder.Entity("Order", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Shipment", b =>
                 {
                     b.Navigation("Items");
                 });
