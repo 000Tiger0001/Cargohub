@@ -58,11 +58,11 @@ public class Shipment : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     [JsonProperty("items")]
-    public List<ItemMovement>? Items { get; set; }
+    public List<ShipmentItemMovement>? Items { get; set; }
 
     public Shipment() { }
 
-    public Shipment(string id, string orderId, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<ItemMovement> items)
+    public Shipment(string id, string orderId, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<ShipmentItemMovement> items)
     {
         Id = id;
         OrderId = orderId;

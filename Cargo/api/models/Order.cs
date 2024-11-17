@@ -63,11 +63,11 @@ public class Order : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     [JsonProperty("items")]
-    public List<ItemMovement>? Items { get; set; }
+    public List<OrderItemMovement>? Items { get; set; }
 
     public Order() { }
 
-    public Order(string id, string sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, int warehouseId, string shipTo, string billTo, string shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, List<ItemMovement> items)
+    public Order(string id, string sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, int warehouseId, string shipTo, string billTo, string shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, List<OrderItemMovement> items)
     {
         Id = id;
         SourceId = sourceId;

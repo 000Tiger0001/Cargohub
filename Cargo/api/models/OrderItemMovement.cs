@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-public class ItemMovement
+public class OrderItemMovement
 {
     public Guid Id { get; set; } = new Guid();
 
@@ -9,12 +9,4 @@ public class ItemMovement
 
     [JsonProperty("amount")]
     public int Amount { get; set; }
-
-    public ItemMovement() { }
-
-    public ItemMovement(string itemId, int amount)
-    {
-        ItemId = itemId;
-        Amount = amount;
-    }
 }
