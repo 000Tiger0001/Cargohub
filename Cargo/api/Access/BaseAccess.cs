@@ -13,12 +13,12 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
     public async Task<List<T>> GetAll()
     {
-        return await DB.ToListAsync();
+        return await DB.AsNoTracking().ToListAsync();
     }
 
     public async Task<T?> GetById(string id)
     {
-        return await DB.FirstOrDefaultAsync(entity => entity.Id == id);
+        return await DB.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
     }
 
 
