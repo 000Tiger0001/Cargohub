@@ -85,25 +85,19 @@ public class JsonToDb
                 }
                 else
                 {
-                    foreach (var item in data)
+                    try
                     {
-                        var typedItem = Convert.ChangeType(item, itemType);
-
-                        // Call Add() with the correct type
-                        try
+                        // If the Add method expects a specific type, pass the typedItem
+                        var addMethod = access.GetType().GetMethod("AddMany");
+                        if (addMethod != null)
                         {
-                            // If the Add method expects a specific type, pass the typedItem
-                            var addMethod = access.GetType().GetMethod("Add");
-                            if (addMethod != null)
-                            {
-                                var result = await (Task<bool>)addMethod.Invoke(access, new object[] { typedItem });
-                                Console.WriteLine($"Add result: {result}");
-                            }
+                            var result = await (Task<bool>)addMethod.Invoke(access, new object[] { data });
+                            Console.WriteLine($"Add result: {result}");
                         }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine($"Error adding item: {ex.Message}");
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error adding item: {ex.Message}");
                     }
                 }
             }

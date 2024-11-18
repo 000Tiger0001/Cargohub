@@ -22,6 +22,24 @@ public abstract class BaseAccess<T> where T : class, IHasId
     }
 
 
+    public async Task<bool> AddMany(List<T> data)
+    {
+        data = data.OrderBy(e => e.Id).ToList();
+        foreach (var entity in data)
+        {
+            if (entity == null) return false;
+            var existingEntity = await GetById(entity.Id!);
+            if (existingEntity != null)
+            {
+                return false;
+            }
+            await DB.AddAsync(entity);
+        }
+
+        var changes = await _context.SaveChangesAsync();
+        return changes > 0;
+    }
+
     //When you call await _context.SaveChangesAsync(), it returns an integer 
     //representing the number of rows affected by the changes you attempted to persist to the database.
 
