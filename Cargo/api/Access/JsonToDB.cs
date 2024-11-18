@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 public class JsonToDb
 {
-    public static async void TransferJsonToDb(WebApplication app)
+    public static async Task TransferJsonToDb(WebApplication app)
     {
         List<string> dataTypes = new List<string>()
         {

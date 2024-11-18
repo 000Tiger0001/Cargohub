@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -52,6 +53,20 @@ app.MapControllers();
 app.UseAuthorization();
 app.Urls.Add("http://localhost:3000");
 
-JsonToDb.TransferJsonToDb(app);
+
+var stopwatch = Stopwatch.StartNew();
+// Call the method you want to benchmark
+await JsonToDb.TransferJsonToDb(app);
+
+stopwatch.Stop();
+var elapsedTime = stopwatch.Elapsed;
+int minutes = elapsedTime.Minutes;
+int seconds = elapsedTime.Seconds;
+int milliseconds = elapsedTime.Milliseconds;
+
+Console.WriteLine($"Time taken by TransferJsonToDb: {minutes} minutes, {seconds} seconds, and {milliseconds} milliseconds");
+Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalMinutes:F2} minutes");
+Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalSeconds:F2} seconds");
+Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalMilliseconds:F2} milliseconds");
 
 app.Run();
