@@ -20,9 +20,9 @@ public class Order : IHasId
     public double TotalSurcharge { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    public List<Item> Items { get; set; }
+    public Dictionary<Guid, int> Items { get; set; }
 
-    public Order(int sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, Guid warehouseId, Guid shipTo, Guid billTo, Guid shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, List<Item> items)
+    public Order(int sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, Guid warehouseId, Guid shipTo, Guid billTo, Guid shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, Dictionary<Guid, int> items)
     {
         Id = Guid.NewGuid();
         SourceId = sourceId;
