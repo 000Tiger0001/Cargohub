@@ -1,12 +1,15 @@
 using Newtonsoft.Json;
-
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 public class Location : IHasId
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public int? Id { get; set; }
 
     [JsonProperty("warehouse_id")]
-    public int WarehouseId { get; set; }
+    public int? WarehouseId { get; set; }
 
     [JsonProperty("code")]
     public string? Code { get; set; }
@@ -22,7 +25,7 @@ public class Location : IHasId
 
     public Location() { }
 
-    public Location(string id, int warehouseId, string code, string name)
+    public Location(int id, int warehouseId, string code, string name)
     {
         Id = id;
         WarehouseId = warehouseId;

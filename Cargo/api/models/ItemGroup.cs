@@ -1,9 +1,13 @@
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class ItemGroup : IHasId
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public int? Id { get; set; }
 
     [JsonProperty("name")]
     public string? Name { get; set; }
@@ -19,7 +23,7 @@ public class ItemGroup : IHasId
 
     public ItemGroup() { }
 
-    public ItemGroup(string id, string name, string description)
+    public ItemGroup(int id, string name, string description)
     {
         Id = id;
         Name = name;

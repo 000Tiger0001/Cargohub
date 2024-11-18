@@ -1,13 +1,17 @@
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class Shipment : IHasId
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public int? Id { get; set; }
 
     [JsonProperty("order_id")]
     // leave single order for now, since there is no logic yet to make a shipment for multiple orders
-    public string? OrderId { get; set; }
+    public int OrderId { get; set; }
 
     [JsonProperty("source_id")]
     public int SourceId { get; set; }
@@ -62,7 +66,7 @@ public class Shipment : IHasId
 
     public Shipment() { }
 
-    public Shipment(string id, string orderId, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<ShipmentItemMovement> items)
+    public Shipment(int id, int orderId, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<ShipmentItemMovement> items)
     {
         Id = id;
         OrderId = orderId;

@@ -1,11 +1,15 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 public class Warehouse : IHasId
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public int? Id { get; set; }
 
     [JsonProperty("code")]
     public string? Code { get; set; }
@@ -82,7 +86,7 @@ public class Warehouse : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public Warehouse() { }
-    public Warehouse(string id, string code, string name, string address, string zip, string city, string province, string country, string contactName, string contactPhone, string contactEmail)
+    public Warehouse(int id, string code, string name, string address, string zip, string city, string province, string country, string contactName, string contactPhone, string contactEmail)
     {
         Id = id;
         Code = code;

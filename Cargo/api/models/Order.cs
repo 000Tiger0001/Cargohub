@@ -1,12 +1,16 @@
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class Order : IHasId
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public int? Id { get; set; }
 
     [JsonProperty("source_id")]
-    public string? SourceId { get; set; }
+    public int SourceId { get; set; }
 
     [JsonProperty("order_date")]
     public DateTime OrderDate { get; set; }
@@ -67,7 +71,7 @@ public class Order : IHasId
 
     public Order() { }
 
-    public Order(string id, string sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, int warehouseId, string shipTo, string billTo, string shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, List<OrderItemMovement> items)
+    public Order(int id, int sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, int warehouseId, string shipTo, string billTo, string shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, List<OrderItemMovement> items)
     {
         Id = id;
         SourceId = sourceId;

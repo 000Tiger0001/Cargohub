@@ -1,12 +1,16 @@
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class Inventory : IHasId
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public int? Id { get; set; }
 
     [JsonProperty("item_id")]
-    public string? ItemId { get; set; }
+    public int? ItemId { get; set; }
 
     [JsonProperty("description")]
     public string? Description { get; set; }
@@ -40,7 +44,7 @@ public class Inventory : IHasId
 
     public Inventory() { }
 
-    public Inventory(string id, string itemId, string description, string itemReference, List<int> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable)
+    public Inventory(int id, int itemId, string description, string itemReference, List<int> locations, int totalOnHand, int totalExpected, int totalOrdered, int totalAllocated, int totalAvailable)
     {
         Id = id;
         ItemId = itemId;

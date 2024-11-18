@@ -8,32 +8,32 @@ public class JsonToDb
         List<string> dataTypes = new List<string>()
         {
             "Client",
-            "Inventorie",
-            "Item",
+            // "Inventorie",
+            // "Item",
             "ItemGroup",
             "ItemLine",
             "ItemType",
             "Location",
-            "Order",
-            "Shipment",
+            // "Order",
+            // "Shipment",
             "Supplier",
-            "Transfer",
+            // "Transfer",
             "Warehouse"
         };
 
         List<Type> classes = new List<Type>()
         {
             typeof(Client),
-            typeof(Inventory),
-            typeof(Item),
+            // typeof(Inventory),
+            // typeof(Item),
             typeof(ItemGroup),
             typeof(ItemLine),
             typeof(ItemType),
             typeof(Location),
-            typeof(Order),
-            typeof(Shipment),
+            // typeof(Order),
+            // typeof(Shipment),
             typeof(Supplier),
-            typeof(Transfer),
+            // typeof(Transfer),
             typeof(Warehouse)
         };
 

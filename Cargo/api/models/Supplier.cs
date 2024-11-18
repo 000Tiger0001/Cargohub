@@ -1,9 +1,13 @@
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class Supplier : IHasId
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public int? Id { get; set; }
 
     [JsonProperty("code")]
     public string? Code { get; set; }
@@ -45,7 +49,7 @@ public class Supplier : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public Supplier() { }
-    public Supplier(string id, string code, string name, string address, string addressExtra, string city, string zipCode, string province, string country, string contactName, string phonenumber, string reference)
+    public Supplier(int id, string code, string name, string address, string addressExtra, string city, string zipCode, string province, string country, string contactName, string phonenumber, string reference)
     {
         Id = id;
         Code = code;

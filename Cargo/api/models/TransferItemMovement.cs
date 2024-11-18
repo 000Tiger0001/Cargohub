@@ -1,8 +1,12 @@
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-public class TransferItemMovement
+public class TransferItemMovement : IHasId
 {
-    public Guid Id { get; set; } = new Guid();
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int? Id { get; set; }
 
     [JsonProperty("item_id")]
     public string? ItemId { get; set; }

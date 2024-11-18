@@ -1,9 +1,13 @@
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class Transfer : IHasId
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public int? Id { get; set; }
 
     [JsonProperty("reference")]
     public string? Reference { get; set; }
@@ -27,7 +31,7 @@ public class Transfer : IHasId
     public List<TransferItemMovement>? Items { get; set; }
 
     public Transfer() { }
-    public Transfer(string id, string reference, int transferFrom, int transferTo, string transferStatus, List<TransferItemMovement> items)
+    public Transfer(int id, string reference, int transferFrom, int transferTo, string transferStatus, List<TransferItemMovement> items)
     {
         Id = id;
         Reference = reference;

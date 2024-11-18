@@ -1,9 +1,12 @@
 using Newtonsoft.Json;
-
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 public class ItemType : IHasId
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public int? Id { get; set; }
 
     [JsonProperty("name")]
     public string? Name { get; set; }
@@ -18,7 +21,7 @@ public class ItemType : IHasId
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public ItemType() { }
-    public ItemType(string id, string name, string description)
+    public ItemType(int id, string name, string description)
     {
         Id = id;
         Name = name;

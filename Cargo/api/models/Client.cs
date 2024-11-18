@@ -1,9 +1,14 @@
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 public class Client : IHasId
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public int? Id { get; set; }
 
     [JsonProperty("name")]
     public string? Name { get; set; }
@@ -40,7 +45,7 @@ public class Client : IHasId
 
     public Client() { }
 
-    public Client(string id, string name, string address, string city, string zipCode, string? province, string country, string contactName, string contactPhone, string contactemail)
+    public Client(int id, string name, string address, string city, string zipCode, string? province, string country, string contactName, string contactPhone, string contactemail)
     {
         Id = id;
         Name = name;
