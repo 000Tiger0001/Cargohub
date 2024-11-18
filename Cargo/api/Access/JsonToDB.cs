@@ -9,7 +9,7 @@ public class JsonToDb
         {
             "Client",
             // "Inventorie",
-            // "Item",
+            "Item",
             "ItemGroup",
             "ItemLine",
             "ItemType",
@@ -25,7 +25,7 @@ public class JsonToDb
         {
             typeof(Client),
             // typeof(Inventory),
-            // typeof(Item),
+            typeof(Item),
             typeof(ItemGroup),
             typeof(ItemLine),
             typeof(ItemType),
@@ -78,6 +78,37 @@ public class JsonToDb
                 var items = JsonConvert.DeserializeObject(content, listType);
                 var data = (IEnumerable<object>)items!;
 
+                // Convert uid to id
+                if (dataType == "Item")
+                {
+                    foreach (var item in data)
+                    {
+                        var itemProperty = item.GetType().GetProperty("uid");
+                        if (itemProperty != null)
+                        {
+                            // Get the value of the "uid" property
+                            var uidValue = itemProperty.GetValue(item) as string;
+
+                            if (!string.IsNullOrEmpty(uidValue))
+                            {
+                                // Extract the numeric part of the "uid" (ignoring the "P" prefix)
+                                string numericPart = uidValue.Substring(1);
+
+                                // Convert the numeric part to an integer
+                                if (int.TryParse(numericPart, out int numericId))
+                                {
+                                    Console.WriteLine($"Converted uid to integer: {numericId}");
+                                    itemProperty.SetValue(item, numericId);
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Failed to convert uid '{uidValue}' to an integer.");
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // make sure ID doesn`t start with 0
                 if (data.Any())
                 {
@@ -95,8 +126,6 @@ public class JsonToDb
                         }
                     }
                 }
-
-
 
                 if (!await access.IsTableEmpty())
                 {
