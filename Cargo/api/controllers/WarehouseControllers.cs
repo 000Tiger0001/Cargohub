@@ -11,11 +11,7 @@ public class WarehouseControllers : Controller
     }
 
     [HttpGet("warehouses")]
-    public async Task<IActionResult> GetWarehouses()
-    {
-        List<Warehouse> warehouses = await WS.GetWarehouses();
-        return Ok(warehouses);
-    }
+    public async Task<IActionResult> GetWarehouses() => Ok(await WS.GetWarehouses());
 
     [HttpGet("warehouse")]
     public async Task<IActionResult> GetWarehouse([FromQuery] Guid warehouseId)

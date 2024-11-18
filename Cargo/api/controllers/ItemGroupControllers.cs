@@ -11,11 +11,7 @@ public class ItemGroupControllers : Controller
     }
 
     [HttpGet("get-item-groups")]
-    public async Task<IActionResult> GetItemGroups()
-    {
-        List<ItemGroup> itemGroups = await IGS.GetItemGroups();
-        return Ok(itemGroups);
-    }
+    public async Task<IActionResult> GetItemGroups() => Ok(await IGS.GetItemGroups());
 
     [HttpGet("get-item-group")]
     public async Task<IActionResult> GetItemGroup([FromQuery] Guid itemGroupId)

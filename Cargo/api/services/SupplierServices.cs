@@ -38,4 +38,17 @@ public class SupplierServices
         AccessJson.WriteJsonList(suppliers);
         return true;
     }
+
+    public async Task<bool> RemoveSupplier(Guid supplierId)
+    {
+        if (supplierId == Guid.Empty) return false;
+
+        List<Supplier> suppliers = await GetSuppliers();
+        Supplier foundSupplier = suppliers.FirstOrDefault(s => s.Id == supplierId)!;
+        if (foundSupplier is null) return false;
+
+        suppliers.Remove(foundSupplier);
+        AccessJson.WriteJsonList(suppliers);
+        return true;
+    }
 }

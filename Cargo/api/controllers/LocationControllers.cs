@@ -11,11 +11,7 @@ public class LocationControllers : Controller
     }
 
     [HttpGet("locations")]
-    public async Task<IActionResult> GetAllLocations()
-    {
-        List<Location> locations = await LS.GetLocations();
-        return Ok(locations);
-    }
+    public async Task<IActionResult> GetAllLocations() => Ok(await LS.GetLocations());
 
     [HttpGet("location")]
     public async Task<IActionResult> GetLocation([FromQuery] Guid locationId)

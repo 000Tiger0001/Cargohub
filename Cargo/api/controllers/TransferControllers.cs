@@ -11,11 +11,7 @@ public class TransferControllers : Controller
     }
 
     [HttpGet("get-transfers")]
-    public async Task<IActionResult> GetTransfers()
-    {
-        List<Transfer> transfers = await TS.GetTransfers();
-        return Ok(transfers);
-    }
+    public async Task<IActionResult> GetTransfers() => Ok(await TS.GetTransfers());
 
     [HttpGet("get-transfer")]
     public async Task<IActionResult> GetTransfer([FromQuery] Guid transferId)

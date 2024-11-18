@@ -11,11 +11,7 @@ public class ItemControllers : Controller
     }
 
     [HttpGet("get-items")]
-    public async Task<IActionResult> GetItems()
-    {
-        List<Item> items = await IS.GetItems();
-        return Ok(items);
-    }
+    public async Task<IActionResult> GetItems() => Ok(await IS.GetItems());
 
     [HttpGet("get-item")]
     public async Task<IActionResult> GetItem([FromQuery] Guid itemId)

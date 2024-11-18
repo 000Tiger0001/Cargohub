@@ -11,11 +11,7 @@ public class ClientControllers : Controller
     }
 
     [HttpGet("clients")]
-    public async Task<IActionResult> GetClients()
-    {
-        List<Client> clients = await CS.GetClients();
-        return Ok(clients);
-    }
+    public async Task<IActionResult> GetClients() => Ok(await CS.GetClients());
 
     [HttpGet("client")]
     public async Task<IActionResult> GetClient([FromQuery] Guid clientId)

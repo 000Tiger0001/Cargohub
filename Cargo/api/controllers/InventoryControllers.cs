@@ -11,11 +11,7 @@ public class InventoryControllers : Controller
     }
 
     [HttpGet("inventories")]
-    public async Task<IActionResult> GetInventories()
-    {
-        List<Inventory> inventories = await IS.GetInventories();
-        return Ok(inventories);
-    }
+    public async Task<IActionResult> GetInventories() => Ok(await IS.GetInventories());
 
     [HttpGet("inventory")]
     public async Task<IActionResult> GetInventory([FromQuery] Guid inventoryId)

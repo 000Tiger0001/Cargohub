@@ -11,11 +11,7 @@ public class ItemTypeControllers : Controller
     }
 
     [HttpGet("get-item-types")]
-    public async Task<IActionResult> GetItemtypes()
-    {
-        List<ItemType> itemTypes = await ITS.GetItemTypes();
-        return Ok(itemTypes);
-    }
+    public async Task<IActionResult> GetItemtypes() => Ok(await ITS.GetItemTypes());
 
     [HttpGet("get-item-type")]
     public async Task<IActionResult> GetItemType([FromQuery] Guid itemTypeId)
