@@ -7,7 +7,7 @@ public class Item : IHasId
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     [JsonProperty("code")]
     public string? Code { get; set; }

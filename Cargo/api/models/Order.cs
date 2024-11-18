@@ -7,7 +7,7 @@ public class Order : IHasId
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     [JsonProperty("source_id")]
     public int SourceId { get; set; }

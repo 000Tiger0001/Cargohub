@@ -6,7 +6,7 @@ public class TransferItemMovement : IHasId
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     [JsonProperty("item_id")]
     public string? ItemId { get; set; }

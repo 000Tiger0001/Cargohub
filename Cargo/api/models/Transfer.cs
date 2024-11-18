@@ -7,7 +7,7 @@ public class Transfer : IHasId
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     [JsonProperty("reference")]
     public string? Reference { get; set; }

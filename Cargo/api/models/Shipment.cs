@@ -7,7 +7,7 @@ public class Shipment : IHasId
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     [JsonProperty("order_id")]
     // leave single order for now, since there is no logic yet to make a shipment for multiple orders

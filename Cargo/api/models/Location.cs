@@ -6,10 +6,10 @@ public class Location : IHasId
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     [JsonProperty("warehouse_id")]
-    public int? WarehouseId { get; set; }
+    public int WarehouseId { get; set; }
 
     [JsonProperty("code")]
     public string? Code { get; set; }

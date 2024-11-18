@@ -7,10 +7,13 @@ public class Inventory : IHasId
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty("id")]
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     [JsonProperty("item_id")]
-    public int? ItemId { get; set; }
+    public int ItemId { get; set; }
+
+    [ForeignKey("ItemId")]  // Specifies that ItemId is a foreign key
+    public virtual Item? Item { get; set; }
 
     [JsonProperty("description")]
     public string? Description { get; set; }
