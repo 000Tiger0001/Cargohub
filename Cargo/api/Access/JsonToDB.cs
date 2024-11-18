@@ -8,7 +8,7 @@ public class JsonToDb
         List<string> dataTypes = new List<string>()
         {
             "Client",
-            // "Inventorie",
+            "Inventorie",
             "Item",
             "ItemGroup",
             "ItemLine",
@@ -24,7 +24,7 @@ public class JsonToDb
         List<Type> classes = new List<Type>()
         {
             typeof(Client),
-            // typeof(Inventory),
+            typeof(Inventory),
             typeof(Item),
             typeof(ItemGroup),
             typeof(ItemLine),
@@ -108,6 +108,7 @@ public class JsonToDb
                         }
                     }
                 }
+
 
                 // make sure ID doesn`t start with 0
                 if (data.Any())

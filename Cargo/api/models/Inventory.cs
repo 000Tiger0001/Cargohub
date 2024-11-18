@@ -10,11 +10,28 @@ public class Inventory : IHasId
     public int Id { get; set; }
 
     [JsonProperty("item_id")]
-    public int ItemId { get; set; }
+    public string? ItemIdString { get; set; }
 
-    [ForeignKey("ItemId")]  // Specifies that ItemId is a foreign key
-    public virtual Item? Item { get; set; }
-
+    [JsonIgnore] // Ignore this property during serialization
+    public int ItemId
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(ItemIdString) && ItemIdString.StartsWith("P"))
+            {
+                string numericPart = ItemIdString.Substring(1); // Remove the "P" prefix
+                if (int.TryParse(numericPart, out int numericId))
+                {
+                    return numericId;
+                }
+            }
+            return 0;
+        }
+        set
+        {
+            ItemIdString = "P" + value.ToString();
+        }
+    }
     [JsonProperty("description")]
     public string? Description { get; set; }
 

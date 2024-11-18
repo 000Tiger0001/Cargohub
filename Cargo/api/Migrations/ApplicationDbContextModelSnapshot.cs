@@ -75,6 +75,9 @@ namespace api.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ItemIdString")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ItemReference")
                         .HasColumnType("TEXT");
 
@@ -100,8 +103,6 @@ namespace api.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
 
                     b.ToTable("Inventories");
                 });
@@ -583,17 +584,6 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Warehouses");
-                });
-
-            modelBuilder.Entity("Inventory", b =>
-                {
-                    b.HasOne("Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("OrderItemMovement", b =>
