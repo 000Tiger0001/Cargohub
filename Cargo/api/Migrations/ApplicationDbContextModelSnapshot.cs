@@ -344,6 +344,9 @@ namespace api.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ItemIdString")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("OrderId")
                         .HasColumnType("INTEGER");
 
@@ -425,7 +428,10 @@ namespace api.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ItemId")
+                    b.Property<int>("ItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ItemIdString")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("ShipmentId")
@@ -526,7 +532,10 @@ namespace api.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ItemId")
+                    b.Property<int>("ItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ItemIdString")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("TransferId")

@@ -14,10 +14,10 @@ public class JsonToDb
             "ItemLine",
             "ItemType",
             "Location",
-            // "Order",
-            // "Shipment",
+            "Order",
+            "Shipment",
             "Supplier",
-            // "Transfer",
+            "Transfer",
             "Warehouse"
         };
 
@@ -30,10 +30,10 @@ public class JsonToDb
             typeof(ItemLine),
             typeof(ItemType),
             typeof(Location),
-            // typeof(Order),
-            // typeof(Shipment),
+            typeof(Order),
+            typeof(Shipment),
             typeof(Supplier),
-            // typeof(Transfer),
+            typeof(Transfer),
             typeof(Warehouse)
         };
 
