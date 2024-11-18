@@ -36,7 +36,7 @@ public class TransferServices
 
     public async Task<bool> UpdateTransfer(Transfer transfer)
     {
-        if (transfer is null) return false;
+        if (transfer is null || transfer.Id == Guid.Empty) return false;
 
         List<Transfer> transfers = await GetTransfers();
         int foundTransferIndex = transfers.FindIndex(t => t.Id == transfer.Id);
