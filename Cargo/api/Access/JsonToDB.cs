@@ -74,10 +74,29 @@ public class JsonToDb
 
                 // Dynamically determine the item type to deserialize based on the dataType
                 Type itemType = classes[i];
-
                 Type listType = typeof(List<>).MakeGenericType(itemType);
                 var items = JsonConvert.DeserializeObject(content, listType);
                 var data = (IEnumerable<object>)items!;
+
+                // make sure ID doesn`t start with 0
+                if (data.Any())
+                {
+                    var firstItem = data.ElementAt(0);
+                    // Map and increment the id for each item if the first item's index is 0
+                    int id = 1;
+                    foreach (var item in data)
+                    {
+                        // Here we are assuming each item has an 'Id' property, and it's of type 'int'
+                        var itemProperty = item.GetType().GetProperty("Id");
+                        if (itemProperty != null && itemProperty.CanWrite)
+                        {
+                            itemProperty.SetValue(item, id);
+                            id++;
+                        }
+                    }
+                }
+
+
 
                 if (!await access.IsTableEmpty())
                 {

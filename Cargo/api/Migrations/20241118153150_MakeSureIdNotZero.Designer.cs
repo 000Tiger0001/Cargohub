@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241118151101_IntegersButNullable")]
-    partial class IntegersButNullable
+    [Migration("20241118153150_MakeSureIdNotZero")]
+    partial class MakeSureIdNotZero
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
