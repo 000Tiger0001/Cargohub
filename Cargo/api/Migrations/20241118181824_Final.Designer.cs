@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241118170644_TestInt")]
-    partial class TestInt
+    [Migration("20241118181824_Final")]
+    partial class Final
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,6 +78,9 @@ namespace api.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ItemIdString")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ItemReference")
                         .HasColumnType("TEXT");
 
@@ -104,8 +107,6 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
-
                     b.ToTable("Inventories");
                 });
 
@@ -129,6 +130,9 @@ namespace api.Migrations
 
                     b.Property<int>("ItemGroupId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ItemIdString")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ItemLineId")
                         .HasColumnType("INTEGER");
@@ -346,6 +350,9 @@ namespace api.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ItemIdString")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("OrderId")
                         .HasColumnType("INTEGER");
 
@@ -427,7 +434,10 @@ namespace api.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ItemId")
+                    b.Property<int>("ItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ItemIdString")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("ShipmentId")
@@ -528,7 +538,10 @@ namespace api.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ItemId")
+                    b.Property<int>("ItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ItemIdString")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("TransferId")
@@ -586,17 +599,6 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Warehouses");
-                });
-
-            modelBuilder.Entity("Inventory", b =>
-                {
-                    b.HasOne("Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("OrderItemMovement", b =>

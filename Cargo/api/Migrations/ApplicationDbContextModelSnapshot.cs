@@ -128,6 +128,9 @@ namespace api.Migrations
                     b.Property<int>("ItemGroupId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ItemIdString")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("ItemLineId")
                         .HasColumnType("INTEGER");
 

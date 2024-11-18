@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class TestInt : Migration
+    public partial class Final : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,30 @@ namespace api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clients", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Inventories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ItemIdString = table.Column<string>(type: "TEXT", nullable: true),
+                    ItemId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    ItemReference = table.Column<string>(type: "TEXT", nullable: true),
+                    Locations = table.Column<string>(type: "TEXT", nullable: true),
+                    TotalOnHand = table.Column<int>(type: "INTEGER", nullable: false),
+                    TotalExpected = table.Column<int>(type: "INTEGER", nullable: false),
+                    TotalOrdered = table.Column<int>(type: "INTEGER", nullable: false),
+                    TotalAllocated = table.Column<int>(type: "INTEGER", nullable: false),
+                    TotalAvailable = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Inventories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,6 +96,7 @@ namespace api.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    ItemIdString = table.Column<string>(type: "TEXT", nullable: true),
                     Code = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     ShortDescription = table.Column<string>(type: "TEXT", nullable: true),
@@ -256,40 +281,12 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Inventories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ItemId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    ItemReference = table.Column<string>(type: "TEXT", nullable: true),
-                    Locations = table.Column<string>(type: "TEXT", nullable: true),
-                    TotalOnHand = table.Column<int>(type: "INTEGER", nullable: false),
-                    TotalExpected = table.Column<int>(type: "INTEGER", nullable: false),
-                    TotalOrdered = table.Column<int>(type: "INTEGER", nullable: false),
-                    TotalAllocated = table.Column<int>(type: "INTEGER", nullable: false),
-                    TotalAvailable = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Inventories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Inventories_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "OrderItemMovement",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    ItemIdString = table.Column<string>(type: "TEXT", nullable: true),
                     ItemId = table.Column<int>(type: "INTEGER", nullable: false),
                     Amount = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderId = table.Column<int>(type: "INTEGER", nullable: true)
@@ -310,7 +307,8 @@ namespace api.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ItemId = table.Column<string>(type: "TEXT", nullable: true),
+                    ItemIdString = table.Column<string>(type: "TEXT", nullable: true),
+                    ItemId = table.Column<int>(type: "INTEGER", nullable: false),
                     Amount = table.Column<int>(type: "INTEGER", nullable: false),
                     ShipmentId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
@@ -330,7 +328,8 @@ namespace api.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ItemId = table.Column<string>(type: "TEXT", nullable: true),
+                    ItemIdString = table.Column<string>(type: "TEXT", nullable: true),
+                    ItemId = table.Column<int>(type: "INTEGER", nullable: false),
                     Amount = table.Column<int>(type: "INTEGER", nullable: false),
                     TransferId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
@@ -343,11 +342,6 @@ namespace api.Migrations
                         principalTable: "Transfers",
                         principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Inventories_ItemId",
-                table: "Inventories",
-                column: "ItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItemMovement_OrderId",
@@ -381,6 +375,9 @@ namespace api.Migrations
                 name: "ItemLines");
 
             migrationBuilder.DropTable(
+                name: "Items");
+
+            migrationBuilder.DropTable(
                 name: "ItemTypes");
 
             migrationBuilder.DropTable(
@@ -400,9 +397,6 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Warehouses");
-
-            migrationBuilder.DropTable(
-                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "Orders");
