@@ -1,10 +1,6 @@
 public class ItemLineServices
 {
-    public async Task<List<ItemLine>> GetItemLines()
-    {
-        List<ItemLine> itemLines = await AccessJson.ReadJson<ItemLine>();
-        return itemLines;
-    }
+    public async Task<List<ItemLine>> GetItemLines() => await AccessJson.ReadJson<ItemLine>();
 
     public async Task<ItemLine> GetItemLine(Guid itemLineId)
     {

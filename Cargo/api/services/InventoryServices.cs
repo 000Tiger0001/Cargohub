@@ -1,23 +1,17 @@
 public class InventoryServices
 {
-    public async Task<List<Inventory>> GetInventories()
-    {
-        List<Inventory> inventories = await AccessJson.ReadJson<Inventory>();
-        return inventories;
-    }
+    public async Task<List<Inventory>> GetInventories() => await AccessJson.ReadJson<Inventory>();
 
     public async Task<Inventory> GetInventory(Guid inventoryId)
     {
         List<Inventory> inventories = await GetInventories();
-        Inventory foundInventory = inventories.FirstOrDefault(i => i.Id == inventoryId)!;
-        return foundInventory;
+        return inventories.FirstOrDefault(i => i.Id == inventoryId)!; ;
     }
 
     public async Task<List<Inventory>> GetInventoriesforItem(Guid itemId)
     {
         List<Inventory> inventories = await GetInventories();
-        List<Inventory> inventoriesWithItemId = inventories.Where(i => i.ItemId == itemId).ToList();
-        return inventoriesWithItemId;
+        return inventories.Where(i => i.ItemId == itemId).ToList();
     }
 
     public async Task<Dictionary<string, int>> GetInventoryTotalsForItem(Guid itemId)

@@ -1,4 +1,3 @@
-using System.Runtime.Intrinsics.X86;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("Cargohub")]

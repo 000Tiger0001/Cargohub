@@ -1,10 +1,6 @@
 public class ItemGroupServices
 {
-    public async Task<List<ItemGroup>> GetItemGroups()
-    {
-        List<ItemGroup> itemGroups = await AccessJson.ReadJson<ItemGroup>();
-        return itemGroups;
-    }
+    public async Task<List<ItemGroup>> GetItemGroups() => await AccessJson.ReadJson<ItemGroup>();
 
     public async Task<ItemGroup> GetItemGroup(Guid itemGroupId)
     {

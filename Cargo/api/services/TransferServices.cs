@@ -1,10 +1,6 @@
 public class TransferServices
 {
-    public async Task<List<Transfer>> GetTransfers()
-    {
-        List<Transfer> transfers = await AccessJson.ReadJson<Transfer>();
-        return transfers;
-    }
+    public async Task<List<Transfer>> GetTransfers() => await AccessJson.ReadJson<Transfer>();
 
     public async Task<Transfer> GetTransfer(Guid transferId)
     {
@@ -17,8 +13,7 @@ public class TransferServices
         Transfer transfer = await GetTransfer(transferId);
         if (transfer is null) return default!;
 
-        Dictionary<Guid, int> items = transfer.Items;
-        return items;
+        return transfer.Items;
     }
 
     public async Task<bool> AddTransfer(Transfer transfer)

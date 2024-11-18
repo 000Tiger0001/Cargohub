@@ -1,10 +1,6 @@
 public class WarehouseServices
 {
-    public async Task<List<Warehouse>> GetWarehouses()
-    {
-        List<Warehouse> warehouses = await AccessJson.ReadJson<Warehouse>();
-        return warehouses;
-    }
+    public async Task<List<Warehouse>> GetWarehouses() => await AccessJson.ReadJson<Warehouse>();
 
     public async Task<Warehouse> GetWarehouse(Guid warehouseId)
     {

@@ -1,23 +1,17 @@
 public class LocationServices
 {
-    public async Task<List<Location>> GetLocations()
-    {
-        List<Location> locations = await AccessJson.ReadJson<Location>();
-        return locations;
-    }
+    public async Task<List<Location>> GetLocations() => await AccessJson.ReadJson<Location>();
 
     public async Task<Location> GetLocation(Guid locationId)
     {
         List<Location> locations = await GetLocations();
-        Location location = locations.FirstOrDefault(l => l.Id == locationId)!;
-        return location;
+        return locations.FirstOrDefault(l => l.Id == locationId)!;
     }
 
     public async Task<List<Location>> GetLocationsInWarehouse(Guid warehouseId)
     {
         List<Location> locations = await GetLocations();
-        List<Location> locationsInWarehouse = locations.FindAll(l => l.WarehouseId == warehouseId);
-        return locationsInWarehouse;
+        return locations.FindAll(l => l.WarehouseId == warehouseId);
     }
 
     public async Task<bool> AddLocation(Location location)

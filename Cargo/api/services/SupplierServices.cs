@@ -1,10 +1,6 @@
 public class SupplierServices
 {
-    public async Task<List<Supplier>> GetSuppliers()
-    {
-        List<Supplier> suppliers = await AccessJson.ReadJson<Supplier>();
-        return suppliers;
-    }
+    public async Task<List<Supplier>> GetSuppliers() => await AccessJson.ReadJson<Supplier>();
 
     public async Task<Supplier> GetSupplier(Guid supplierId)
     {

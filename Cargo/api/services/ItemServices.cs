@@ -1,10 +1,6 @@
 public class ItemServices
 {
-    public async Task<List<Item>> GetItems()
-    {
-        List<Item> items = await AccessJson.ReadJson<Item>();
-        return items;
-    }
+    public async Task<List<Item>> GetItems() => await AccessJson.ReadJson<Item>();
 
     public async Task<Item> GetItem(Guid itemId)
     {
@@ -15,29 +11,25 @@ public class ItemServices
     public async Task<List<Item>> GetItemsForItemLine(Guid itemLineId)
     {
         List<Item> items = await GetItems();
-        List<Item> itemsWithItemLineId = items.FindAll(i => i.ItemLineId == itemLineId);
-        return itemsWithItemLineId;
+        return items.FindAll(i => i.ItemLineId == itemLineId);
     }
 
     public async Task<List<Item>> GetItemsForItemGroup(Guid itemGroupId)
     {
         List<Item> items = await GetItems();
-        List<Item> itemsWithItemGroupId = items.FindAll(i => i.ItemGroupId == itemGroupId);
-        return itemsWithItemGroupId;
+        return items.FindAll(i => i.ItemGroupId == itemGroupId);
     }
 
     public async Task<List<Item>> GetItemsForItemType(Guid itemTypeId)
     {
         List<Item> items = await GetItems();
-        List<Item> itemsWithItemTypeId = items.FindAll(i => i.ItemTypeId == itemTypeId);
-        return itemsWithItemTypeId;
+        return items.FindAll(i => i.ItemTypeId == itemTypeId);
     }
 
     public async Task<List<Item>> GetItemsForSupplier(Guid supplierId)
     {
         List<Item> items = await GetItems();
-        List<Item> itemsWithSupplierId = items.FindAll(i => i.SupplierId == supplierId);
-        return itemsWithSupplierId;
+        return items.FindAll(i => i.SupplierId == supplierId);
     }
 
     public async Task<bool> AddItem(Item item)

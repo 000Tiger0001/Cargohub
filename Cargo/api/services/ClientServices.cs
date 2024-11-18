@@ -1,10 +1,6 @@
 public class ClientServices
 {
-    public async Task<List<Client>> GetClients()
-    {
-        List<Client> clients = await AccessJson.ReadJson<Client>();
-        return clients;
-    }
+    public async Task<List<Client>> GetClients() => await AccessJson.ReadJson<Client>();
 
     public async Task<Client> GetClient(Guid clientId)
     {

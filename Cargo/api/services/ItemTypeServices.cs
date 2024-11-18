@@ -1,10 +1,6 @@
 public class ItemTypeServices
 {
-    public async Task<List<ItemType>> GetItemTypes()
-    {
-        List<ItemType> itemTypes = await AccessJson.ReadJson<ItemType>();
-        return itemTypes;
-    }
+    public async Task<List<ItemType>> GetItemTypes() => await AccessJson.ReadJson<ItemType>();
 
     public async Task<ItemType> GetItemType(Guid itemTypeId)
     {

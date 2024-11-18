@@ -1,16 +1,11 @@
 public class ShipmentServices
 {
-    public async Task<List<Shipment>> GetShipments()
-    {
-        List<Shipment> shipments = await AccessJson.ReadJson<Shipment>();
-        return shipments;
-    }
+    public async Task<List<Shipment>> GetShipments() => await AccessJson.ReadJson<Shipment>();
 
     public async Task<Shipment> GetShipment(Guid shipmentId)
     {
         List<Shipment> shipments = await GetShipments();
-        Shipment foundShipment = shipments.FirstOrDefault(s => s.Id == shipmentId)!;
-        return foundShipment;
+        return shipments.FirstOrDefault(s => s.Id == shipmentId)!;
     }
 
     public async Task<Dictionary<Guid, int>> GetItemsInShipment(Guid shipmentId)
