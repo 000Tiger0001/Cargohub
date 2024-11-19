@@ -109,7 +109,7 @@ public class JsonToDb
                         if (addMethod != null)
                         {
                             var result = await (Task<bool>)addMethod.Invoke(access, new object[] { data });
-                            Console.WriteLine($"Add result: {result}");
+                            // Console.WriteLine($"Add result: {result}");
                         }
                     }
                     catch (Exception ex)

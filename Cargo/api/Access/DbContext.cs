@@ -21,13 +21,6 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Order>().HasKey(o => o.Id);
-        modelBuilder.Entity<Shipment>().HasKey(s => s.Id);
-
-        modelBuilder.Entity<ShipmentItemMovement>().HasKey(s => s.Id);
-        modelBuilder.Entity<OrderItemMovement>().HasKey(o => o.Id);
-        modelBuilder.Entity<TransferItemMovement>().HasKey(t => t.Id);
-
         // Configure entities and relationships here if needed
         base.OnModelCreating(modelBuilder);
     }
