@@ -3,21 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 [Route("Cargohub")]
 public class ItemLineControllers : Controller
 {
-    ItemLineServices ILS;
+    private ItemLineServices _itemLineService;
 
-    public ItemLineControllers(ItemLineServices ils)
+    public ItemLineControllers(ItemLineServices itemLineService)
     {
-        ILS = ils;
+        _itemLineService = itemLineService;
     }
 
     [HttpGet("get-item-lines")]
-    public async Task<IActionResult> GetItemLines() => Ok(await ILS.GetItemLines());
+    public async Task<IActionResult> GetItemLines() => Ok(await _itemLineService.GetItemLines());
 
     [HttpGet("get-item-line")]
-    public async Task<IActionResult> GetItemLine([FromQuery] Guid itemLineId)
+    public async Task<IActionResult> GetItemLine([FromQuery] int itemLineId)
     {
-        if (itemLineId == Guid.Empty) return BadRequest("You can't use an empty string. ");
-        ItemLine itemLine = await ILS.GetItemLine(itemLineId);
+        if (itemLineId == 0) return BadRequest("You can't use an empty string. ");
+        ItemLine? itemLine = await _itemLineService.GetItemLine(itemLineId);
         if (itemLine is null) return BadRequest("Item line not found. ");
         return Ok(itemLine);
     }
@@ -27,7 +27,7 @@ public class ItemLineControllers : Controller
     {
         if (itemLine is null || itemLine.Name == "") return BadRequest("Not enough info. ");
 
-        bool IsAdded = await ILS.AddItemLine(itemLine);
+        bool IsAdded = await _itemLineService.AddItemLine(itemLine);
         if (!IsAdded) return BadRequest("Can't add item line. ");
         return Ok("Item line added. ");
     }
@@ -35,19 +35,19 @@ public class ItemLineControllers : Controller
     [HttpPut("update-item-line")]
     public async Task<IActionResult> UpdateItemLine([FromBody] ItemLine itemLine)
     {
-        if (itemLine is null || itemLine.Id == Guid.Empty) return BadRequest("Not enough info. ");
+        if (itemLine is null || itemLine.Id == 0) return BadRequest("Not enough info. ");
 
-        bool IsUpdated = await ILS.UpdateItemLine(itemLine);
+        bool IsUpdated = await _itemLineService.UpdateItemLine(itemLine);
         if (!IsUpdated) return BadRequest("Item line can't be updated. ");
         return Ok("Item line updated. ");
     }
 
     [HttpDelete("remove-item-line")]
-    public async Task<IActionResult> RemoveItemLine([FromQuery] Guid itemLineId)
+    public async Task<IActionResult> RemoveItemLine([FromQuery] int itemLineId)
     {
-        if (itemLineId == Guid.Empty) return BadRequest("Can't remove item line with empty id. ");
+        if (itemLineId == 0) return BadRequest("Can't remove item line with empty id. ");
 
-        bool IsRemoved = await ILS.RemoveItemLine(itemLineId);
+        bool IsRemoved = await _itemLineService.RemoveItemLine(itemLineId);
         if (!IsRemoved) return BadRequest("Couldn't remove item line with given id. ");
         return Ok("Item line removed. ");
     }

@@ -1,43 +1,30 @@
 public class ItemLineServices
 {
-    public async Task<List<ItemLine>> GetItemLines() => await AccessJson.ReadJson<ItemLine>();
+    private ItemLineAccess _itemLineAccess;
 
-    public async Task<ItemLine> GetItemLine(Guid itemLineId)
+    public ItemLineServices(ItemLineAccess itemLineAccess)
     {
-        List<ItemLine> itemLines = await GetItemLines();
-        return itemLines.FirstOrDefault(i => i.Id == itemLineId)!;
+        _itemLineAccess = itemLineAccess;
     }
+    public async Task<List<ItemLine>> GetItemLines() => await _itemLineAccess.GetAll();
+
+    public async Task<ItemLine?> GetItemLine(int itemLineId) => await _itemLineAccess.GetById(itemLineId);
 
     public async Task<bool> AddItemLine(ItemLine itemLine)
     {
         if (itemLine is null || itemLine.Name == "") return false;
         List<ItemLine> itemLines = await GetItemLines();
         ItemLine doubleItemLine = itemLines.Find(i => i.Name == itemLine.Name)!;
-        if (doubleItemLine is null) return false;
-        await AccessJson.WriteJson(itemLine);
-        return true;
+        if (doubleItemLine is not null) return false;
+        return await _itemLineAccess.Add(itemLine);
     }
 
     public async Task<bool> UpdateItemLine(ItemLine itemLine)
     {
-        if (itemLine is null) return false;
-        List<ItemLine> itemLines = await GetItemLines();
-        int itemLineIndex = itemLines.FindIndex(i => i.Id == itemLine.Id);
-        if (itemLineIndex == -1) return false;
+        if (itemLine is null || itemLine.Id == 0) return false;
         itemLine.UpdatedAt = DateTime.Now;
-        itemLines[itemLineIndex] = itemLine;
-        AccessJson.WriteJsonList(itemLines);
-        return true;
+        return await _itemLineAccess.Update(itemLine);
     }
 
-    public async Task<bool> RemoveItemLine(Guid itemLineId)
-    {
-        if (itemLineId == Guid.Empty) return false;
-        List<ItemLine> itemLines = await GetItemLines();
-        ItemLine foundItemLine = itemLines.FirstOrDefault(i => i.Id == itemLineId)!;
-        if (foundItemLine is null) return false;
-        itemLines.Remove(foundItemLine);
-        AccessJson.WriteJsonList(itemLines);
-        return true;
-    }
+    public async Task<bool> RemoveItemLine(int itemLineId) => await _itemLineAccess.Remove(itemLineId);
 }

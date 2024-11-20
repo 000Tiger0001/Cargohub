@@ -46,7 +46,6 @@ public class ItemServices
     public async Task<bool> UpdateItem(Item item)
     {
         if (item is null || item.Id == 0) return false;
-
         item.UpdatedAt = DateTime.Now;
         return await _itemAccess.Update(item);
     }
