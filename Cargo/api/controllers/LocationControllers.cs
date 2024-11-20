@@ -3,12 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 [Route("Cargohub")]
 public class LocationControllers : Controller
 {
-    LocationServices LS;
     private readonly LocationAccess _locationAccess;
 
-    public LocationControllers(LocationServices ls, LocationAccess locationAccess)
+    public LocationControllers(LocationAccess locationAccess)
     {
-        LS = ls;
         _locationAccess = locationAccess;
     }
 
