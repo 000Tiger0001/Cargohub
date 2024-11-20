@@ -37,6 +37,11 @@ builder.Services.AddTransient<WarehouseAccess>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxResponseBufferSize = 104857600; // 100 MB
+});
+
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
