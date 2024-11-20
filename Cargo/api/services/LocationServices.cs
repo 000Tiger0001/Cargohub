@@ -1,13 +1,13 @@
 public class LocationServices
 {
-    private LocationAccess _locationAcces;
+    private LocationAccess _locationAccess;
     public LocationServices(LocationAccess locationAcces)
     {
-        _locationAcces = locationAcces;
+        _locationAccess = locationAcces;
     }
-    public async Task<List<Location>> GetLocations() => await _locationAcces.GetAll();
+    public async Task<List<Location>> GetLocations() => await _locationAccess.GetAll();
 
-    public async Task<Location?> GetLocation(int locationId) => await _locationAcces.GetById(locationId)!;
+    public async Task<Location?> GetLocation(int locationId) => await _locationAccess.GetById(locationId)!;
 
     public async Task<List<Location>> GetLocationsInWarehouse(int warehouseId)
     {
@@ -20,7 +20,7 @@ public class LocationServices
         List<Location> locations = await GetLocations();
         Location doubleLocation = locations.FirstOrDefault(l => l.Code == location.Code && l.Name == location.Name && l.WarehouseId == location.WarehouseId)!;
         if (doubleLocation is not null) return false;
-        await _locationAcces.Add(location);
+        await _locationAccess.Add(location);
         return true;
     }
 
@@ -29,9 +29,8 @@ public class LocationServices
         if (location is null || location.Id == 0) return false;
 
         location.UpdatedAt = DateTime.Now;
-        bool IsUpdated = await _locationAcces.Update(location);
-        return IsUpdated;
+        return await _locationAccess.Update(location);
     }
 
-    public async Task<bool> RemoveLocation(int locationId) => await _locationAcces.Delete(locationId);
+    public async Task<bool> RemoveLocation(int locationId) => await _locationAccess.Remove(locationId);
 }

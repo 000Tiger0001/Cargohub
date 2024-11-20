@@ -17,9 +17,7 @@ public class SupplierServices
         List<Supplier> suppliers = await GetSuppliers();
         Supplier doubleSupplier = suppliers.FirstOrDefault(s => s.Address == supplier.Address && s.AddressExtra == supplier.AddressExtra && s.City == supplier.City && s.Code == supplier.Code && s.ContactName == supplier.ContactName && s.Country == supplier.Country && s.Name == supplier.Name && s.Phonenumber == supplier.Phonenumber && s.Province == supplier.Province && s.Reference == supplier.Reference && s.ZipCode == supplier.ZipCode)!;
         if (doubleSupplier is not null) return false;
-
-        bool IsAdded = await _supplierAccess.Add(supplier);
-        return IsAdded;
+        return await _supplierAccess.Add(supplier); ;
     }
 
     public async Task<bool> UpdateSupplier(Supplier supplier)
@@ -27,9 +25,8 @@ public class SupplierServices
         if (supplier is null || supplier.Id == 0) return false;
 
         supplier.UpdatedAt = DateTime.Now;
-        bool IsUpdated = await _supplierAccess.Update(supplier);
-        return IsUpdated;
+        return await _supplierAccess.Update(supplier); ;
     }
 
-    public async Task<bool> RemoveSupplier(int supplierId) => await _supplierAccess.Delete(supplierId);
+    public async Task<bool> RemoveSupplier(int supplierId) => await _supplierAccess.Remove(supplierId);
 }

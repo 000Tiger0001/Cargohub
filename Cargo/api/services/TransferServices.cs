@@ -25,9 +25,7 @@ public class TransferServices
         List<Transfer> transfers = await GetTransfers();
         Transfer doubleTransfer = transfers.FirstOrDefault(t => t.Reference == transfer.Reference && t.TransferFrom == transfer.TransferFrom && t.TransferTo == transfer.TransferTo && t.TransferStatus == transfer.TransferStatus)!;
         if (doubleTransfer is null) return false;
-
-        bool IsAdded = await _transferAccess.Add(transfer);
-        return IsAdded;
+        return await _transferAccess.Add(transfer); ;
     }
 
     public async Task<bool> UpdateTransfer(Transfer transfer)
@@ -35,9 +33,8 @@ public class TransferServices
         if (transfer is null || transfer.Id == 0) return false;
 
         transfer.UpdatedAt = DateTime.Now;
-        bool IsUpdated = await _transferAccess.Update(transfer);
-        return IsUpdated;
+        return await _transferAccess.Update(transfer); ;
     }
 
-    public async Task<bool> RemoveTransfer(int transferId) => await _transferAccess.Delete(transferId);
+    public async Task<bool> RemoveTransfer(int transferId) => await _transferAccess.Remove(transferId);
 }

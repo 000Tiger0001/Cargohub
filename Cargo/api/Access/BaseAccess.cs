@@ -73,7 +73,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
         return changes > 0;
     }
 
-    public async Task<bool> Delete(int id)
+    public async Task<bool> Remove(int id)
     {
         var entity = await GetById(id);
         // Retrieve entity to ensure it exists

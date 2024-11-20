@@ -50,9 +50,8 @@ public class OrderServices
         if (order is null || order.Id == 0) return false;
 
         order.UpdatedAt = DateTime.Now;
-        bool IsUpdated = await _orderAccess.Update(order);
-        return IsUpdated;
+        return await _orderAccess.Update(order); ;
     }
 
-    public async Task<bool> RemoveOrder(int orderId) => await _orderAccess.Delete(orderId);
+    public async Task<bool> RemoveOrder(int orderId) => await _orderAccess.Remove(orderId);
 }

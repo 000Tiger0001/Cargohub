@@ -17,8 +17,7 @@ public class ItemTypeServices
         List<ItemType> itemTypes = await GetItemTypes();
         ItemType doubleItemType = itemTypes.FirstOrDefault(i => i.Name == itemType.Name)!;
         if (doubleItemType is null) return false;
-        bool IsAdded = await _itemTypeAccess.Add(itemType);
-        return IsAdded;
+        return await _itemTypeAccess.Add(itemType);
     }
 
     public async Task<bool> UpdateItemType(ItemType itemType)
@@ -26,9 +25,8 @@ public class ItemTypeServices
         if (itemType is null || itemType.Id == 0) return false;
 
         itemType.UpdatedAt = DateTime.Now;
-        bool IsUpdated = await _itemTypeAccess.Update(itemType);
-        return IsUpdated;
+        return await _itemTypeAccess.Update(itemType);
     }
 
-    public async Task<bool> RemoveItemType(int itemTypeId) => await _itemTypeAccess.Delete(itemTypeId);
+    public async Task<bool> RemoveItemType(int itemTypeId) => await _itemTypeAccess.Remove(itemTypeId);
 }
