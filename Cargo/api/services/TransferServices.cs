@@ -1,16 +1,18 @@
 public class TransferServices
 {
-    public async Task<List<Transfer>> GetTransfers() => await AccessJson.ReadJson<Transfer>();
+    private TransferAccess _transferAccess;
 
-    public async Task<Transfer> GetTransfer(Guid transferId)
+    public TransferServices(TransferAccess transferAccess)
     {
-        List<Transfer> transfers = await GetTransfers();
-        return transfers.FirstOrDefault(t => t.Id == transferId)!;
+        _transferAccess = transferAccess;
     }
+    public async Task<List<Transfer>> GetTransfers() => await _transferAccess.GetAll();
 
-    public async Task<Dictionary<Guid, int>> GetItemsInTransfer(Guid transferId)
+    public async Task<Transfer?> GetTransfer(int transferId) => await _transferAccess.GetById(transferId)!;
+
+    public async Task<List<TransferItemMovement>?> GetItemsInTransfer(int transferId)
     {
-        Transfer transfer = await GetTransfer(transferId);
+        Transfer? transfer = await GetTransfer(transferId)!;
         if (transfer is null) return default!;
 
         return transfer.Items;
@@ -18,41 +20,24 @@ public class TransferServices
 
     public async Task<bool> AddTransfer(Transfer transfer)
     {
-        if (transfer is null || transfer.Reference == "" || (transfer.TransferFrom == Guid.Empty && transfer.TransferTo == Guid.Empty) || transfer.TransferStatus == "") return false;
+        if (transfer is null || transfer.Reference == "" || (transfer.TransferFrom == 0 && transfer.TransferTo == 0) || transfer.TransferStatus == "") return false;
 
         List<Transfer> transfers = await GetTransfers();
         Transfer doubleTransfer = transfers.FirstOrDefault(t => t.Reference == transfer.Reference && t.TransferFrom == transfer.TransferFrom && t.TransferTo == transfer.TransferTo && t.TransferStatus == transfer.TransferStatus)!;
         if (doubleTransfer is null) return false;
 
-        transfer.Id = Guid.NewGuid();
-        await AccessJson.WriteJson(transfer);
-        return true;
+        bool IsAdded = await _transferAccess.Add(transfer);
+        return IsAdded;
     }
 
     public async Task<bool> UpdateTransfer(Transfer transfer)
     {
-        if (transfer is null || transfer.Id == Guid.Empty) return false;
-
-        List<Transfer> transfers = await GetTransfers();
-        int foundTransferIndex = transfers.FindIndex(t => t.Id == transfer.Id);
-        if (foundTransferIndex == -1) return false;
+        if (transfer is null || transfer.Id == 0) return false;
 
         transfer.UpdatedAt = DateTime.Now;
-        transfers[foundTransferIndex] = transfer;
-        AccessJson.WriteJsonList(transfers);
-        return true;
+        bool IsUpdated = await _transferAccess.Update(transfer);
+        return IsUpdated;
     }
 
-    public async Task<bool> RemoveTransfer(Guid transferId)
-    {
-        if (transferId == Guid.Empty) return false;
-
-        List<Transfer> transfers = await GetTransfers();
-        Transfer foundTransfer = transfers.FirstOrDefault(t => t.Id == transferId)!;
-        if (foundTransfer is null) return false;
-
-        transfers.Remove(foundTransfer);
-        AccessJson.WriteJsonList(transfers);
-        return true;
-    }
+    public async Task<bool> RemoveTransfer(int transferId) => await _transferAccess.Delete(transferId);
 }
