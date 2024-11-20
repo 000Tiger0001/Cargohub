@@ -30,4 +30,9 @@ public class OrderControllers : Controller
         if (shipmentId == 0) return BadRequest("Can't proccess this id. ");
         return Ok(await _orderServices.GetOrdersInShipment(shipmentId));
     }
+
+    /*public async Task<IActionResult> GetOrdersForClient(int clientId)
+    {
+        if (clientId ==)
+    }*/
 }

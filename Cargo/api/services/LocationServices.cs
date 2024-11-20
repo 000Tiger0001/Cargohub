@@ -9,8 +9,7 @@ public class LocationServices
 
     public async Task<Location> GetLocation(int locationId)
     {
-        List<Location> locations = await GetLocations();
-        return locations.FirstOrDefault(l => l.Id == locationId)!;
+        return await _locationAcces.GetById(locationId)!;
     }
 
     public async Task<List<Location>> GetLocationsInWarehouse(int warehouseId)
