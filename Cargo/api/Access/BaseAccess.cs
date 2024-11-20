@@ -18,7 +18,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
     public async Task<T?> GetById(int id)
     {
-        return await DB.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
+        return await DB.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id)!;
     }
 
 

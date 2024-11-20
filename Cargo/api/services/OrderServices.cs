@@ -44,4 +44,13 @@ public class OrderServices
         bool IsAdded = await _orderAccess.Add(order);
         return IsAdded;
     }
+
+    public async Task<bool> UpdateOrder(Order order)
+    {
+        order.UpdatedAt = DateTime.Now;
+        bool IsUpdated = await _orderAccess.Update(order);
+        return IsUpdated;
+    }
+
+    public async Task<bool> RemoveOrder(int orderId) => await _orderAccess.Delete(orderId);
 }
