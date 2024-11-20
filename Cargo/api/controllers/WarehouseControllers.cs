@@ -44,7 +44,7 @@ public class WarehouseControllers : Controller
     [HttpDelete("remove-warehouse")]
     public async Task<IActionResult> RemoveWarehouse([FromQuery] Guid warehouseId)
     {
-        if (warehouseId == Guid.Empty) return BadRequest("Cannot remove warehouse with empty id. ");
+        if (warehouseId == Guid.Empty) return BadRequest("Can't remove warehouse with empty id. ");
 
         bool IsRemoved = await WS.RemoveWarehouse(warehouseId);
         if (!IsRemoved) return BadRequest("Warehouse couldn't be removed. ");

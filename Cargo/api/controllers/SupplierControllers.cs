@@ -3,22 +3,22 @@ using Microsoft.AspNetCore.Mvc;
 [Route("Cargohub")]
 public class SupplierControllers : Controller
 {
-    private SupplierServices _SS;
+    private SupplierServices SS;
 
     public SupplierControllers(SupplierServices ss)
     {
-        _SS = ss;
+        SS = ss;
     }
 
     [HttpGet("suppliers")]
-    public async Task<IActionResult> GetSuppliers() => Ok(await _SS.GetSuppliers());
+    public async Task<IActionResult> GetSuppliers() => Ok(await SS.GetSuppliers());
 
     [HttpGet("supplier")]
     public async Task<IActionResult> GetSupplier([FromQuery] Guid supplierId)
     {
         if (supplierId == Guid.Empty) return BadRequest("Can't get supplier with empty id. ");
 
-        Supplier supplier = await _SS.GetSupplier(supplierId);
+        Supplier supplier = await SS.GetSupplier(supplierId);
         if (supplier is null) BadRequest("Supplier not found. ");
         return Ok(supplier);
     }
@@ -28,7 +28,7 @@ public class SupplierControllers : Controller
     {
         if (supplier is null || supplier.Address == "" || supplier.AddressExtra == "" || supplier.City == "" || supplier.Code == "" || supplier.ContactName == "" || supplier.Country == "" || supplier.Name == "" || supplier.Phonenumber == "" || supplier.Province == "" || supplier.Reference == "" || supplier.ZipCode == "") return BadRequest("Not enough info given. ");
 
-        bool IsAdded = await _SS.AddSupplier(supplier);
+        bool IsAdded = await SS.AddSupplier(supplier);
         if (!IsAdded) return BadRequest("Can't add supplier. ");
         return Ok("Supplier added. ");
     }
@@ -37,7 +37,7 @@ public class SupplierControllers : Controller
     {
         if (supplier is null || supplier.Id == Guid.Empty) return BadRequest("Not enough given. ");
 
-        bool IsUpdated = await _SS.UpdateSupplier(supplier);
+        bool IsUpdated = await SS.UpdateSupplier(supplier);
         if (!IsUpdated) return BadRequest("Supplier can't be updated. ");
         return Ok("Supplier updated. ");
     }
@@ -46,7 +46,7 @@ public class SupplierControllers : Controller
     {
         if (supplierId == Guid.Empty) return BadRequest("Can't remove supplier with empty id. ");
 
-        bool IsRemoved = await _SS.RemoveSupplier(supplierId);
+        bool IsRemoved = await SS.RemoveSupplier(supplierId);
         if (!IsRemoved) return BadRequest("Supplier can't be removed. ");
         return Ok("Supplier removed. ");
     }
