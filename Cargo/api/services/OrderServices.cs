@@ -47,6 +47,8 @@ public class OrderServices
 
     public async Task<bool> UpdateOrder(Order order)
     {
+        if (order is null || order.Id == 0) return false;
+
         order.UpdatedAt = DateTime.Now;
         bool IsUpdated = await _orderAccess.Update(order);
         return IsUpdated;

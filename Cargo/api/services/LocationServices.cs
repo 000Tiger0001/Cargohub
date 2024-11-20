@@ -26,6 +26,8 @@ public class LocationServices
 
     public async Task<bool> UpdateLocation(Location location)
     {
+        if (location is null || location.Id == 0) return false;
+
         location.UpdatedAt = DateTime.Now;
         bool IsUpdated = await _locationAcces.Update(location);
         return IsUpdated;

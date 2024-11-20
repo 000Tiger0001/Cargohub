@@ -3,21 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 [Route("Cargohub")]
 public class ItemTypeControllers : Controller
 {
-    ItemTypeServices ITS;
+    private ItemTypeServices _itemTypeService;
 
-    public ItemTypeControllers(ItemTypeServices its)
+    public ItemTypeControllers(ItemTypeServices itemTypeServices)
     {
-        ITS = its;
+        _itemTypeService = itemTypeServices;
     }
 
     [HttpGet("get-item-types")]
-    public async Task<IActionResult> GetItemtypes() => Ok(await ITS.GetItemTypes());
+    public async Task<IActionResult> GetItemtypes() => Ok(await _itemTypeService.GetItemTypes());
 
     [HttpGet("get-item-type")]
-    public async Task<IActionResult> GetItemType([FromQuery] Guid itemTypeId)
+    public async Task<IActionResult> GetItemType([FromQuery] int itemTypeId)
     {
-        if (itemTypeId == Guid.Empty) return BadRequest("You can't use an empty string. ");
-        ItemType itemType = await ITS.GetItemType(itemTypeId);
+        if (itemTypeId == 0) return BadRequest("You can't use an empty id. ");
+        ItemType? itemType = await _itemTypeService.GetItemType(itemTypeId);
         if (itemType is null) return BadRequest("Item type not found. ");
         return Ok(itemType);
     }
@@ -27,7 +27,7 @@ public class ItemTypeControllers : Controller
     {
         if (itemType is null || itemType.Name == "") return BadRequest("Not enough info. ");
 
-        bool IsAdded = await ITS.AddItemType(itemType);
+        bool IsAdded = await _itemTypeService.AddItemType(itemType);
         if (!IsAdded) return BadRequest("Can't add item type. ");
         return Ok("Item type added. ");
     }
@@ -35,19 +35,19 @@ public class ItemTypeControllers : Controller
     [HttpPut("update-item-type")]
     public async Task<IActionResult> UpdateItemType([FromBody] ItemType itemType)
     {
-        if (itemType is null || itemType.Id == Guid.Empty) return BadRequest("Not enough info. ");
+        if (itemType is null || itemType.Id == 0) return BadRequest("Not enough info. ");
 
-        bool IsUpdated = await ITS.UpdateItemType(itemType);
+        bool IsUpdated = await _itemTypeService.UpdateItemType(itemType);
         if (!IsUpdated) return BadRequest("Item type can't be updated. ");
         return Ok("Item type updated. ");
     }
 
     [HttpDelete("remove-item-type")]
-    public async Task<IActionResult> RemoveItemType([FromQuery] Guid itemTypeId)
+    public async Task<IActionResult> RemoveItemType([FromQuery] int itemTypeId)
     {
-        if (itemTypeId == Guid.Empty) return BadRequest("Can't remove item type with empty id. ");
+        if (itemTypeId == 0) return BadRequest("Can't remove item type with empty id. ");
 
-        bool IsRemoved = await ITS.RemoveItemType(itemTypeId);
+        bool IsRemoved = await _itemTypeService.RemoveItemType(itemTypeId);
         if (!IsRemoved) return BadRequest("Couldn't remove item type with given id. ");
         return Ok("Item type removed. ");
     }
