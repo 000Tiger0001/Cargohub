@@ -1,23 +1,16 @@
-using api;
-using NUnit.Framework;
+using Xunit;
 
 public class Tests
 {
-    [SetUp]
-    public void Setup()
-    {
-
-    }
-
-    [Test]
+    [Fact]
     public void Test1()
     {
-        Assert.Pass();
+        Assert.True(true);
     }
 
-    [Test]
+    [Fact]
     public void Test2()
     {
-        Assert.AreNotEqual(1, 2);
+        Assert.NotEqual(1, 2);
     }
 }
