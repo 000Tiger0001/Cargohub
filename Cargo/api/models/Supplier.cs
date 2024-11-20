@@ -1,23 +1,57 @@
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 public class Supplier : IHasId
 {
-    public Guid Id { get; set; }
-    public string Code { get; set; }
-    public string Name { get; set; }
-    public string Address { get; set; }
-    public string AddressExtra { get; set; }
-    public string City { get; set; }
-    public string ZipCode { get; set; }
-    public string Province { get; set; }
-    public string Country { get; set; }
-    public string ContactName { get; set; }
-    public string Phonenumber { get; set; }
-    public string Reference { get; set; }
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [JsonProperty("id")]
+    public int Id { get; set; }
+
+    [JsonProperty("code")]
+    public string? Code { get; set; }
+
+    [JsonProperty("name")]
+    public string? Name { get; set; }
+
+    [JsonProperty("address")]
+    public string? Address { get; set; }
+
+    [JsonProperty("address_extra")]
+    public string? AddressExtra { get; set; }
+
+    [JsonProperty("city")]
+    public string? City { get; set; }
+
+    [JsonProperty("zip_code")]
+    public string? ZipCode { get; set; }
+
+    [JsonProperty("province")]
+    public string? Province { get; set; }
+
+    [JsonProperty("country")]
+    public string? Country { get; set; }
+
+    [JsonProperty("contact_name")]
+    public string? ContactName { get; set; }
+
+    [JsonProperty("phonenumber")]
+    public string? Phonenumber { get; set; }
+
+    [JsonProperty("reference")]
+    public string? Reference { get; set; }
+
+    [JsonProperty("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    [JsonProperty("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Supplier(string code, string name, string address, string addressExtra, string city, string zipCode, string province, string country, string contactName, string phonenumber, string reference)
+    public Supplier() { }
+    public Supplier(int id, string code, string name, string address, string addressExtra, string city, string zipCode, string province, string country, string contactName, string phonenumber, string reference)
     {
-        Id = Guid.NewGuid();
+        Id = id;
         Code = code;
         Name = name;
         Address = address;

@@ -1,17 +1,39 @@
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 public class Transfer : IHasId
 {
-    public Guid Id { get; set; }
-    public string Reference { get; set; }
-    public Guid TransferFrom { get; set; }
-    public Guid TransferTo { get; set; }
-    public string TransferStatus { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    public Dictionary<Guid, int> Items { get; set; }
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [JsonProperty("id")]
+    public int Id { get; set; }
 
-    public Transfer(string reference, Guid transferFrom, Guid transferTo, string transferStatus, Dictionary<Guid, int> items)
+    [JsonProperty("reference")]
+    public string? Reference { get; set; }
+
+    [JsonProperty("transfer_from")]
+    public int? TransferFrom { get; set; }
+
+    [JsonProperty("transfer_to")]
+    public int? TransferTo { get; set; }
+
+    [JsonProperty("transfer_status")]
+    public string? TransferStatus { get; set; }
+
+    [JsonProperty("created_at")]
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    [JsonProperty("updated_at")]
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
+    [JsonProperty("items")]
+    public List<TransferItemMovement>? Items { get; set; }
+
+    public Transfer() { }
+    public Transfer(int id, string reference, int transferFrom, int transferTo, string transferStatus, List<TransferItemMovement> items)
     {
-        Id = Guid.NewGuid();
+        Id = id;
         Reference = reference;
         TransferFrom = transferFrom;
         TransferTo = transferTo;

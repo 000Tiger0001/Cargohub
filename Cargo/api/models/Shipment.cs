@@ -1,29 +1,75 @@
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 public class Shipment : IHasId
 {
-    public Guid Id { get; set; }
-    public List<Guid> OrderIds { get; set; }
-    public int SourceId { get; set; }
-    public DateTime OrderDate { get; set; }
-    public DateTime RequestDate { get; set; }
-    public DateTime ShipmentDate { get; set; }
-    public char ShipmentType { get; set; }
-    public string ShipmentStatus { get; set; }
-    public string Notes { get; set; }
-    public string CarrierCode { get; set; }
-    public string CarrierDescription { get; set; }
-    public string ServiceCode { get; set; }
-    public string PaymentType { get; set; }
-    public string TransferMode { get; set; }
-    public int TotalPackageCount { get; set; }
-    public double TotalPackageWeight { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    public Dictionary<Guid, int> Items { get; set; }
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [JsonProperty("id")]
+    public int Id { get; set; }
 
-    public Shipment(List<Guid> orderIds, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, Dictionary<Guid, int> items)
+    [JsonProperty("order_id")]
+    // leave single order for now, since there is no logic yet to make a shipment for multiple orders
+    public int OrderId { get; set; }
+
+    [JsonProperty("source_id")]
+    public int SourceId { get; set; }
+
+    [JsonProperty("order_date")]
+    public DateTime OrderDate { get; set; }
+
+    [JsonProperty("request_date")]
+    public DateTime RequestDate { get; set; }
+
+    [JsonProperty("shipment_date")]
+    public DateTime ShipmentDate { get; set; }
+
+    [JsonProperty("shipment_type")]
+    public char ShipmentType { get; set; }
+
+    [JsonProperty("shipment_status")]
+    public string? ShipmentStatus { get; set; }
+
+    [JsonProperty("notes")]
+    public string? Notes { get; set; }
+
+    [JsonProperty("carrier_code")]
+    public string? CarrierCode { get; set; }
+
+    [JsonProperty("carrier_description")]
+    public string? CarrierDescription { get; set; }
+
+    [JsonProperty("service_code")]
+    public string? ServiceCode { get; set; }
+
+    [JsonProperty("payment_type")]
+    public string? PaymentType { get; set; }
+
+    [JsonProperty("transfer_mode")]
+    public string? TransferMode { get; set; }
+
+    [JsonProperty("total_package_count")]
+    public int TotalPackageCount { get; set; }
+
+    [JsonProperty("total_package_weight")]
+    public double TotalPackageWeight { get; set; }
+
+    [JsonProperty("created_at")]
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    [JsonProperty("updated_at")]
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
+    [JsonProperty("items")]
+    public List<ShipmentItemMovement>? Items { get; set; }
+
+    public Shipment() { }
+
+    public Shipment(int id, int orderId, int sourceId, DateTime orderDate, DateTime requestDate, DateTime shipmentDate, char shipmentType, string shipmentStatus, string notes, string carrierCode, string carrierDescription, string serviceCode, string paymentType, string transerMode, int totalPackageCount, double totalPackageWeight, List<ShipmentItemMovement> items)
     {
-        Id = Guid.NewGuid();
-        OrderIds = orderIds;
+        Id = id;
+        OrderId = orderId;
         SourceId = sourceId;
         OrderDate = orderDate;
         RequestDate = requestDate;
