@@ -1,5 +1,5 @@
-namespace Tests;
 using api;
+using NUnit.Framework;
 
 public class Tests
 {
@@ -13,5 +13,11 @@ public class Tests
     public void Test1()
     {
         Assert.Pass();
+    }
+
+    [Test]
+    public void Test2()
+    {
+        Assert.AreNotEqual(1, 2);
     }
 }
