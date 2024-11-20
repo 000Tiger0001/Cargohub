@@ -1,20 +1,21 @@
 public class InventoryServices
 {
-    public async Task<List<Inventory>> GetInventories() => await AccessJson.ReadJson<Inventory>();
+    private InventoryAccess _inventoryAccess;
 
-    public async Task<Inventory> GetInventory(Guid inventoryId)
+    public InventoryServices(InventoryAccess inventoryAccess)
     {
-        List<Inventory> inventories = await GetInventories();
-        return inventories.FirstOrDefault(i => i.Id == inventoryId)!; ;
+        _inventoryAccess = inventoryAccess;
     }
+    public async Task<List<Inventory>> GetInventories() => await _inventoryAccess.GetAll();
 
-    public async Task<List<Inventory>> GetInventoriesforItem(Guid itemId)
+    public async Task<Inventory?> GetInventory(int inventoryId) => await _inventoryAccess.GetById(inventoryId);
+    public async Task<List<Inventory>> GetInventoriesforItem(int itemId)
     {
         List<Inventory> inventories = await GetInventories();
         return inventories.Where(i => i.ItemId == itemId).ToList();
     }
 
-    public async Task<Dictionary<string, int>> GetInventoryTotalsForItem(Guid itemId)
+    public async Task<Dictionary<string, int>> GetInventoryTotalsForItem(int itemId)
     {
         List<Inventory> inventories = await GetInventories();
         Dictionary<string, int> result = new()
@@ -42,32 +43,18 @@ public class InventoryServices
     public async Task<bool> AddInventory(Inventory inventory)
     {
         List<Inventory> inventories = await GetInventories();
-        inventory.Id = Guid.NewGuid();
         Inventory doubleInventory = inventories.FirstOrDefault(i => i.ItemId == inventory.ItemId || i.ItemReference == inventory.ItemReference)!;
         if (doubleInventory is not null) return false;
-        await AccessJson.WriteJson(inventory);
-        return true;
+        return await _inventoryAccess.Add(inventory);
     }
 
     public async Task<bool> UpdateInventory(Inventory inventory)
     {
-        List<Inventory> inventories = await GetInventories();
-        int foundInventoryIndex = inventories.FindIndex(i => i.Id == inventory.Id);
-        if (foundInventoryIndex == -1) return false;
+        if (inventory is null || inventory.Id == 0) return false;
+
         inventory.UpdatedAt = DateTime.Now;
-        inventories[foundInventoryIndex] = inventory;
-        AccessJson.WriteJsonList(inventories);
-        return true;
+        return await _inventoryAccess.Update(inventory);
     }
 
-    public async Task<bool> RemoveInventory(Guid inventoryId)
-    {
-        if (inventoryId == Guid.Empty) return false;
-        List<Inventory> inventories = await GetInventories();
-        Inventory foundInventory = inventories.FirstOrDefault(i => i.Id == inventoryId)!;
-        if (foundInventory is null) return false;
-        inventories.Remove(foundInventory);
-        AccessJson.WriteJsonList(inventories);
-        return true;
-    }
+    public async Task<bool> RemoveInventory(int inventoryId) => await _inventoryAccess.Remove(inventoryId);
 }
