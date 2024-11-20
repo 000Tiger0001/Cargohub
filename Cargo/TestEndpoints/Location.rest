@@ -1,0 +1,5 @@
+### Get all locations
+GET http://localhost:3000/Cargohub/locations
+
+### Get location by id
+GET http://localhost:3000/Cargohub/location?locationid=10
