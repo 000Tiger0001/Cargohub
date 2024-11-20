@@ -7,10 +7,7 @@ public class LocationServices
     }
     public async Task<List<Location>> GetLocations() => await _locationAcces.GetAll();
 
-    public async Task<Location> GetLocation(int locationId)
-    {
-        return await _locationAcces.GetById(locationId)!;
-    }
+    public async Task<Location?> GetLocation(int locationId) => await _locationAcces.GetById(locationId)!;
 
     public async Task<List<Location>> GetLocationsInWarehouse(int warehouseId)
     {
