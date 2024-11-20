@@ -1,19 +1,19 @@
 public class ShipmentServices
 {
-    public async Task<List<Shipment>> GetShipments() => await AccessJson.ReadJson<Shipment>();
-
-    public async Task<Shipment> GetShipment(Guid shipmentId)
+    private ShipmentAccess _shipmentAccess;
+    public ShipmentServices(ShipmentAccess shipmentAccess)
     {
-        List<Shipment> shipments = await GetShipments();
-        return shipments.FirstOrDefault(s => s.Id == shipmentId)!;
+        _shipmentAccess = shipmentAccess;
     }
+    public async Task<List<Shipment>> GetShipments() => await _shipmentAccess.GetAll();
 
-    public async Task<Dictionary<Guid, int>> GetItemsInShipment(Guid shipmentId)
+    public async Task<Shipment?> GetShipment(int shipmentId) => await _shipmentAccess.GetById(shipmentId);
+
+    public async Task<List<ShipmentItemMovement>?> GetItemsInShipment(int shipmentId)
     {
-        List<Shipment> shipments = await GetShipments();
-        Shipment foundShipment = shipments.FirstOrDefault(s => s.Id == shipmentId)!;
-        if (foundShipment is null) return [];
-        return foundShipment.Items;
+        Shipment? shipment = await GetShipment(shipmentId);
+        if (shipment is null) return [];
+        return shipment.Items;
     }
 
     public async Task<bool> AddShipment(Shipment shipment)
@@ -21,27 +21,20 @@ public class ShipmentServices
         if (shipment is null) return false;
 
         List<Shipment> shipments = await GetShipments();
-        shipment.Id = Guid.NewGuid();
-
-        Shipment doubleShipment = shipments.FirstOrDefault(s => s.OrderIds == shipment.OrderIds && s.SourceId == shipment.SourceId && s.OrderDate == shipment.OrderDate && s.RequestDate == shipment.RequestDate && s.ShipmentDate == shipment.ShipmentDate && s.ShipmentType == shipment.ShipmentType && s.Notes == shipment.Notes && s.CarrierCode == shipment.CarrierCode && s.CarrierDescription == shipment.CarrierDescription && s.ServiceCode == shipment.ServiceCode && s.PaymentType == shipment.PaymentType && s.TransferMode == shipment.TransferMode && s.TotalPackageCount == shipment.TotalPackageCount && s.TotalPackageWeight == shipment.TotalPackageWeight && s.Items == shipment.Items)!;
+        Shipment doubleShipment = shipments.FirstOrDefault(s => s.OrderId == shipment.OrderId && s.SourceId == shipment.SourceId && s.OrderDate == shipment.OrderDate && s.RequestDate == shipment.RequestDate && s.ShipmentDate == shipment.ShipmentDate && s.ShipmentType == shipment.ShipmentType && s.Notes == shipment.Notes && s.CarrierCode == shipment.CarrierCode && s.CarrierDescription == shipment.CarrierDescription && s.ServiceCode == shipment.ServiceCode && s.PaymentType == shipment.PaymentType && s.TransferMode == shipment.TransferMode && s.TotalPackageCount == shipment.TotalPackageCount && s.TotalPackageWeight == shipment.TotalPackageWeight && s.Items == shipment.Items)!;
         if (doubleShipment is not null) return false;
 
-        await AccessJson.WriteJson(shipment);
-        return true;
+        bool IsAdded = await _shipmentAccess.Add(shipment);
+        return IsAdded;
     }
 
     public async Task<bool> UpdateShipment(Shipment shipment)
     {
-        if (shipment is null) return false;
-
-        List<Shipment> shipments = await GetShipments();
-        int shipmentIndex = shipments.FindIndex(s => s.Id == shipment.Id);
-        if (shipmentIndex == -1) return false;
+        if (shipment is null || shipment.Id == 0) return false;
 
         shipment.UpdatedAt = DateTime.Now;
-        shipments[shipmentIndex] = shipment;
-        AccessJson.WriteJsonList(shipments);
-        return true;
+        bool IsUpdated = await _shipmentAccess.Update(shipment);
+        return IsUpdated;
     }
 
     /*public async Task<bool> UpdateItemsInShipment(Guid shipmentId, List<Item> items)
@@ -81,7 +74,7 @@ public class ShipmentServices
         }
     }*/
 
-    public async Task<bool> RemoveShipment(Guid shipmentId)
+    public async Task<bool> RemoveShipment(int shipmentId)
     {
         List<Shipment> shipments = await GetShipments();
         Shipment shipmentToRemove = shipments.FirstOrDefault(s => s.Id == shipmentId)!;
