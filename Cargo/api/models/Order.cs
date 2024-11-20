@@ -40,13 +40,13 @@ public class Order : IHasId
     public int WarehouseId { get; set; }
 
     [JsonProperty("ship_to")]
-    public string? ShipTo { get; set; }
+    public int ShipTo { get; set; }
 
     [JsonProperty("bill_to")]
-    public string? BillTo { get; set; }
+    public int BillTo { get; set; }
 
     [JsonProperty("shipment_id")]
-    public string? ShipmentId { get; set; }
+    public int ShipmentId { get; set; }
 
     [JsonProperty("total_amount")]
     public double TotalAmount { get; set; }
@@ -71,7 +71,7 @@ public class Order : IHasId
 
     public Order() { }
 
-    public Order(int id, int sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, int warehouseId, string shipTo, string billTo, string shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, List<OrderItemMovement> items)
+    public Order(int id, int sourceId, DateTime orderDate, DateTime requestdate, string reference, string extraReference, string orderStatus, string notes, string shippingNotes, string pickingNotes, int warehouseId, int shipTo, int billTo, int shipmentId, double totalAmount, double totalDiscount, double totalTax, double totalSurcharge, List<OrderItemMovement> items)
     {
         Id = id;
         SourceId = sourceId;

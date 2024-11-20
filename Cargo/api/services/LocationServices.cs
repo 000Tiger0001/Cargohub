@@ -1,14 +1,19 @@
 public class LocationServices
 {
-    public async Task<List<Location>> GetLocations() => await AccessJson.ReadJson<Location>();
+    private LocationAccess _locationAcces;
+    public LocationServices(LocationAccess locationAcces)
+    {
+        _locationAcces = locationAcces;
+    }
+    public async Task<List<Location>> GetLocations() => await _locationAcces.GetAll();
 
-    public async Task<Location> GetLocation(Guid locationId)
+    public async Task<Location> GetLocation(int locationId)
     {
         List<Location> locations = await GetLocations();
         return locations.FirstOrDefault(l => l.Id == locationId)!;
     }
 
-    public async Task<List<Location>> GetLocationsInWarehouse(Guid warehouseId)
+    public async Task<List<Location>> GetLocationsInWarehouse(int warehouseId)
     {
         List<Location> locations = await GetLocations();
         return locations.FindAll(l => l.WarehouseId == warehouseId);
@@ -19,28 +24,16 @@ public class LocationServices
         List<Location> locations = await GetLocations();
         Location doubleLocation = locations.FirstOrDefault(l => l.Code == location.Code && l.Name == location.Name && l.WarehouseId == location.WarehouseId)!;
         if (doubleLocation is not null) return false;
-        await AccessJson.WriteJson(location);
+        await _locationAcces.Add(location);
         return true;
     }
 
     public async Task<bool> UpdateLocation(Location location)
     {
-        List<Location> locations = await GetLocations();
-        int foundLocationIndex = locations.FindIndex(l => l.Id == location.Id);
-        if (foundLocationIndex == -1) return false;
         location.UpdatedAt = DateTime.Now;
-        locations[foundLocationIndex] = location;
-        AccessJson.WriteJsonList(locations);
-        return true;
+        bool IsUpdated = await _locationAcces.Update(location);
+        return IsUpdated;
     }
 
-    public async Task<bool> RemoveLocation(Guid locationId)
-    {
-        List<Location> locations = await GetLocations();
-        Location foundLocation = locations.FirstOrDefault(l => l.Id == locationId)!;
-        if (foundLocation is null) return false;
-        locations.Remove(foundLocation);
-        AccessJson.WriteJsonList(locations);
-        return true;
-    }
+    public async Task<bool> RemoveLocation(int locationId) => await _locationAcces.Delete(locationId);
 }
