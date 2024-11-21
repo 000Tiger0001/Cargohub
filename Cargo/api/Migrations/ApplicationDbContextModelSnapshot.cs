@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace api.Migrations
+namespace Cargo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -273,8 +273,8 @@ namespace api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("BillTo")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("BillTo")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -300,11 +300,11 @@ namespace api.Migrations
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ShipTo")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("ShipTo")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("ShipmentId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("ShipmentId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ShippingNotes")
                         .HasColumnType("TEXT");

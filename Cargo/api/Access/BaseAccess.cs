@@ -18,13 +18,13 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
     public async Task<T?> GetById(int id)
     {
-        return await DB.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
+        return await DB.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id)!;
     }
 
 
     public async Task<bool> AddMany(List<T> data)
     {
-        data = data.OrderBy(e => e.Id).ToList();
+        // data = data.OrderBy(e => e.Id).ToList();
         foreach (var entity in data)
         {
             if (entity == null) return false;
@@ -73,7 +73,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
         return changes > 0;
     }
 
-    public async Task<bool> Delete(int id)
+    public async Task<bool> Remove(int id)
     {
         var entity = await GetById(id);
         // Retrieve entity to ensure it exists

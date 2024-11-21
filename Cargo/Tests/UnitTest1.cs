@@ -9,6 +9,7 @@ public class LocationControllerTests
     private readonly ApplicationDbContext _dbContext;
     private readonly LocationAccess _locationAccess;
     private readonly LocationControllers _controller;
+    private readonly LocationServices _service;
 
     public LocationControllerTests()
     {
@@ -22,8 +23,11 @@ public class LocationControllerTests
         // Create a new instance of LocationAccess with the in-memory DbContext
         _locationAccess = new LocationAccess(_dbContext);
 
+        // Create new instance of locationService
+        _service = new(_locationAccess);
+
         // Initialize the controller with LocationAccess
-        _controller = new LocationControllers(_locationAccess);
+        _controller = new LocationControllers(_service);
     }
 
     [Fact]
