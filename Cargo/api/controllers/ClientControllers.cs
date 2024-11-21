@@ -26,7 +26,7 @@ public class ClientControllers : Controller
     [HttpPost("add-client")]
     public async Task<IActionResult> AddClient([FromBody] Client client)
     {
-        if (client is null || client.Name == "" || client.Address == "" || client.City == "" || client.ZipCode == "" || client.Province == "" || client.Country == "" || client.ContactName == "" || client.ContactPhone == "" || client.ContactEmail == "") return BadRequest("Not enoug info given. ");
+        if (client is null || client.Name == "" || client.Address == "" || client.City == "" || client.ZipCode == "" || client.Province == "" || client.Country == "" || client.ContactName == "" || client.ContactPhone == "" || client.ContactEmail == "") return BadRequest("Not enough info given. ");
 
         bool IsAdded = await _clientService.AddClient(client);
         if (!IsAdded) return BadRequest("Couldn't add client. ");

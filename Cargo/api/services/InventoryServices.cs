@@ -17,7 +17,7 @@ public class InventoryServices
 
     public async Task<Dictionary<string, int>> GetInventoryTotalsForItem(int itemId)
     {
-        List<Inventory> inventories = await GetInventories();
+        List<Inventory> inventories = GetInventoriesforItem(itemId);
         Dictionary<string, int> result = new()
         {
             {"total_expected", 0},
@@ -28,15 +28,11 @@ public class InventoryServices
 
         foreach (Inventory inventory in inventories)
         {
-            if (inventory.ItemId == itemId)
-            {
-                result["total_expected"] += inventory.TotalExpected;
-                result["total_ordered"] += inventory.TotalOrdered;
-                result["total_allocated"] += inventory.TotalAllocated;
-                result["total_available"] += inventory.TotalAvailable;
-            }
+            result["total_expected"] += inventory.TotalExpected;
+            result["total_ordered"] += inventory.TotalOrdered;
+            result["total_allocated"] += inventory.TotalAllocated;
+            result["total_available"] += inventory.TotalAvailable;
         }
-
         return result;
     }
 
