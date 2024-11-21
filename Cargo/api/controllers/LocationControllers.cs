@@ -24,7 +24,6 @@ public class LocationControllers : Controller
         if (location is not null) return Ok(location);
         return BadRequest("There is no location with the given id. ");
     }
-<<<<<<< HEAD
 
     [HttpGet("locations-from-warehouse")]
     public async Task<IActionResult> GetLocationsFromWarehouse([FromQuery] int warehouseId)
@@ -64,6 +63,3 @@ public class LocationControllers : Controller
         return Ok("Location removed. ");
     }
 }
-=======
-}
->>>>>>> main
