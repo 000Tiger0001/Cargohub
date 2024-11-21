@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 [Route("Cargohub")]
 public class LocationControllers : Controller
 {
-    private readonly LocationAccess _locationAccess;
+    private readonly LocationServices _locationAccess;
 
-    public LocationControllers(LocationAccess locationAccess)
+    public LocationControllers(LocationServices locationAccess)
     {
         _locationAccess = locationAccess;
     }
