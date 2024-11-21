@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 [Route("Cargohub")]
 public class TransferControllers : Controller
 {
-    TransferServices TS;
+    private TransferServices TS;
 
     public TransferControllers(TransferServices ts)
     {
