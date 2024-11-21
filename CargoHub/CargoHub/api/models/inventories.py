@@ -26,7 +26,7 @@ class Inventories(Base):
                 result.append(x)
         return result
 
-    def get_inventory_totals_for_item(self, item_id) -> dict:
+    def get_inventory_totals_for_item(self, item_id) -> dict[str, int]:
         result = {
             "total_expected": 0,
             "total_ordered": 0,
