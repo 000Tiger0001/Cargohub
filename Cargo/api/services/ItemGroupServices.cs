@@ -16,6 +16,7 @@ public class ItemGroupServices
         if (itemGroup is null || itemGroup.Name == "") return false;
         List<ItemGroup> itemGroups = await GetItemGroups();
         ItemGroup doubleItemGroup = itemGroups.Find(i => i.Name == itemGroup.Name)!;
+        if (doubleItemGroup is not null) return false;
         return await _itemGroupAccess.Add(itemGroup);
     }
 
