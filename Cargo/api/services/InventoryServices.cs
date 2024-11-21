@@ -17,7 +17,7 @@ public class InventoryServices
 
     public async Task<Dictionary<string, int>> GetInventoryTotalsForItem(int itemId)
     {
-        List<Inventory> inventories = GetInventoriesforItem(itemId);
+        List<Inventory> inventories = await GetInventoriesforItem(itemId);
         Dictionary<string, int> result = new()
         {
             {"total_expected", 0},
