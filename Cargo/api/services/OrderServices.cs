@@ -12,8 +12,7 @@ public class OrderServices
 
     public async Task<Order> GetOrder(int orderId)
     {
-        List<Order> orders = await GetOrders();
-        return orders.FirstOrDefault(o => o.Id == orderId)!;
+        return await _orderAccess.GetById(orderId);
     }
 
     public async Task<List<OrderItemMovement>> GetItemsInOrder(int orderId)
