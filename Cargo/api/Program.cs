@@ -8,6 +8,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 
 // test
+// test
 builder.Services.AddTransient<ClientServices>();
 builder.Services.AddTransient<InventoryServices>();
 builder.Services.AddTransient<ItemGroupServices>();
