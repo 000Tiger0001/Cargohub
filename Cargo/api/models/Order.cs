@@ -40,13 +40,13 @@ public class Order : IHasId
     public int WarehouseId { get; set; }
 
     [JsonProperty("ship_to")]
-    public int ShipTo { get; set; }
+    public int? ShipTo { get; set; } = null;
 
     [JsonProperty("bill_to")]
-    public int BillTo { get; set; }
+    public int? BillTo { get; set; } = null;
 
     [JsonProperty("shipment_id")]
-    public int ShipmentId { get; set; }
+    public int? ShipmentId { get; set; } = null;
 
     [JsonProperty("total_amount")]
     public double TotalAmount { get; set; }
