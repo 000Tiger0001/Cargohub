@@ -7,7 +7,7 @@ builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-// 1234
+// 1
 builder.Services.AddTransient<ClientServices>();
 builder.Services.AddTransient<InventoryServices>();
 builder.Services.AddTransient<ItemGroupServices>();
