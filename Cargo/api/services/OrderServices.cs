@@ -10,15 +10,12 @@ public class OrderServices
     }
     public async Task<List<Order>> GetOrders() => await _orderAccess.GetAll();
 
-    public async Task<Order> GetOrder(int orderId)
-    {
-        return await _orderAccess.GetById(orderId);
-    }
+    public async Task<Order?> GetOrder(int orderId) => await _orderAccess.GetById(orderId)!;
 
     public async Task<List<OrderItemMovement>> GetItemsInOrder(int orderId)
     {
-        Order order = await GetOrder(orderId);
-        return order.Items!;
+        Order? order = await GetOrder(orderId)!;
+        return order!.Items!;
     }
 
     public async Task<List<Order>> GetOrdersInShipment(int shipmentId)
@@ -40,8 +37,7 @@ public class OrderServices
         List<Order> orders = await GetOrders();
         Order doubleOrder = orders.FirstOrDefault(o => o.SourceId == order.SourceId && o.BillTo == order.BillTo && o.ExtraReference == order.ExtraReference && o.Items == order.Items && o.Notes == order.Notes && o.OrderDate == order.OrderDate && o.OrderStatus == order.OrderStatus && o.PickingNotes == order.PickingNotes && o.Reference == order.Reference && o.RequestDate == order.RequestDate && o.ShipmentId == order.ShipmentId && o.ShippingNotes == o.ShippingNotes && o.ShipTo == order.ShipTo && o.TotalAmount == order.TotalAmount && o.Totaldiscount == order.Totaldiscount)!;
         if (doubleOrder is null) return false;
-        bool IsAdded = await _orderAccess.Add(order);
-        return IsAdded;
+        return await _orderAccess.Add(order); ;
     }
 
     public async Task<bool> UpdateOrder(Order order)

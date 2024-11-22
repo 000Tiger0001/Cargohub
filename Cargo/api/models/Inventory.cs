@@ -20,10 +20,7 @@ public class Inventory : IHasId
             if (!string.IsNullOrEmpty(ItemIdString) && ItemIdString.StartsWith("P"))
             {
                 string numericPart = ItemIdString.Substring(1); // Remove the "P" prefix
-                if (int.TryParse(numericPart, out int numericId))
-                {
-                    return numericId;
-                }
+                if (int.TryParse(numericPart, out int numericId)) return numericId;
             }
             return 0;
         }

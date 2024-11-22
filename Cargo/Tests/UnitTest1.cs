@@ -1,8 +1,6 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 public class LocationControllerTests
 {
@@ -34,24 +32,24 @@ public class LocationControllerTests
     public async Task GetAllLocations_ReturnsOkResult_WithLocations()
     {
         // Arrange
-        var mockLocations = new List<Location>
-        {
-            new Location { Id = 1, WarehouseId = 1, Code = "LOC1", Name = "Location 1" },
-            new Location { Id = 2, WarehouseId = 1, Code = "LOC2", Name = "Location 2" }
-        };
+        List<Location> mockLocations =
+        [
+            new() { Id = 1, WarehouseId = 1, Code = "LOC1", Name = "Location 1" },
+            new() { Id = 2, WarehouseId = 1, Code = "LOC2", Name = "Location 2" }
+        ];
 
         // Add the mock locations to the in-memory database
-        await _dbContext.Locations.AddRangeAsync(mockLocations);
+        await _dbContext.Locations!.AddRangeAsync(mockLocations);
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _controller.GetAllLocations();
+        IActionResult result = await _controller.GetAllLocations();
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(result);
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
 
-        var locations = Assert.IsType<List<Location>>(okResult.Value);
+        List<Location> locations = Assert.IsType<List<Location>>(okResult.Value);
         Assert.Equal(2, locations.Count);
     }
 
@@ -59,21 +57,21 @@ public class LocationControllerTests
     public async Task GetLocation_ReturnsOkResult_WhenLocationExists()
     {
         // Arrange
-        var locationId = 100000000;
-        var mockLocation = new Location { Id = locationId, WarehouseId = 1, Code = "LOC1", Name = "Location 1" };
+        int locationId = 100000000;
+        Location mockLocation = new() { Id = locationId, WarehouseId = 1, Code = "LOC1", Name = "Location 1" };
 
         // Add the mock location to the in-memory database
-        await _dbContext.Locations.AddAsync(mockLocation);
+        await _dbContext.Locations!.AddAsync(mockLocation);
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var result = await _controller.GetLocation(locationId);
+        IActionResult result = await _controller.GetLocation(locationId);
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(result);
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
 
-        var location = Assert.IsType<Location>(okResult.Value);
+        Location location = Assert.IsType<Location>(okResult.Value);
         Assert.Equal(locationId, location.Id);
     }
 
@@ -81,12 +79,12 @@ public class LocationControllerTests
     public async Task GetLocation_ReturnsBadRequest_WhenLocationDoesNotExist()
     {
         // Arrange
-        var locationId = -1; // Non-existent location ID
+        int locationId = -1; // Non-existent location ID
         // Act
-        var result = await _controller.GetLocation(locationId);
+        IActionResult result = await _controller.GetLocation(locationId);
 
         // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        BadRequestObjectResult badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
         Assert.Equal(400, badRequestResult.StatusCode);
         Assert.Equal("There is no location with the given id. ", badRequestResult.Value);
     }

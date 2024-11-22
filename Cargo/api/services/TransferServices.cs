@@ -13,8 +13,7 @@ public class TransferServices
     public async Task<List<TransferItemMovement>?> GetItemsInTransfer(int transferId)
     {
         Transfer? transfer = await GetTransfer(transferId)!;
-        if (transfer is null) return default!;
-
+        if (transfer is null) return [];
         return transfer.Items;
     }
 
