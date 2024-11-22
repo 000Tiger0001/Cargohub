@@ -26,4 +26,35 @@ public class InventoryControllerTests
         // Initialize the controller with ClientAccess
         _controller = new InventoryControllers(_service);
     }
+
+    [Fact]
+    public async Task GetAllInventories()
+    {
+        Inventory mockInventory = new(1, 1, "hoi", "", [1, 2, 3], 50, 0, 0, 0, 50);
+
+        Assert.Equal(await _service.GetInventories(), []);
+
+        await _service.AddInventory(mockInventory);
+
+        Assert.Equal(await _service.GetInventories(), [mockInventory]);
+
+        await _service.RemoveInventory(1);
+
+        Assert.Equal(await _service.GetInventories(), []);
+    }
+
+    [Fact]
+    public async Task GetInventory()
+    {
+        Inventory mockInventory = new(1, 1, "hoi", "", [1, 2, 3], 50, 0, 0, 0, 50);
+
+        await _service.AddInventory(mockInventory);
+
+        Assert.Equal(await _service.GetInventory(1), mockInventory);
+        Assert.Null(await _service.GetInventory(0));
+
+        await _service.RemoveInventory(1);
+
+        Assert.Null(await _service.GetInventory(1));
+    }
 }
