@@ -1,14 +1,27 @@
 public class InventoryServices
 {
     private InventoryAccess _inventoryAccess;
+    private bool _debug;
+    public List<Inventory> testInventories;
 
-    public InventoryServices(InventoryAccess inventoryAccess)
+    public InventoryServices(InventoryAccess inventoryAccess, bool debug)
     {
         _inventoryAccess = inventoryAccess;
+        _debug = debug;
+        testInventories = [];
     }
-    public async Task<List<Inventory>> GetInventories() => await _inventoryAccess.GetAll();
+    public async Task<List<Inventory>> GetInventories()
+    {
+        if (!_debug) return await _inventoryAccess.GetAll();
+        return testInventories;
+    }
 
-    public async Task<Inventory?> GetInventory(int inventoryId) => await _inventoryAccess.GetById(inventoryId);
+    public async Task<Inventory?> GetInventory(int inventoryId)
+    {
+        if (!_debug) return await _inventoryAccess.GetById(inventoryId);
+        return testInventories.FirstOrDefault(i => i.Id == inventoryId);
+    }
+
     public async Task<List<Inventory>> GetInventoriesforItem(int itemId)
     {
         List<Inventory> inventories = await GetInventories();
@@ -41,7 +54,9 @@ public class InventoryServices
         List<Inventory> inventories = await GetInventories();
         Inventory doubleInventory = inventories.FirstOrDefault(i => i.ItemId == inventory.ItemId || i.ItemReference == inventory.ItemReference)!;
         if (doubleInventory is not null) return false;
-        return await _inventoryAccess.Add(inventory);
+        if (!_debug) return await _inventoryAccess.Add(inventory);
+        testInventories.Add(inventory);
+        return true;
     }
 
     public async Task<bool> UpdateInventory(Inventory inventory)
@@ -49,8 +64,16 @@ public class InventoryServices
         if (inventory is null || inventory.Id == 0) return false;
 
         inventory.UpdatedAt = DateTime.Now;
-        return await _inventoryAccess.Update(inventory);
+        if (!_debug) return await _inventoryAccess.Update(inventory);
+        int foundInventoryIndex = testInventories.FindIndex(i => i.Id == inventory.Id);
+        if (foundInventoryIndex == -1) return false;
+        testInventories[foundInventoryIndex] = inventory;
+        return true;
     }
 
-    public async Task<bool> RemoveInventory(int inventoryId) => await _inventoryAccess.Remove(inventoryId);
+    public async Task<bool> RemoveInventory(int inventoryId)
+    {
+        if (!_debug) return await _inventoryAccess.Remove(inventoryId);
+        return testInventories.Remove(testInventories.FirstOrDefault(i => i.Id ==inventoryId)!);
+    }
 }

@@ -1,12 +1,10 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 
 public class ClientControllerTests
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly ClientAccess _clientAccess;
-    private readonly ClientControllers _controller;
     private readonly ClientServices _service;
 
     public ClientControllerTests()
@@ -23,9 +21,6 @@ public class ClientControllerTests
 
         // Create new instance of clientService
         _service = new(_clientAccess, true);
-
-        // Initialize the controller with ClientAccess
-        _controller = new ClientControllers(_clientAccess);
     }
 
     [Fact]
