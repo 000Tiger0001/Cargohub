@@ -1,0 +1,4 @@
+public class TransferItemMovement : ItemMovement
+{
+
+}
