@@ -30,7 +30,7 @@ public class InventoryControllerTests
     [Fact]
     public async Task GetAllInventories()
     {
-        Inventory mockInventory = new(1, 1, "hoi", "", [1, 2, 3], 50, 0, 0, 0, 50);
+        Inventory mockInventory = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
 
         Assert.Equal(await _service.GetInventories(), []);
 
@@ -46,7 +46,7 @@ public class InventoryControllerTests
     [Fact]
     public async Task GetInventory()
     {
-        Inventory mockInventory = new(1, 1, "hoi", "", [1, 2, 3], 50, 0, 0, 0, 50);
+        Inventory mockInventory = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
 
         await _service.AddInventory(mockInventory);
 
@@ -56,5 +56,27 @@ public class InventoryControllerTests
         await _service.RemoveInventory(1);
 
         Assert.Null(await _service.GetInventory(1));
+    }
+
+    [Fact]
+    public async Task GetInventoriesForItems()
+    {
+        Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
+        Inventory mockInventory2 = new(2, 2, "Focused transitional alliance", "nyg48736S", [19800, 23653, 3068, 3334, 20477, 20524, 17579, 2271, 2293, 22717], 194, 0, 139, 41, 55);
+        
+        await _service.AddInventory(mockInventory1);
+        await _service.AddInventory(mockInventory2);
+
+        Assert.Equal(await _service.GetInventories(), [mockInventory1, mockInventory2]);
+        Assert.Equal(await _service.GetInventoriesforItem(1), [mockInventory1]);
+        Assert.Equal(await _service.GetInventoriesforItem(2), [mockInventory2]);
+        Assert.Equal(await _service.GetInventoriesforItem(3), []);
+
+        bool IsRemoved1 = await _service.RemoveInventory(1);
+        bool IsRemoved2 = await _service.RemoveInventory(2);
+
+        Assert.True(IsRemoved1);
+        Assert.True(IsRemoved2);
+        Assert.Equal(await _service.GetInventories(), []);
     }
 }
