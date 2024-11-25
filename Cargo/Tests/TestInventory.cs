@@ -11,7 +11,7 @@ public class InventoryControllerTests
     {
         // Use an in-memory SQLite database for testing
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                        .UseInMemoryDatabase("testhub") // In-memory database
+                        .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
 
         _dbContext = new ApplicationDbContext(options);

@@ -11,7 +11,7 @@ public class ClientControllerTests
     {
         // Use an in-memory SQLite database for testing
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                        .UseInMemoryDatabase("testhub") // In-memory database
+                        .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
 
         _dbContext = new ApplicationDbContext(options);
@@ -28,26 +28,28 @@ public class ClientControllerTests
     {
         Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
+
+        await _service.AddClient(mockClient);
+
+        List<Client> clients = await _service.GetClients();
+
+        Assert.Equal(mockClient, clients[0]);
+
+        await _service.RemoveClient(1);
+        Assert.Equal([], await _service.GetClients());
+    }
+
+    [Fact]
+    public async Task GetClient()
+    {
+        Client mockClient = new Client(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
 
         await _service.AddClient(mockClient);
 
         List<Client> clients = await _service.GetClients();
 
         Assert.Equal(clients[0], mockClient);
-
-        await _service.RemoveClient(1);
-        Assert.Equal(await _service.GetClients(), []);
-    }
-
-    [Fact]
-    public async Task GetClient()
-    {
-        Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
-
-        await _service.AddClient(mockClient);
-
-        Assert.Equal(mockClient, await _service.GetClient(1));
         Assert.Null(await _service.GetClient(0));
 
         await _service.RemoveClient(1);
