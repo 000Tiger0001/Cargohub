@@ -37,10 +37,6 @@ jobs:
       - name: Setup MSBuild.exe
         uses: microsoft/setup-msbuild@v2
 
-      # Restore dependencies
-      - name: Restore dependencies
-        run: dotnet restore ${{ env.Solution_Name }}
-
       # Start the server using 'dotnet run'
       - name: Start API Server
         run: |
@@ -57,7 +53,7 @@ jobs:
 
       # Run the tests
       - name: Execute unit tests
-        run: dotnet test ${{ env.Test_Project_Path }} --configuration ${{ matrix.configuration }}
+        run: dotnet test
 
       # Optionally, stop the server after tests (if needed)
       - name: Stop the server
