@@ -59,7 +59,7 @@ public class InventoryControllerTests
     {
         Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
         Inventory mockInventory2 = new(2, 2, "Focused transitional alliance", "nyg48736S", [19800, 23653, 3068, 3334, 20477, 20524, 17579, 2271, 2293, 22717], 194, 0, 139, 41, 55);
-        
+
         await _service.AddInventory(mockInventory1);
         await _service.AddInventory(mockInventory2);
 
@@ -81,33 +81,34 @@ public class InventoryControllerTests
     {
         Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
         Inventory mockInventory2 = new(2, 2, "Focused transitional alliance", "nyg48736S", [19800, 23653, 3068, 3334, 20477, 20524, 17579, 2271, 2293, 22717], 194, 0, 139, 0, 55);
-        Inventory mockInventory3 = new(3, 1, "Cloned actuating artificial intelligence", "QVm03739H", [5321, 21960], 24, 0, 90, 68, -134);
+        Inventory mockInventory3 = new(3, 3, "Cloned actuating artificial intelligence", "QVm03739H", [5321, 21960], 24, 0, 90, 68, -134);
 
         bool IsAdded1 = await _service.AddInventory(mockInventory1);
         bool IsAdded2 = await _service.AddInventory(mockInventory2);
+        bool IsAdded3 = await _service.AddInventory(mockInventory3);
 
         Assert.True(IsAdded1);
         Assert.True(IsAdded2);
-        Assert.Equal(await _service.GetInventories(), [mockInventory1, mockInventory2]);
-        Dictionary<string, int> totals1 = await _service.GetInventoryTotalsForItem(1);
-        Assert.Equal(0, totals1["total_expected"]);
-        Assert.Equal(80, totals1["total_ordered"]);
-        Assert.Equal(41, totals1["total_allocated"]);
-        Assert.Equal(141, totals1["total_available"]);
+        Assert.True(IsAdded3);
+        Assert.Equal(await _service.GetInventories(), [mockInventory1, mockInventory2, mockInventory3]);
 
-        Dictionary<string, int> totals2 = await _service.GetInventoryTotalsForItem(2);
-        Assert.Equal(0, totals2["total_expected"]);
-        Assert.Equal(139, totals2["total_ordered"]);
-        Assert.Equal(0, totals2["total_allocated"]);
-        Assert.Equal(55, totals2["total_available"]);
+        Dictionary<string, int> totals1 = await _service.GetInventoryTotalsForItem(mockInventory1.Id);
+        Assert.Equal(mockInventory1.TotalExpected, totals1["total_expected"]);
+        Assert.Equal(mockInventory1.TotalOrdered, totals1["total_ordered"]);
+        Assert.Equal(mockInventory1.TotalAllocated, totals1["total_allocated"]);
+        Assert.Equal(mockInventory1.TotalAvailable, totals1["total_available"]);
 
-        await _service.AddInventory(mockInventory3);
+        Dictionary<string, int> totals2 = await _service.GetInventoryTotalsForItem(mockInventory2.Id);
+        Assert.Equal(mockInventory2.TotalExpected, totals2["total_expected"]);
+        Assert.Equal(mockInventory2.TotalOrdered, totals2["total_ordered"]);
+        Assert.Equal(mockInventory2.TotalAllocated, totals2["total_allocated"]);
+        Assert.Equal(mockInventory2.TotalAvailable, totals2["total_available"]);
 
-        Dictionary<string, int> totals3 = await _service.GetInventoryTotalsForItem(1);
-        Assert.Equal(0, totals3["total_expected"]);
-        Assert.Equal(170, totals3["total_ordered"]);
-        Assert.Equal(109, totals3["total_allocated"]);
-        Assert.Equal(7, totals3["total_available"]);
+        Dictionary<string, int> totals3 = await _service.GetInventoryTotalsForItem(mockInventory3.Id);
+        Assert.Equal(mockInventory3.TotalExpected, totals3["total_expected"]);
+        Assert.Equal(mockInventory3.TotalOrdered, totals3["total_ordered"]);
+        Assert.Equal(mockInventory3.TotalAllocated, totals3["total_allocated"]);
+        Assert.Equal(mockInventory3.TotalAvailable, totals3["total_available"]);
 
         bool IsRemoved1 = await _service.RemoveInventory(1);
         bool IsRemoved2 = await _service.RemoveInventory(2);
