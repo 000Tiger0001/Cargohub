@@ -1,14 +1,18 @@
 public class TransferServices
 {
     private TransferAccess _transferAccess;
+    private bool _debug;
+    private List<Transfer> _testTransfers;
 
-    public TransferServices(TransferAccess transferAccess)
+    public TransferServices(TransferAccess transferAccess, bool debug)
     {
         _transferAccess = transferAccess;
+        _debug = debug;
+        _testTransfers = [];
     }
-    public async Task<List<Transfer>> GetTransfers() => await _transferAccess.GetAll();
+    public async Task<List<Transfer>> GetTransfers() => _debug ? _testTransfers : await _transferAccess.GetAll();
 
-    public async Task<Transfer?> GetTransfer(int transferId) => await _transferAccess.GetById(transferId)!;
+    public async Task<Transfer?> GetTransfer(int transferId) => _debug ? _testTransfers.FirstOrDefault(t => t.Id == transferId) : await _transferAccess.GetById(transferId)!;
 
     public async Task<List<TransferItemMovement>?> GetItemsInTransfer(int transferId)
     {
@@ -20,20 +24,24 @@ public class TransferServices
     public async Task<bool> AddTransfer(Transfer transfer)
     {
         if (transfer is null || transfer.Reference == "" || (transfer.TransferFrom == 0 && transfer.TransferTo == 0) || transfer.TransferStatus == "") return false;
-
         List<Transfer> transfers = await GetTransfers();
         Transfer doubleTransfer = transfers.FirstOrDefault(t => t.Reference == transfer.Reference && t.TransferFrom == transfer.TransferFrom && t.TransferTo == transfer.TransferTo && t.TransferStatus == transfer.TransferStatus)!;
         if (doubleTransfer is null) return false;
-        return await _transferAccess.Add(transfer); ;
+        if (!_debug) return await _transferAccess.Add(transfer);
+        _testTransfers.Add(transfer);
+        return true;
     }
 
     public async Task<bool> UpdateTransfer(Transfer transfer)
     {
         if (transfer is null || transfer.Id == 0) return false;
-
         transfer.UpdatedAt = DateTime.Now;
-        return await _transferAccess.Update(transfer); ;
+        if (!_debug) return await _transferAccess.Update(transfer);
+        int foundTransferIndex = _testTransfers.FindIndex(t => t.Id == transfer.Id);
+        if (foundTransferIndex == -1) return false;
+        _testTransfers[foundTransferIndex] = transfer;
+        return true;
     }
 
-    public async Task<bool> RemoveTransfer(int transferId) => await _transferAccess.Remove(transferId);
+    public async Task<bool> RemoveTransfer(int transferId) => _debug ? _testTransfers.Remove(_testTransfers.FirstOrDefault(t => t.Id == transferId)!): await _transferAccess.Remove(transferId);
 }

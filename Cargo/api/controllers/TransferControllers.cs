@@ -3,22 +3,22 @@ using Microsoft.AspNetCore.Mvc;
 [Route("Cargohub")]
 public class TransferControllers : Controller
 {
-    private TransferServices TS;
+    private TransferServices _transferServices;
 
-    public TransferControllers(TransferServices ts)
+    public TransferControllers(TransferAccess transferAccess)
     {
-        TS = ts;
+        _transferServices = new(transferAccess, false);
     }
 
     [HttpGet("get-transfers")]
-    public async Task<IActionResult> GetTransfers() => Ok(await TS.GetTransfers());
+    public async Task<IActionResult> GetTransfers() => Ok(await _transferServices.GetTransfers());
 
     [HttpGet("get-transfer")]
     public async Task<IActionResult> GetTransfer([FromQuery] int transferId)
     {
         if (transferId == 0) return BadRequest("Can't proccess empty id. ");
 
-        Transfer? transfer = await TS.GetTransfer(transferId);
+        Transfer? transfer = await _transferServices.GetTransfer(transferId);
         if (transfer is null) return BadRequest("Transfer with this id doesn't exist. ");
         return Ok(transfer);
     }
@@ -28,7 +28,7 @@ public class TransferControllers : Controller
     {
         if (transferId == 0) return BadRequest("Can't proccess empty id. ");
 
-        List<TransferItemMovement>? items = await TS.GetItemsInTransfer(transferId);
+        List<TransferItemMovement>? items = await _transferServices.GetItemsInTransfer(transferId);
         if (items == default) return BadRequest("Transfer doesn't have any items. ");
         return Ok(items);
     }
@@ -38,7 +38,7 @@ public class TransferControllers : Controller
     {
         if (transfer is null || transfer.Reference == "" || (transfer.TransferFrom == 0 && transfer.TransferTo == 0) || transfer.TransferStatus == "") return BadRequest("Not enough given. ");
 
-        bool IsAdded = await TS.AddTransfer(transfer);
+        bool IsAdded = await _transferServices.AddTransfer(transfer);
         if (!IsAdded) return BadRequest("Transfer can't be added. ");
         return Ok("Transfer added. ");
     }
@@ -48,7 +48,7 @@ public class TransferControllers : Controller
     {
         if (transfer is null || transfer.Id == 0) return BadRequest("Not enough info given. ");
 
-        bool IsUpdated = await TS.UpdateTransfer(transfer);
+        bool IsUpdated = await _transferServices.UpdateTransfer(transfer);
         if (!IsUpdated) return BadRequest("Transfer couldn't be updated. ");
         return Ok("Transfer updated. ");
     }
@@ -58,7 +58,7 @@ public class TransferControllers : Controller
     {
         if (transferId == 0) BadRequest("Can't proccess empty string. ");
 
-        bool IsRemoved = await TS.RemoveTransfer(transferId);
+        bool IsRemoved = await _transferServices.RemoveTransfer(transferId);
         if (!IsRemoved) return BadRequest("Transfer doesn't exist. ");
         return Ok("Transfer removed. ");
     }
