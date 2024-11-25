@@ -5,7 +5,6 @@ public class InventoryControllerTests
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly InventoryAccess _inventoryAccess;
-    private readonly InventoryControllers _controller;
     private readonly InventoryServices _service;
 
     public InventoryControllerTests()
@@ -22,9 +21,6 @@ public class InventoryControllerTests
 
         // Create new instance of clientService
         _service = new(_inventoryAccess, true);
-
-        // Initialize the controller with ClientAccess
-        _controller = new InventoryControllers(_service);
     }
 
     [Fact]

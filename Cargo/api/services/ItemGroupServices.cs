@@ -8,8 +8,7 @@ public class ItemGroupServices
     {
         _itemGroupAccess = itemGroupAccess;
         _debug = debug;
-        if (_debug) _testItemGroups = [];
-        else _testItemGroups = null!;
+        _testItemGroups = [];
     }
 
     public async Task<List<ItemGroup>> GetItemGroups()
