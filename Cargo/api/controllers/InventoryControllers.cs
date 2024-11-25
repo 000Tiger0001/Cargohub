@@ -5,9 +5,9 @@ public class InventoryControllers : Controller
 {
     private InventoryServices _inventoryService;
 
-    public InventoryControllers(InventoryServices inventoryService)
+    public InventoryControllers(InventoryAccess inventoryAcces)
     {
-        _inventoryService = inventoryService;
+        _inventoryService = new(inventoryAcces, false);
     }
 
     [HttpGet("inventories")]
