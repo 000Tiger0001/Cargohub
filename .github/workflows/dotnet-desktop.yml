@@ -40,12 +40,12 @@ jobs:
       # Start the server using 'dotnet run'
       - name: Start API Server
         run: |
-          # Start the server in the background
-          start /b dotnet run --project YourApiProjectDirectory &
+          # Start the server in the background using cmd
+          start cmd /c "dotnet run --project YourApiProjectDirectory"
 
           # Wait for the server to be fully ready
           echo "Waiting for server to start..."
-          timeout /t 15 /nobreak  # Give 15 seconds for the server to start (adjust this as needed)
+          timeout /t 10 /nobreak  # Give 10 seconds for the server to start (adjust this as needed)
 
           # Optionally, you can use a health check to ensure the server is responding
           echo "Checking if server is up..."
@@ -53,7 +53,7 @@ jobs:
 
       # Run the tests
       - name: Execute unit tests
-        run: dotnet test
+        run: dotnet test ${{ env.Test_Project_Path }} --configuration ${{ matrix.configuration }}
 
       # Optionally, stop the server after tests (if needed)
       - name: Stop the server
