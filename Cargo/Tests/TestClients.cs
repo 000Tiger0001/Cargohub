@@ -36,8 +36,6 @@ public class ClientControllerTests
 
         await _service.RemoveClient(1);
         Assert.Equal([], await _service.GetClients());
-        // example for presentation
-        Assert.Equal(5, 2 + 2);
     }
 
     [Fact]
