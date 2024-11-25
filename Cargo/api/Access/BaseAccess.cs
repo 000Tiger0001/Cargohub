@@ -28,7 +28,11 @@ public abstract class BaseAccess<T> where T : class, IHasId
         foreach (var entity in data)
         {
             if (entity == null) return false;
+
+            // Detach the entity from the context if it is already being tracked
+            DetachEntity(entity);
             var existingEntity = await GetById(entity.Id);
+
             if (existingEntity != null)
             {
                 return false;
@@ -37,6 +41,8 @@ public abstract class BaseAccess<T> where T : class, IHasId
         }
 
         var changes = await _context.SaveChangesAsync();
+        // Clear the change tracker after the operation
+        ClearChangeTracker();
         return changes > 0;
     }
 
@@ -46,19 +52,29 @@ public abstract class BaseAccess<T> where T : class, IHasId
     public async Task<bool> Add(T entity)
     {
         if (entity == null) return false;
+
+        // Detach the entity from the context if it is already being tracked
+        DetachEntity(entity);
         var existingEntity = await GetById(entity.Id!);
+
         if (existingEntity != null)
         {
             return false;
         }
         await DB.AddAsync(entity);
         var changes = await _context.SaveChangesAsync();
+
+        // Clear the change tracker after the operation
+        ClearChangeTracker();
         return changes > 0;
     }
 
     public async Task<bool> Update(T entity)
     {
         if (entity == null) return false;
+
+        // Detach the entity from the context if it is already being tracked
+        DetachEntity(entity);
 
         // Check if the entity exists before updating
         var existingEntity = await GetById(entity.Id!);
@@ -86,6 +102,24 @@ public abstract class BaseAccess<T> where T : class, IHasId
         }
         return false;
     }
+
+    private void DetachEntity(T entity)
+    {
+        if (_context.Entry(entity).State == EntityState.Detached)
+            return;
+
+        _context.Entry(entity).State = EntityState.Detached;
+    }
+
+    private void ClearChangeTracker()
+    {
+        foreach (var entry in _context.ChangeTracker.Entries())
+        {
+            entry.State = EntityState.Detached;
+        }
+    }
+
+
 
     // Check if the table is empty
     public async Task<bool> IsTableEmpty()

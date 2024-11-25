@@ -34,7 +34,8 @@ public class ClientControllerTests
 
         List<Client> clients = await _service.GetClients();
 
-        Assert.Equal(mockClient, clients[0]);
+        Assert.Equal(mockClient.Id, clients[0].Id);
+        Assert.Equal(mockClient.Name, clients[0].Name);
 
         await _service.RemoveClient(1);
         Assert.Equal([], await _service.GetClients());
@@ -49,9 +50,10 @@ public class ClientControllerTests
 
         List<Client> clients = await _service.GetClients();
 
-        Assert.Equal(clients[0], mockClient);
-        Assert.Null(await _service.GetClient(0));
+        Assert.Equal(mockClient.Id, clients[0].Id);
+        Assert.Equal(mockClient.Name, clients[0].Name);
 
+        Assert.Null(await _service.GetClient(0));
         await _service.RemoveClient(1);
 
         Assert.Null(await _service.GetClient(1));
@@ -160,7 +162,11 @@ public class ClientControllerTests
         bool IsAdded = await _service.AddClient(mockClient);
 
         Assert.True(IsAdded);
-        Assert.Equal(await _service.GetClient(1), mockClient);
+
+        List<Client> clients = await _service.GetClients();
+
+        Assert.Equal(mockClient.Id, clients[0].Id);
+        Assert.Equal(mockClient.Name, clients[0].Name);
 
         bool IsRemoved = await _service.RemoveClient(1);
 
