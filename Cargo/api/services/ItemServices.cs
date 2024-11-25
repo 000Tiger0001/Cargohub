@@ -1,14 +1,26 @@
 public class ItemServices
 {
     private ItemAccess _itemAccess;
-    public ItemServices(ItemAccess itemAccess)
+    private bool _debug;
+    private List<Item> _testItems;
+    public ItemServices(ItemAccess itemAccess, bool debug)
     {
         _itemAccess = itemAccess;
+        _debug = debug;
+        _testItems = [];
     }
 
-    public async Task<List<Item>> GetItems() => await _itemAccess.GetAll();
+    public async Task<List<Item>> GetItems()
+    {
+        if (!_debug) return await _itemAccess.GetAll();
+        return _testItems;
+    }
 
-    public async Task<Item?> GetItem(int itemId) => await _itemAccess.GetById(itemId);
+    public async Task<Item?> GetItem(int itemId)
+    {
+        if (!_debug) return await _itemAccess.GetById(itemId);
+        return _testItems.FirstOrDefault(i => i.Id == itemId);
+    }
 
     public async Task<List<Item>> GetItemsForItemLine(int itemLineId)
     {
@@ -40,15 +52,25 @@ public class ItemServices
         List<Item> items = await GetItems();
         Item doubleItem = items.FirstOrDefault(i => i.Code == item.Code && i.CommodityCode == i.CommodityCode && i.Description == item.Description && i.ShortDescription == item.ShortDescription && i.ItemGroupId == item.ItemGroupId && i.ItemLineId == item.ItemLineId && i.ItemTypeId == item.ItemTypeId && i.ModelNumber == item.ModelNumber && i.UpcCode == item.UpcCode)!;
         if (doubleItem is not null) return false;
-        return await _itemAccess.Add(item);
+        if (!_debug) return await _itemAccess.Add(item);
+        _testItems.Add(item);
+        return true;
     }
 
     public async Task<bool> UpdateItem(Item item)
     {
         if (item is null || item.Id == 0) return false;
         item.UpdatedAt = DateTime.Now;
-        return await _itemAccess.Update(item);
+        if (!_debug) return await _itemAccess.Update(item);
+        int foundItemIndex = _testItems.FindIndex(i => i.Id == item.Id);
+        if (foundItemIndex == -1) return false;
+        _testItems[foundItemIndex] = item;
+        return true;
     }
 
-    public async Task<bool> RemoveItem(int itemId) => await _itemAccess.Remove(itemId);
+    public async Task<bool> RemoveItem(int itemId)
+    {
+        if (!_debug) return await _itemAccess.Remove(itemId);
+        return _testItems.Remove(_testItems.FirstOrDefault(i => i.Id == itemId)!);
+    }
 }
