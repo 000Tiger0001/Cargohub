@@ -5,9 +5,9 @@ public class ShipmentControllers : Controller
 {
     private ShipmentServices _shipmentService;
 
-    public ShipmentControllers(ShipmentServices shipmentServices)
+    public ShipmentControllers(ShipmentAccess shipmentAccess)
     {
-        _shipmentService = shipmentServices;
+        _shipmentService = new(shipmentAccess, false);
     }
 
     [HttpGet("get-shipments")]
