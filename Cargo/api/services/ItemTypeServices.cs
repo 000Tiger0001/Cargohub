@@ -11,17 +11,9 @@ public class ItemTypeServices
         _testItemTypes = [];
     }
 
-    public async Task<List<ItemType>> GetItemTypes()
-    {
-        if (!_debug) return await _itemTypeAccess.GetAll();
-        return _testItemTypes;
-    }
+    public async Task<List<ItemType>> GetItemTypes() => _debug ? _testItemTypes : await _itemTypeAccess.GetAll();
 
-    public async Task<ItemType?> GetItemType(int itemTypeId)
-    {
-        if (!_debug) return await _itemTypeAccess.GetById(itemTypeId);
-        return _testItemTypes.FirstOrDefault(i => i.Id == itemTypeId);
-    }
+    public async Task<ItemType?> GetItemType(int itemTypeId) => _debug ? _testItemTypes.FirstOrDefault(i => i.Id == itemTypeId) : await _itemTypeAccess.GetById(itemTypeId);
 
     public async Task<bool> AddItemType(ItemType itemType)
     {
@@ -45,9 +37,5 @@ public class ItemTypeServices
         return true;
     }
 
-    public async Task<bool> RemoveItemType(int itemTypeId)
-    {
-        if (!_debug) return await _itemTypeAccess.Remove(itemTypeId);
-        return _testItemTypes.Remove(_testItemTypes.FirstOrDefault(i => i.Id == itemTypeId)!);
-    }
+    public async Task<bool> RemoveItemType(int itemTypeId) => _debug ? _testItemTypes.Remove(_testItemTypes.FirstOrDefault(i => i.Id == itemTypeId)!) : await _itemTypeAccess.Remove(itemTypeId);
 }

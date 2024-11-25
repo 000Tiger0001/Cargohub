@@ -11,17 +11,9 @@ public class ItemGroupServices
         _testItemGroups = [];
     }
 
-    public async Task<List<ItemGroup>> GetItemGroups()
-    {
-        if (!_debug) return await _itemGroupAccess.GetAll();
-        return _testItemGroups;
-    }
+    public async Task<List<ItemGroup>> GetItemGroups() => _debug ? _testItemGroups : await _itemGroupAccess.GetAll();
 
-    public async Task<ItemGroup?> GetItemGroup(int itemGroupId) 
-    {
-        if (!_debug) return await _itemGroupAccess.GetById(itemGroupId);
-        return _testItemGroups.FirstOrDefault(i => i.Id == itemGroupId);
-    }
+    public async Task<ItemGroup?> GetItemGroup(int itemGroupId) => _debug ? _testItemGroups.FirstOrDefault(i => i.Id == itemGroupId) : await _itemGroupAccess.GetById(itemGroupId);
 
     public async Task<bool> AddItemGroup(ItemGroup itemGroup)
     {
@@ -45,9 +37,5 @@ public class ItemGroupServices
         return true;
     }
 
-    public async Task<bool> RemoveItemGroup(int itemGroupId)
-    {
-        if (!_debug) return await _itemGroupAccess.Remove(itemGroupId);
-        return _testItemGroups.Remove(_testItemGroups.FirstOrDefault(i => i.Id == itemGroupId)!);
-    }
+    public async Task<bool> RemoveItemGroup(int itemGroupId) => _debug ? _testItemGroups.Remove(_testItemGroups.FirstOrDefault(i => i.Id == itemGroupId)!) : await _itemGroupAccess.Remove(itemGroupId);
 }

@@ -10,17 +10,9 @@ public class ItemLineServices
         _debug = debug;
         _testItemLines = [];
     }
-    public async Task<List<ItemLine>> GetItemLines()
-    {
-        if (!_debug) return await _itemLineAccess.GetAll();
-        return _testItemLines;
-    }
+    public async Task<List<ItemLine>> GetItemLines() => _debug ? _testItemLines : await _itemLineAccess.GetAll();
 
-    public async Task<ItemLine?> GetItemLine(int itemLineId)
-    {
-        if (!_debug) return await _itemLineAccess.GetById(itemLineId);
-        return _testItemLines.FirstOrDefault(i => i.Id == itemLineId);
-    }
+    public async Task<ItemLine?> GetItemLine(int itemLineId) => _debug ? _testItemLines.FirstOrDefault(i => i.Id == itemLineId) : await _itemLineAccess.GetById(itemLineId);
 
     public async Task<bool> AddItemLine(ItemLine itemLine)
     {
@@ -44,9 +36,5 @@ public class ItemLineServices
         return true;
     }
 
-    public async Task<bool> RemoveItemLine(int itemLineId)
-    {
-        if (!_debug) return await _itemLineAccess.Remove(itemLineId);
-        return _testItemLines.Remove(_testItemLines.FirstOrDefault(i => i.Id == itemLineId)!);
-    }
+    public async Task<bool> RemoveItemLine(int itemLineId) => _debug ? _testItemLines.Remove(_testItemLines.FirstOrDefault(i => i.Id == itemLineId)!) : await _itemLineAccess.Remove(itemLineId);
 }

@@ -10,17 +10,9 @@ public class InventoryServices
         _debug = debug;
         testInventories = [];
     }
-    public async Task<List<Inventory>> GetInventories()
-    {
-        if (!_debug) return await _inventoryAccess.GetAll();
-        return testInventories;
-    }
+    public async Task<List<Inventory>> GetInventories() => _debug ? testInventories : await _inventoryAccess.GetAll();
 
-    public async Task<Inventory?> GetInventory(int inventoryId)
-    {
-        if (!_debug) return await _inventoryAccess.GetById(inventoryId);
-        return testInventories.FirstOrDefault(i => i.Id == inventoryId);
-    }
+    public async Task<Inventory?> GetInventory(int inventoryId) => _debug ? testInventories.FirstOrDefault(i => i.Id == inventoryId) : await _inventoryAccess.GetById(inventoryId);
 
     public async Task<List<Inventory>> GetInventoriesforItem(int itemId)
     {
@@ -62,7 +54,6 @@ public class InventoryServices
     public async Task<bool> UpdateInventory(Inventory inventory)
     {
         if (inventory is null || inventory.Id == 0) return false;
-
         inventory.UpdatedAt = DateTime.Now;
         if (!_debug) return await _inventoryAccess.Update(inventory);
         int foundInventoryIndex = testInventories.FindIndex(i => i.Id == inventory.Id);
@@ -71,9 +62,5 @@ public class InventoryServices
         return true;
     }
 
-    public async Task<bool> RemoveInventory(int inventoryId)
-    {
-        if (!_debug) return await _inventoryAccess.Remove(inventoryId);
-        return testInventories.Remove(testInventories.FirstOrDefault(i => i.Id ==inventoryId)!);
-    }
+    public async Task<bool> RemoveInventory(int inventoryId) => _debug ? testInventories.Remove(testInventories.FirstOrDefault(i => i.Id == inventoryId)!) : await _inventoryAccess.Remove(inventoryId);
 }

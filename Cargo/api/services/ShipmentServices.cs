@@ -11,17 +11,9 @@ public class ShipmentServices
         _testShipment = [];
     }
 
-    public async Task<List<Shipment>> GetShipments()
-    {
-        if (!_debug) return await _shipmentAccess.GetAll();
-        return _testShipment;
-    }
+    public async Task<List<Shipment>> GetShipments() => _debug ? _testShipment : await _shipmentAccess.GetAll();
 
-    public async Task<Shipment?> GetShipment(int shipmentId)
-    {
-        if (!_debug) return await _shipmentAccess.GetById(shipmentId);
-        return _testShipment.FirstOrDefault(s => s.Id == shipmentId);
-    }
+    public async Task<Shipment?> GetShipment(int shipmentId) => _debug ? _testShipment.FirstOrDefault(s => s.Id == shipmentId) : await _shipmentAccess.GetById(shipmentId);
 
     public async Task<List<ShipmentItemMovement>?> GetItemsInShipment(int shipmentId)
     {
@@ -89,9 +81,5 @@ public class ShipmentServices
         }
     }*/
 
-    public async Task<bool> RemoveShipment(int shipmentId)
-    {
-        if (!_debug) return await _shipmentAccess.Remove(shipmentId);
-        return _testShipment.Remove(_testShipment.FirstOrDefault(s => s.Id == shipmentId)!);
-    }
+    public async Task<bool> RemoveShipment(int shipmentId) => _debug ? _testShipment.Remove(_testShipment.FirstOrDefault(s => s.Id == shipmentId)!) : await _shipmentAccess.Remove(shipmentId);
 }

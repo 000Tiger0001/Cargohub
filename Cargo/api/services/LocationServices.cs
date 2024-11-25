@@ -11,17 +11,9 @@ public class LocationServices
         _testLocations = [];
     }
 
-    public async Task<List<Location>> GetLocations()
-    {
-        if (!_debug) return await _locationAccess.GetAll();
-        return _testLocations;
-    }
+    public async Task<List<Location>> GetLocations() => _debug ? _testLocations : await _locationAccess.GetAll();
 
-    public async Task<Location?> GetLocation(int locationId)
-    {
-        if (!_debug) return await _locationAccess.GetById(locationId)!;
-        return _testLocations.FirstOrDefault(l => l.Id == locationId);
-    }
+    public async Task<Location?> GetLocation(int locationId) => _debug ? _testLocations.FirstOrDefault(l => l.Id == locationId) : await _locationAccess.GetById(locationId)!;
 
     public async Task<List<Location>> GetLocationsInWarehouse(int warehouseId)
     {
@@ -50,9 +42,5 @@ public class LocationServices
         return true;
     }
 
-    public async Task<bool> RemoveLocation(int locationId)
-    {
-        if (!_debug) return await _locationAccess.Remove(locationId);
-        return _testLocations.Remove(_testLocations.FirstOrDefault(l => l.Id == locationId)!);
-    }
+    public async Task<bool> RemoveLocation(int locationId) => _debug ? _testLocations.Remove(_testLocations.FirstOrDefault(l => l.Id == locationId)!) : await _locationAccess.Remove(locationId);
 }

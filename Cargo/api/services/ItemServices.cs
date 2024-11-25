@@ -10,17 +10,9 @@ public class ItemServices
         _testItems = [];
     }
 
-    public async Task<List<Item>> GetItems()
-    {
-        if (!_debug) return await _itemAccess.GetAll();
-        return _testItems;
-    }
+    public async Task<List<Item>> GetItems() => _debug ? _testItems : await _itemAccess.GetAll();
 
-    public async Task<Item?> GetItem(int itemId)
-    {
-        if (!_debug) return await _itemAccess.GetById(itemId);
-        return _testItems.FirstOrDefault(i => i.Id == itemId);
-    }
+    public async Task<Item?> GetItem(int itemId) => _debug ? _testItems.FirstOrDefault(i => i.Id == itemId) : await _itemAccess.GetById(itemId);
 
     public async Task<List<Item>> GetItemsForItemLine(int itemLineId)
     {
@@ -68,9 +60,5 @@ public class ItemServices
         return true;
     }
 
-    public async Task<bool> RemoveItem(int itemId)
-    {
-        if (!_debug) return await _itemAccess.Remove(itemId);
-        return _testItems.Remove(_testItems.FirstOrDefault(i => i.Id == itemId)!);
-    }
+    public async Task<bool> RemoveItem(int itemId) => _debug ? _testItems.Remove(_testItems.FirstOrDefault(i => i.Id == itemId)!) : await _itemAccess.Remove(itemId);
 }

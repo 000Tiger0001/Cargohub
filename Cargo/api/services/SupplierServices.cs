@@ -10,17 +10,9 @@ public class SupplierServices
         _debug = debug;
         _testSuppliers = [];
     }
-    public async Task<List<Supplier>> GetSuppliers()
-    {
-        if (!_debug) return await _supplierAccess.GetAll();
-        return _testSuppliers;
-    }
+    public async Task<List<Supplier>> GetSuppliers() => _debug ? _testSuppliers : await _supplierAccess.GetAll();
 
-    public async Task<Supplier?> GetSupplier(int supplierId)
-    {
-        if (!_debug) return await _supplierAccess.GetById(supplierId);
-        return _testSuppliers.FirstOrDefault(s => s.Id == supplierId);
-    }
+    public async Task<Supplier?> GetSupplier(int supplierId) => _debug ? _testSuppliers.FirstOrDefault(s => s.Id == supplierId) : await _supplierAccess.GetById(supplierId);
 
     public async Task<bool> AddSupplier(Supplier supplier)
     {
@@ -44,9 +36,5 @@ public class SupplierServices
         return true;
     }
 
-    public async Task<bool> RemoveSupplier(int supplierId)
-    {
-        if (!_debug) return await _supplierAccess.Remove(supplierId);
-        return _testSuppliers.Remove(_testSuppliers.FirstOrDefault(s => s.Id == supplierId)!);
-    }
+    public async Task<bool> RemoveSupplier(int supplierId) => _debug ? _testSuppliers.Remove(_testSuppliers.FirstOrDefault(s => s.Id == supplierId)!) : await _supplierAccess.Remove(supplierId);
 }

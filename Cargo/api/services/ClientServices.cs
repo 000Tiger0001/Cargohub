@@ -11,17 +11,9 @@ public class ClientServices
         testClients = [];
     }
 
-    public async Task<List<Client>> GetClients()
-    {
-        if (!_debug) return await _clientAccess.GetAll();
-        return testClients;
-    }
+    public async Task<List<Client>> GetClients() => _debug ? testClients : await _clientAccess.GetAll();
 
-    public async Task<Client?> GetClient(int clientId)
-    {
-        if (!_debug) return await _clientAccess.GetById(clientId);
-        return testClients.FirstOrDefault(c => c.Id == clientId);
-    }
+    public async Task<Client?> GetClient(int clientId) => _debug ? testClients.FirstOrDefault(c => c.Id == clientId) : await _clientAccess.GetById(clientId);
 
     public async Task<bool> AddClient(Client client)
     {
@@ -37,7 +29,6 @@ public class ClientServices
     public async Task<bool> UpdateClient(Client client)
     {
         if (client == null || client.Id == 0) return false;
-
         client.UpdatedAt = DateTime.Now;
         if (!_debug) return await _clientAccess.Update(client);
         int foundClientIndex = testClients.FindIndex(c => c.Id == client.Id);
@@ -46,10 +37,5 @@ public class ClientServices
         return true;
     }
 
-    public async Task<bool> RemoveClient(int clientId)
-    {
-        if (!_debug) await _clientAccess.Remove(clientId);
-        Client foundClient = testClients.FirstOrDefault(c => c.Id == clientId)!;
-        return testClients.Remove(foundClient);
-    }
+    public async Task<bool> RemoveClient(int clientId) => _debug ? testClients.Remove(testClients.FirstOrDefault(c => c.Id == clientId)!) : await _clientAccess.Remove(clientId);
 }

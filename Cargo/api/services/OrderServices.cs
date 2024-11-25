@@ -12,17 +12,9 @@ public class OrderServices
         _debug = debug;
         _testOrders = [];
     }
-    public async Task<List<Order>> GetOrders()
-    {
-        if (!_debug) return await _orderAccess.GetAll();
-        return _testOrders;
-    }
+    public async Task<List<Order>> GetOrders() => _debug ? _testOrders : await _orderAccess.GetAll();
 
-    public async Task<Order?> GetOrder(int orderId)
-    {
-        if (!_debug) return await _orderAccess.GetById(orderId)!;
-        return _testOrders.FirstOrDefault(o => o.Id == orderId);
-    }
+    public async Task<Order?> GetOrder(int orderId) => _debug ? _testOrders.FirstOrDefault(o => o.Id == orderId) : await _orderAccess.GetById(orderId)!;
 
     public async Task<List<OrderItemMovement>> GetItemsInOrder(int orderId)
     {
@@ -64,9 +56,5 @@ public class OrderServices
         return true;
     }
 
-    public async Task<bool> RemoveOrder(int orderId)
-    {
-        if (!_debug) return await _orderAccess.Remove(orderId);
-        return _testOrders.Remove(_testOrders.FirstOrDefault(o => o.Id == orderId)!);
-    }
+    public async Task<bool> RemoveOrder(int orderId) => _debug ? _testOrders.Remove(_testOrders.FirstOrDefault(o => o.Id == orderId)!) : await _orderAccess.Remove(orderId);
 }
