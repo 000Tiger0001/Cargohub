@@ -85,6 +85,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
         DB.Update(entity);
         var changes = await _context.SaveChangesAsync();
 
+        ClearChangeTracker();
         // Return true if the entity was successfully updated
         return changes > 0;
     }
