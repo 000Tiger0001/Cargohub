@@ -74,4 +74,27 @@ public class Inventory : IHasId
         TotalAllocated = totalAllocated;
         TotalAvailable = totalAvailable;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Inventory other)
+        {
+            return Id == other.Id &&
+                   ItemId == other.ItemId &&
+                   Description == other.Description &&
+                   ItemReference == other.ItemReference &&
+                   Locations?.SequenceEqual(other.Locations) == true &&
+                   TotalOnHand == other.TotalOnHand &&
+                   TotalExpected == other.TotalExpected &&
+                   TotalOrdered == other.TotalOrdered &&
+                   TotalAllocated == other.TotalAllocated &&
+                   TotalAvailable == other.TotalAvailable;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
 }
