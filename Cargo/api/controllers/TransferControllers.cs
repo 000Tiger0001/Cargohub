@@ -5,9 +5,9 @@ public class TransferControllers : Controller
 {
     private TransferServices _transferServices;
 
-    public TransferControllers(TransferAccess transferAccess)
+    public TransferControllers(TransferServices transferServices)
     {
-        _transferServices = new(transferAccess, false);
+        _transferServices = transferServices;
     }
 
     [HttpGet("get-transfers")]

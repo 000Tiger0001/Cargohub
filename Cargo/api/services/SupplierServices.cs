@@ -1,18 +1,14 @@
 public class SupplierServices
 {
     private SupplierAccess _supplierAccess;
-    private bool _debug;
-    private List<Supplier> _testSuppliers;
 
-    public SupplierServices(SupplierAccess supplierAccess, bool debug)
+    public SupplierServices(SupplierAccess supplierAccess)
     {
         _supplierAccess = supplierAccess;
-        _debug = debug;
-        _testSuppliers = [];
     }
-    public async Task<List<Supplier>> GetSuppliers() => _debug ? _testSuppliers : await _supplierAccess.GetAll();
+    public async Task<List<Supplier>> GetSuppliers() => await _supplierAccess.GetAll();
 
-    public async Task<Supplier?> GetSupplier(int supplierId) => _debug ? _testSuppliers.FirstOrDefault(s => s.Id == supplierId) : await _supplierAccess.GetById(supplierId);
+    public async Task<Supplier?> GetSupplier(int supplierId) => await _supplierAccess.GetById(supplierId);
 
     public async Task<bool> AddSupplier(Supplier supplier)
     {
@@ -20,21 +16,15 @@ public class SupplierServices
         List<Supplier> suppliers = await GetSuppliers();
         Supplier doubleSupplier = suppliers.FirstOrDefault(s => s.Address == supplier.Address && s.AddressExtra == supplier.AddressExtra && s.City == supplier.City && s.Code == supplier.Code && s.ContactName == supplier.ContactName && s.Country == supplier.Country && s.Name == supplier.Name && s.Phonenumber == supplier.Phonenumber && s.Province == supplier.Province && s.Reference == supplier.Reference && s.ZipCode == supplier.ZipCode)!;
         if (doubleSupplier is not null) return false;
-        if (!_debug) return await _supplierAccess.Add(supplier);
-        _testSuppliers.Add(supplier);
-        return true;
+        return await _supplierAccess.Add(supplier);
     }
 
     public async Task<bool> UpdateSupplier(Supplier supplier)
     {
         if (supplier is null || supplier.Id == 0) return false;
         supplier.UpdatedAt = DateTime.Now;
-        if (!_debug) return await _supplierAccess.Update(supplier);
-        int foundSupplierIndex = _testSuppliers.FindIndex(s => s.Id == supplier.Id);
-        if (foundSupplierIndex == -1) return false;
-        _testSuppliers[foundSupplierIndex] = supplier;
-        return true;
+        return await _supplierAccess.Update(supplier);
     }
 
-    public async Task<bool> RemoveSupplier(int supplierId) => _debug ? _testSuppliers.Remove(_testSuppliers.FirstOrDefault(s => s.Id == supplierId)!) : await _supplierAccess.Remove(supplierId);
+    public async Task<bool> RemoveSupplier(int supplierId) => await _supplierAccess.Remove(supplierId);
 }

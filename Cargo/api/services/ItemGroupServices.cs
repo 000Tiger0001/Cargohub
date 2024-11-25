@@ -1,19 +1,15 @@
 public class ItemGroupServices
 {
     private ItemGroupAccess _itemGroupAccess;
-    private bool _debug;
-    private List<ItemGroup> _testItemGroups;
 
-    public ItemGroupServices(ItemGroupAccess itemGroupAccess, bool debug)
+    public ItemGroupServices(ItemGroupAccess itemGroupAccess)
     {
         _itemGroupAccess = itemGroupAccess;
-        _debug = debug;
-        _testItemGroups = [];
     }
 
-    public async Task<List<ItemGroup>> GetItemGroups() => _debug ? _testItemGroups : await _itemGroupAccess.GetAll();
+    public async Task<List<ItemGroup>> GetItemGroups() => await _itemGroupAccess.GetAll();
 
-    public async Task<ItemGroup?> GetItemGroup(int itemGroupId) => _debug ? _testItemGroups.FirstOrDefault(i => i.Id == itemGroupId) : await _itemGroupAccess.GetById(itemGroupId);
+    public async Task<ItemGroup?> GetItemGroup(int itemGroupId) => await _itemGroupAccess.GetById(itemGroupId);
 
     public async Task<bool> AddItemGroup(ItemGroup itemGroup)
     {
@@ -21,21 +17,15 @@ public class ItemGroupServices
         List<ItemGroup> itemGroups = await GetItemGroups();
         ItemGroup doubleItemGroup = itemGroups.Find(i => i.Name == itemGroup.Name)!;
         if (doubleItemGroup is not null) return false;
-        if (!_debug) return await _itemGroupAccess.Add(itemGroup);
-        _testItemGroups.Add(itemGroup);
-        return true;
+        return await _itemGroupAccess.Add(itemGroup);
     }
 
     public async Task<bool> UpdateItemGroup(ItemGroup itemGroup)
     {
         if (itemGroup is null || itemGroup.Id == 0) return false;
         itemGroup.UpdatedAt = DateTime.Now;
-        if (!_debug) return await _itemGroupAccess.Update(itemGroup);
-        int foundItemGroupIndex = _testItemGroups.FindIndex(i => i.Id == itemGroup.Id);
-        if (foundItemGroupIndex == -1) return false;
-        _testItemGroups[foundItemGroupIndex] = itemGroup;
-        return true;
+        return await _itemGroupAccess.Update(itemGroup);
     }
 
-    public async Task<bool> RemoveItemGroup(int itemGroupId) => _debug ? _testItemGroups.Remove(_testItemGroups.FirstOrDefault(i => i.Id == itemGroupId)!) : await _itemGroupAccess.Remove(itemGroupId);
+    public async Task<bool> RemoveItemGroup(int itemGroupId) => await _itemGroupAccess.Remove(itemGroupId);
 }

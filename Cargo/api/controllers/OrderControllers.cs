@@ -5,9 +5,9 @@ public class OrderControllers : Controller
 {
     private OrderServices _orderServices;
 
-    public OrderControllers(OrderAccess orderAccess)
+    public OrderControllers(OrderServices orderServices)
     {
-        _orderServices = new(orderAccess, false);
+        _orderServices = orderServices;
     }
 
     [HttpGet("get-orders")]

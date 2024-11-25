@@ -5,9 +5,9 @@ public class ItemControllers : Controller
 {
     private ItemServices _itemService;
 
-    public ItemControllers(ItemAccess itemAccess)
+    public ItemControllers(ItemServices itemServices)
     {
-        _itemService = new(itemAccess, false);
+        _itemService = itemServices;
     }
 
     [HttpGet("get-items")]
