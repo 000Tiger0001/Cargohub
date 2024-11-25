@@ -19,7 +19,7 @@ public class ClientServices
     {
         if (client is null || client.Name == "" || client.Address == "" || client.City == "" || client.ZipCode == "" || client.Province == "" || client.Country == "" || client.ContactName == "" || client.ContactPhone == "" || client.ContactEmail == "") return false;
         List<Client> clients = await GetClients();
-        Client doubleClient = clients.FirstOrDefault(c => c.Name == client.Name && c.Address == client.Address && c.City == client.City && c.ZipCode == client.ZipCode && c.Province == client.Province && c.Country == client.Country && c.ContactName == client.ContactName && c.ContactPhone == client.ContactPhone && c.ContactEmail == client.ContactEmail)!;
+        Client doubleClient = clients.FirstOrDefault(c => c.Id == client.Id || (c.Name == client.Name && c.Address == client.Address && c.City == client.City && c.ZipCode == client.ZipCode && c.Province == client.Province && c.Country == client.Country && c.ContactName == client.ContactName && c.ContactPhone == client.ContactPhone && c.ContactEmail == client.ContactEmail))!;
         if (doubleClient is not null) return false;
         if (!_debug) return await _clientAccess.Add(client);
         testClients.Add(client);
