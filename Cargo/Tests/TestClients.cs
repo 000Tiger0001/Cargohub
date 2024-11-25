@@ -20,7 +20,7 @@ public class ClientControllerTests
         _clientAccess = new ClientAccess(_dbContext);
 
         // Create new instance of clientService
-        _service = new(_clientAccess, true);
+        _service = new(_clientAccess);
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public class ClientControllerTests
         Assert.False(IsAdded2);
         Assert.Equal(await _service.GetClient(1), mockClient);
 
-        _service.testClients = [];
+        await _service.RemoveClient(1);
 
         Assert.Equal(await _service.GetClients(), []);
     }
@@ -125,7 +125,7 @@ public class ClientControllerTests
         Assert.False(IsAdded2);
         Assert.Equal(await _service.GetClients(), [mockClient1]);
 
-        _service.testClients = [];
+        await _service.RemoveClient(1);
 
         Assert.Equal(await _service.GetClients(), []);
     }

@@ -20,7 +20,7 @@ public class InventoryControllerTests
         _inventoryAccess = new InventoryAccess(_dbContext);
 
         // Create new instance of clientService
-        _service = new(_inventoryAccess, true);
+        _service = new(_inventoryAccess);
     }
 
     [Fact]
