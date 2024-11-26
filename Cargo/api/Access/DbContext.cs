@@ -17,6 +17,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<Supplier>? Suppliers { get; set; }
     public DbSet<Transfer>? Transfers { get; set; }
     public DbSet<Warehouse>? Warehouses { get; set; }
+    public DbSet<OrderItemMovement>? OrderItemMovements { get; set; }
+    public DbSet<ShipmentItemMovement>? ShipmentItemMovements { get; set; }
+    public DbSet<TransferItemMovement>? TransferItemMovements { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
