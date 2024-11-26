@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 public class ShipmentItemMovement : ItemMovement
 {
     [JsonProperty("Shipment_Id")]
