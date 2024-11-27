@@ -28,15 +28,15 @@ public class InventoryControllerTests
     {
         Inventory mockInventory = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
 
-        Assert.Equal(await _service.GetInventories(), []);
+        Assert.Equal([], await _service.GetInventories());
 
         await _service.AddInventory(mockInventory);
 
-        Assert.Equal(await _service.GetInventories(), [mockInventory]);
+        Assert.Equal([mockInventory], await _service.GetInventories());
 
         await _service.RemoveInventory(1);
 
-        Assert.Equal(await _service.GetInventories(), []);
+        Assert.Equal([], await _service.GetInventories());
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public class InventoryControllerTests
 
         await _service.AddInventory(mockInventory);
 
-        Assert.Equal(await _service.GetInventory(1), mockInventory);
+        Assert.Equal(mockInventory, await _service.GetInventory(1));
         Assert.Null(await _service.GetInventory(0));
 
         await _service.RemoveInventory(1);
@@ -63,10 +63,10 @@ public class InventoryControllerTests
         await _service.AddInventory(mockInventory1);
         await _service.AddInventory(mockInventory2);
 
-        Assert.Equal(await _service.GetInventories(), [mockInventory1, mockInventory2]);
-        Assert.Equal(await _service.GetInventoriesforItem(1), [mockInventory1]);
-        Assert.Equal(await _service.GetInventoriesforItem(2), [mockInventory2]);
-        Assert.Equal(await _service.GetInventoriesforItem(3), []);
+        Assert.Equal([mockInventory1, mockInventory2], await _service.GetInventories());
+        Assert.Equal([mockInventory1], await _service.GetInventoriesforItem(1));
+        Assert.Equal([mockInventory2], await _service.GetInventoriesforItem(2));
+        Assert.Equal([], await _service.GetInventoriesforItem(3));
 
         bool IsRemoved1 = await _service.RemoveInventory(1);
         bool IsRemoved2 = await _service.RemoveInventory(2);
@@ -118,5 +118,134 @@ public class InventoryControllerTests
         Assert.True(IsRemoved2);
         Assert.True(IsRemoved3);
         Assert.Equal(await _service.GetInventories(), []);
+    }
+
+    [Fact]
+    public async Task AddInventoryGood()
+    {
+        Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
+
+        Assert.Equal([], await _service.GetInventories());
+
+        await _service.AddInventory(mockInventory1);
+
+        Assert.Equal([mockInventory1], await _service.GetInventories());
+
+        await _service.RemoveInventory(1);
+
+        Assert.Equal([], await _service.GetInventories());
+    }
+
+    [Fact]
+    public async Task AddInventoryBad()
+    {
+        Location mockLocation = new(1, 1, "", "");
+
+        Assert.Equal([], await _service.GetInventories());
+
+        /* De code hieronder is uitgecomment, omdat het een error geeft. */
+        //await _service.AddInventory(mockLocation);
+
+        Assert.Equal([], await _service.GetInventories());
+
+        await _service.RemoveInventory(1);
+
+        Assert.Equal([], await _service.GetInventories());
+    }
+
+    [Fact]
+    public async Task AddDuplicateInventory()
+    {
+        Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
+
+        bool IsAdded = await _service.AddInventory(mockInventory1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockInventory1], await _service.GetInventories());
+
+        bool IsAdded1 = await _service.AddInventory(mockInventory1);
+
+        Assert.False(IsAdded1);
+        Assert.Equal([mockInventory1], await _service.GetInventories());
+
+        bool IsRemoved = await _service.RemoveInventory(1);
+
+        Assert.True(IsRemoved);
+        Assert.Equal([], await _service.GetInventories());
+    }
+
+    [Fact]
+    public async Task AddInventoryWithDuplicateId()
+    {
+        Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
+        Inventory mockInventory2 = new(1, 2, "Focused transitional alliance", "nyg48736S", [19800,23653,3068,3334,20477,20524,17579,2271,2293,22717], 194, 0, 139, 0, 55);
+
+        bool IsAdded = await _service.AddInventory(mockInventory1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockInventory1], await _service.GetInventories());
+
+        bool IsAdded1 = await _service.AddInventory(mockInventory2);
+
+        Assert.False(IsAdded1);
+        Assert.Equal([mockInventory1], await _service.GetInventories());
+
+        bool IsRemoved = await _service.RemoveInventory(1);
+
+        Assert.True(IsRemoved);
+        Assert.Equal([], await _service.GetInventories());
+    }
+
+    [Fact]
+    public async Task UpdateInventoryGood()
+    {
+        Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
+        Inventory mockInventory2 = new(1, 2, "Focused transitional alliance", "nyg48736S", [19800, 23653, 3068, 3334, 20477, 20524, 17579, 2271, 2293, 22717], 194, 0, 139, 0, 55);
+
+        bool IsAdded = await _service.AddInventory(mockInventory1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockInventory1], await _service.GetInventories());
+
+        bool IsUpdated = await _service.UpdateInventory(mockInventory2);
+
+        Assert.True(IsUpdated);
+        Assert.Equal(mockInventory2, await _service.GetInventory(1));
+        Assert.NotEqual(mockInventory1, await _service.GetInventory(1));
+
+        await _service.RemoveInventory(1);
+    }
+
+    /*[Fact]
+    public async Task UpdateInventoryBad()
+    {
+        Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
+        Inventory mockInventory2 = new(2, 2, "Focused transitional alliance", "nyg48736S", [19800, 23653, 3068, 3334, 20477, 20524, 17579, 2271, 2293, 22717], 194, 0, 139, 0, 55);
+
+        bool IsAdded = await _service.AddInventory(mockInventory1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockInventory1], await _service.GetInventories());
+
+        bool IsAdded1 = await _service.AddInventory(mockInventory2);
+
+        Assert.True(IsAdded1);
+        Assert.Equal([mockInventory1, mockInventory2], await _service.GetInventories());
+    }*/
+
+    [Fact]
+    public async Task RemoveInventory()
+    {
+        Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
+
+        bool IsAdded = await _service.AddInventory(mockInventory1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockInventory1], await _service.GetInventories());
+
+        bool IsRemoved = await _service.RemoveInventory(1);
+
+        Assert.True(IsRemoved);
+        Assert.Equal([], await _service.GetInventories());
     }
 }

@@ -83,7 +83,7 @@ public class Inventory : IHasId
                    ItemId == other.ItemId &&
                    Description == other.Description &&
                    ItemReference == other.ItemReference &&
-                   Locations?.SequenceEqual(other.Locations) == true &&
+                   Locations?.SequenceEqual(other.Locations!) == true &&
                    TotalOnHand == other.TotalOnHand &&
                    TotalExpected == other.TotalExpected &&
                    TotalOrdered == other.TotalOrdered &&
