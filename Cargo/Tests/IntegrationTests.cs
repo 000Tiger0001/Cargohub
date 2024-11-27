@@ -150,7 +150,6 @@ public class IntegrationTests
     {
         var testOrderItemMovement = new OrderItemMovement { Id = 1, ItemId = 1, Amount = 1, ItemIdString = "1", OrderId = 1 };
         var testOrder = new Order { Id = 1 };
-        // Arrange
         var testItem = new Item { Id = 1 };
         await _dbContext.Orders.AddAsync(testOrder);
         await _dbContext.Items.AddAsync(testItem);
@@ -162,9 +161,7 @@ public class IntegrationTests
     {
         var testShipmentItemMovement = new ShipmentItemMovement { Id = 1, ItemId = 1, Amount = 1, ItemIdString = "1", Shipment_Id = 1 };
         var testShipment = new Shipment { Id = 1 };
-        // Arrange
         var testItem = new Item { Id = 1 };
-        // Add the mock locations to the in-memory database
         await _dbContext.Shipments.AddAsync(testShipment);
         await _dbContext.Items.AddAsync(testItem);
         await _serviceItems.RemoveItem(1);
@@ -175,9 +172,7 @@ public class IntegrationTests
     {
         var testTransferItemMovement = new TransferItemMovement { Id = 1, ItemId = 1, Amount = 1, ItemIdString = "1", TransferId = 1 };
         var testTransfer = new Transfer { Id = 1 };
-        // Arrange
         var testItem = new Item { Id = 1 };
-        // Add the mock locations to the in-memory database
         await _dbContext.Transfers.AddAsync(testTransfer);
         await _dbContext.Items.AddAsync(testItem);
         await _serviceItems.RemoveItem(1);
