@@ -77,7 +77,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Run Program
-        run: dotnet run --Cargo.csproj
+        run: dotnet run --project Cargo/api/Cargo.csproj
 
       # Execute all unit tests in the solution
       - name: Execute unit tests
