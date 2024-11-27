@@ -92,21 +92,28 @@ public class JsonToDb
                         }
                     }
                 }
-                try
+
+                if (!await access.IsTableEmpty())
                 {
-                    // If the Add method expects a specific type, pass the typedItem
-                    var addMethod = access.GetType().GetMethod("AddMany");
-                    if (addMethod != null)
+                    Console.WriteLine($"Table for {dataType} is not empty, skipping add operation.");
+                }
+                else
+                {
+                    try
                     {
-                        var result = await (Task<bool>)addMethod.Invoke(access, new object[] { data });
-                        // Console.WriteLine($"Add result: {result}");
+                        // If the Add method expects a specific type, pass the typedItem
+                        var addMethod = access.GetType().GetMethod("AddMany");
+                        if (addMethod != null)
+                        {
+                            var result = await (Task<bool>)addMethod.Invoke(access, new object[] { data });
+                            // Console.WriteLine($"Add result: {result}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error adding item: {ex.Message}");
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error adding item: {ex.Message}");
-                }
-
             }
         }
     }
