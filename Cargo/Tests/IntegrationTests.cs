@@ -154,33 +154,33 @@ public class IntegrationTests
         var testItem = new Item { Id = 1 };
         await _dbContext.Orders.AddAsync(testOrder);
         await _dbContext.Items.AddAsync(testItem);
-        await _controllerItem.RemoveItem(1);
+        await _serviceItems.RemoveItem(1);
         Assert.NotNull(_serviceItems.GetItem(1));
     }
     [Fact]
     public async Task ItemDeleteShipment()
     {
-        var testShipmentItemMovement = new ShipmentItemMovement { Id = 1, ItemId = 1, Amount = 1, ItemIdString = "1", ShipmentId = 1 };
+        var testShipmentItemMovement = new ShipmentItemMovement { Id = 1, ItemId = 1, Amount = 1, ItemIdString = "1", Shipment_Id = 1 };
         var testShipment = new Shipment { Id = 1 };
         // Arrange
         var testItem = new Item { Id = 1 };
         // Add the mock locations to the in-memory database
         await _dbContext.Shipments.AddAsync(testShipment);
         await _dbContext.Items.AddAsync(testItem);
-        await _controllerItem.RemoveItem(1);
+        await _serviceItems.RemoveItem(1);
         Assert.NotNull(_serviceItems.GetItem(1));
     }
     [Fact]
     public async Task ItemDeleteTransfer()
     {
         var testTransferItemMovement = new TransferItemMovement { Id = 1, ItemId = 1, Amount = 1, ItemIdString = "1", TransferId = 1 };
-        var testTranfer = new Transfer { Id = 1 };
+        var testTransfer = new Transfer { Id = 1 };
         // Arrange
         var testItem = new Item { Id = 1 };
         // Add the mock locations to the in-memory database
         await _dbContext.Transfers.AddAsync(testTransfer);
         await _dbContext.Items.AddAsync(testItem);
-        await _controllerItem.RemoveItem(1);
+        await _serviceItems.RemoveItem(1);
         Assert.NotNull(_serviceItems.GetItem(1));
     }
 
@@ -272,5 +272,31 @@ public class IntegrationTests
         var testItem = new Item { Id = 1, SupplierId = 1 };
         await _serviceItems.AddItem(testItem);
         Assert.Null(await _serviceItems.GetItem(1));
+    }
+
+    [Fact]
+    public async Task AddShipmentWithoutItem()
+    {
+        ShipmentItemMovement testShipmentItemMovement = new ShipmentItemMovement { Id = 1, ItemId = 1, ItemIdString = "1", Amount = 3 };
+        Shipment testShipment = new Shipment { Id = 1, Items = { testShipmentItemMovement } };
+        await _serviceShipment.AddShipment(testShipment);
+        Assert.Null(await _serviceShipment.GetShipment(1));
+    }
+
+    [Fact]
+    public async Task AddOrderWithoutItem()
+    {
+        OrderItemMovement testOrderItemMovement = new OrderItemMovement { Id = 1, ItemId = 1, ItemIdString = "1", Amount = 3 };
+        Order testOrder = new Order { Id = 1, Items = { testOrderItemMovement } };
+        await _serviceOrder.AddOrder(testOrder);
+        Assert.Null(await _serviceOrder.GetOrder(1));
+    }
+    [Fact]
+    public async Task AddTransferWithoutItem()
+    {
+        TransferItemMovement testTransferItemMovement = new TransferItemMovement { Id = 1, ItemId = 1, ItemIdString = "1", Amount = 3 };
+        Transfer testTransfer = new Transfer { Id = 1, Items = { testTransferItemMovement } };
+        await _serviceTransfer.AddTransfer(testTransfer);
+        Assert.Null(await _serviceTransfer.GetTransfer(1));
     }
 }
