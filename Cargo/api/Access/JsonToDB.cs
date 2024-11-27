@@ -78,45 +78,35 @@ public class JsonToDb
                 var items = JsonConvert.DeserializeObject(content, listType);
                 var data = (IEnumerable<object>)items!;
 
-                // make sure ID doesn`t start with 0
+                // make sure id is not negative and 0
+                // let EF update values for you by using [DatabaseGenerated(DatabaseGeneratedOption.Identity)] in models
                 if (data.Any())
                 {
                     var firstItem = data.ElementAt(0);
-                    // Map and increment the id for each item if the first item's index is 0
-                    int id = 1;
                     foreach (var item in data)
                     {
-                        // Here we are assuming each item has an 'Id' property, and it's of type 'int'
                         var itemProperty = item.GetType().GetProperty("Id");
                         if (itemProperty != null && itemProperty.CanWrite)
                         {
-                            itemProperty.SetValue(item, id);
-                            id++;
+                            itemProperty.SetValue(item, null);
                         }
                     }
+                }
+                try
+                {
+                    // If the Add method expects a specific type, pass the typedItem
+                    var addMethod = access.GetType().GetMethod("AddMany");
+                    if (addMethod != null)
+                    {
+                        var result = await (Task<bool>)addMethod.Invoke(access, new object[] { data });
+                        // Console.WriteLine($"Add result: {result}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error adding item: {ex.Message}");
                 }
 
-                if (!await access.IsTableEmpty())
-                {
-                    Console.WriteLine($"Table for {dataType} is not empty, skipping add operation.");
-                }
-                else
-                {
-                    try
-                    {
-                        // If the Add method expects a specific type, pass the typedItem
-                        var addMethod = access.GetType().GetMethod("AddMany");
-                        if (addMethod != null)
-                        {
-                            var result = await (Task<bool>)addMethod.Invoke(access, new object[] { data });
-                            // Console.WriteLine($"Add result: {result}");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error adding item: {ex.Message}");
-                    }
-                }
             }
         }
     }
