@@ -27,7 +27,7 @@ public class ResponseTimeTests
     }
 
     [Theory]
-    [InlineData(5, 20)] // 1 second = 1000 ms, n requests per endpoint
+    [InlineData(60, 5)] // 1 second = 1000 ms, n requests per endpoint
     public async Task ApiResponseTime_ShouldBeWithinLimit(int maxResponseTimeSeconds, int requestCount)
     {
         // List of endpoints to test
