@@ -32,6 +32,10 @@ public class Inventory : IHasId
             ItemIdString = "P" + value.ToString();
         }
     }
+
+    [ForeignKey("ItemId")]
+    public Item? Item { get; set; }
+
     [JsonProperty("description")]
     public string? Description { get; set; }
 

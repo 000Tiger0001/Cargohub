@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 public class Location : IHasId
 {
     [Key]
@@ -10,6 +11,9 @@ public class Location : IHasId
 
     [JsonProperty("warehouse_id")]
     public int WarehouseId { get; set; }
+
+    [ForeignKey("WarehouseId")]
+    public Warehouse? Warehouse { get; set; }
 
     [JsonProperty("code")]
     public string? Code { get; set; }

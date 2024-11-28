@@ -39,6 +39,9 @@ public class Order : IHasId
     [JsonProperty("warehouse_id")]
     public int WarehouseId { get; set; }
 
+    [ForeignKey("WarehouseId")]
+    public Warehouse? Warehouse { get; set; }
+
     [JsonProperty("ship_to")]
     public int? ShipTo { get; set; } = null;
 
