@@ -13,7 +13,7 @@ public class Location : IHasId
     public int WarehouseId { get; set; }
 
     [ForeignKey("WarehouseId")]
-    public Warehouse? Warehouse { get; set; }
+    public virtual Warehouse? Warehouse { get; set; }
 
     [JsonProperty("code")]
     public string? Code { get; set; }

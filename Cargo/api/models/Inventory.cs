@@ -31,7 +31,7 @@ public class Inventory : IHasId
     }
 
     [ForeignKey("ItemId")]
-    public Item? Item { get; set; }
+    public virtual Item? Item { get; set; }
 
     [JsonProperty("description")]
     public string? Description { get; set; }
