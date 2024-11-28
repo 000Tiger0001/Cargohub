@@ -73,7 +73,7 @@ public class InventoryTests
 
         Assert.True(IsRemoved1);
         Assert.True(IsRemoved2);
-        Assert.Equal(await _service.GetInventories(), []);
+        Assert.Empty(await _service.GetInventories());
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public class InventoryTests
         Assert.True(IsAdded1);
         Assert.True(IsAdded2);
         Assert.True(IsAdded3);
-        Assert.Equal(await _service.GetInventories(), [mockInventory1, mockInventory2, mockInventory3]);
+        Assert.Equal([mockInventory1, mockInventory2, mockInventory3], await _service.GetInventories());
 
         Dictionary<string, int> totals1 = await _service.GetInventoryTotalsForItem(mockInventory1.Id);
         Assert.Equal(mockInventory1.TotalExpected, totals1["total_expected"]);
@@ -117,7 +117,7 @@ public class InventoryTests
         Assert.True(IsRemoved1);
         Assert.True(IsRemoved2);
         Assert.True(IsRemoved3);
-        Assert.Equal(await _service.GetInventories(), []);
+        Assert.Empty(await _service.GetInventories());
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public class InventoryTests
     {
         Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
 
-        Assert.Equal([], await _service.GetInventories());
+        Assert.Empty(await _service.GetInventories());
 
         bool IsAdded = await _service.AddInventory(mockInventory1);
 
@@ -134,7 +134,7 @@ public class InventoryTests
 
         await _service.RemoveInventory(1);
 
-        Assert.Equal([], await _service.GetInventories());
+        Assert.Empty(await _service.GetInventories());
     }
 
     [Fact]
@@ -142,16 +142,16 @@ public class InventoryTests
     {
         Location mockLocation = new(1, 1, "", "");
 
-        Assert.Equal([], await _service.GetInventories());
+        Assert.Empty(await _service.GetInventories());
 
         /* De code hieronder is uitgecomment, omdat het een error geeft. */
         //await _service.AddInventory(mockLocation);
 
-        Assert.Equal([], await _service.GetInventories());
+        Assert.Empty(await _service.GetInventories());
 
         await _service.RemoveInventory(1);
 
-        Assert.Equal([], await _service.GetInventories());
+        Assert.Empty(await _service.GetInventories());
     }
 
     [Fact]
@@ -172,7 +172,7 @@ public class InventoryTests
         bool IsRemoved = await _service.RemoveInventory(1);
 
         Assert.True(IsRemoved);
-        Assert.Equal([], await _service.GetInventories());
+        Assert.Empty(await _service.GetInventories());
     }
 
     [Fact]
@@ -194,7 +194,7 @@ public class InventoryTests
         bool IsRemoved = await _service.RemoveInventory(1);
 
         Assert.True(IsRemoved);
-        Assert.Equal([], await _service.GetInventories());
+        Assert.Empty(await _service.GetInventories());
     }
 
     [Fact]
@@ -247,6 +247,6 @@ public class InventoryTests
         bool IsRemoved = await _service.RemoveInventory(1);
 
         Assert.True(IsRemoved);
-        Assert.Equal([], await _service.GetInventories());
+        Assert.Empty(await _service.GetInventories());
     }
 }

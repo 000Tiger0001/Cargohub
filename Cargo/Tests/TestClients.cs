@@ -35,7 +35,7 @@ public class ClientTests
         Assert.Equal(await _service.GetClient(mockClient.Id), mockClient);
 
         await _service.RemoveClient(1);
-        Assert.Equal([], await _service.GetClients());
+        Assert.Empty(await _service.GetClients());
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class ClientTests
     {
         Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
 
         bool IsAdded = await _service.AddClient(mockClient);
 
@@ -67,7 +67,7 @@ public class ClientTests
 
         await _service.RemoveClient(1);
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
     }
 
     [Fact]
@@ -75,16 +75,16 @@ public class ClientTests
     {
         Location mockLocation = new(1, 1, "", "");
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
 
         /*This line beneath gives an error, because the method "AddClient()" can't get a location. */
         //bool IsAdded = await _service.AddClient(mockLocation);
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
 
         await _service.RemoveClient(1);
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
     }
 
     [Fact]
@@ -95,16 +95,16 @@ public class ClientTests
         bool IsAdded1 = await _service.AddClient(mockClient);
 
         Assert.True(IsAdded1);
-        Assert.Equal(await _service.GetClient(1), mockClient);
+        Assert.Equal(mockClient, await _service.GetClient(1));
 
         bool IsAdded2 = await _service.AddClient(mockClient);
 
         Assert.False(IsAdded2);
-        Assert.Equal(await _service.GetClient(1), mockClient);
+        Assert.Equal(mockClient, await _service.GetClient(1));
 
         await _service.RemoveClient(1);
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public class ClientTests
 
         await _service.RemoveClient(1);
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
     }
 
     [Fact]
@@ -164,6 +164,6 @@ public class ClientTests
         bool IsRemoved = await _service.RemoveClient(1);
 
         Assert.True(IsRemoved);
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
     }
 }

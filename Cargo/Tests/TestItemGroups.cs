@@ -1,6 +1,5 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 public class ItemGroupTests
 {
@@ -23,7 +22,7 @@ public class ItemGroupTests
     {
         ItemGroup mockItemGroup = new (1, "Hardware", "");
 
-        Assert.Equal([], await _service.GetItemGroups());
+        Assert.Empty(await _service.GetItemGroups());
 
         await _service.AddItemGroup(mockItemGroup);
 
@@ -31,7 +30,7 @@ public class ItemGroupTests
 
         await _service.RemoveItemGroup(1);
 
-        Assert.Equal([], await _service.GetItemGroups());
+        Assert.Empty(await _service.GetItemGroups());
     }
 
     [Fact]
@@ -54,7 +53,7 @@ public class ItemGroupTests
     {
         ItemGroup mockItemGroup = new(1, "Hardware", "");
 
-        Assert.Equal([], await _service.GetItemGroups());
+        Assert.Empty(await _service.GetItemGroups());
 
         bool IsAdded = await _service.AddItemGroup(mockItemGroup);
 
@@ -63,7 +62,7 @@ public class ItemGroupTests
         
         await _service.RemoveItemGroup(1);
 
-        Assert.Equal([], await _service.GetItemGroups());
+        Assert.Empty(await _service.GetItemGroups());
     }
 
     [Fact]
@@ -71,14 +70,14 @@ public class ItemGroupTests
     {
         Client mockClient = new(1, "Joost", "JoostLaan 2", "Rotterdam", "5656AA", "Zuid-Holland", "Nederland", "Joost", "06 123456789", "JoostMagHetWeten@gmail.com");
 
-        Assert.Equal([], await _service.GetItemGroups());
+        Assert.Empty(await _service.GetItemGroups());
 
         /* De code hieronder is uitgecomment, omdat het een error geeft. */
         //await _service.AddItemGroup(mockClient);
 
-        Assert.Equal([], await _service.GetItemGroups());
+        Assert.Empty(await _service.GetItemGroups());
 
-        Assert.Equal([], await _service.GetItemGroups());
+        Assert.Empty(await _service.GetItemGroups());
     }
 
     [Fact]
@@ -98,7 +97,7 @@ public class ItemGroupTests
 
         await _service.RemoveItemGroup(1);
 
-        Assert.Equal([], await _service.GetItemGroups());
+        Assert.Empty(await _service.GetItemGroups());
     }
 
     [Fact]
@@ -119,7 +118,7 @@ public class ItemGroupTests
 
         await _service.RemoveItemGroup(1);
 
-        Assert.Equal([], await _service.GetItemGroups());
+        Assert.Empty(await _service.GetItemGroups());
     }
 
     [Fact]
@@ -155,6 +154,6 @@ public class ItemGroupTests
         bool IsRemoved = await _service.RemoveItemGroup(1);
 
         Assert.True(IsRemoved);
-        Assert.Equal([], await _service.GetItemGroups());
+        Assert.Empty(await _service.GetItemGroups());
     }
 }
