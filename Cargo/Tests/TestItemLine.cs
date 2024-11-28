@@ -106,4 +106,26 @@ public class ItemLineTests
         Assert.True(IsRemoved);
         Assert.Empty(await _service.GetItemLines());
     }
+
+    [Fact]
+    public async Task AddItemLineWithDuplicateId()
+    {
+        ItemLine mockItemLine1 = new(1, "Home Appliances", "Stuff for home");
+        ItemLine mockItemLine2 = new(1, "Office Supplies", "Nice office");
+
+        bool IsAdded1 = await _service.AddItemLine(mockItemLine1);
+
+        Assert.True(IsAdded1);
+        Assert.Equal([mockItemLine1], await _service.GetItemLines());
+
+        bool IsAdded2 = await _service.AddItemLine(mockItemLine2);
+
+        Assert.False(IsAdded2);
+        Assert.Equal([mockItemLine1], await _service.GetItemLines());
+
+        bool IsRemoved = await _service.RemoveItemLine(1);
+
+        Assert.True(IsRemoved);
+        Assert.Empty(await _service.GetItemLines());
+    }
 }
