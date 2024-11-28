@@ -32,4 +32,21 @@ public class ItemLineTests
 
         Assert.Empty(await _service.GetItemLines());
     }
+
+    [Fact]
+    public async Task GetItem()
+    {
+        ItemLine mockItemLine = new(1, "Home Appliances", "Stuff for home");
+
+        bool IsAdded = await _service.AddItemLine(mockItemLine);
+
+        Assert.True(IsAdded);
+        Assert.Equal(mockItemLine, await _service.GetItemLine(1));
+        Assert.Null(await _service.GetItemLine(0));
+
+        bool IsRemoved = await _service.RemoveItemLine(1);
+
+        Assert.True(IsRemoved);
+        Assert.Null(await _service.GetItemLine(1));
+    }
 }
