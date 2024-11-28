@@ -128,4 +128,24 @@ public class ItemLineTests
         Assert.True(IsRemoved);
         Assert.Empty(await _service.GetItemLines());
     }
+
+    [Fact]
+    public async Task UpdateItemLine()
+    {
+        ItemLine mockItemLine1 = new(1, "Home Appliances", "Stuff for home");
+        ItemLine mockItemLine2 = new(1, "Office Supplies", "Nice office");
+
+        bool IsAdded = await _service.AddItemLine(mockItemLine1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockItemLine1], await _service.GetItemLines());
+
+        bool IsUpdated = await _service.UpdateItemLine(mockItemLine2);
+
+        Assert.True(IsUpdated);
+        Assert.Equal([mockItemLine2], await _service.GetItemLines());
+        Assert.NotEqual([mockItemLine1], await _service.GetItemLines());
+
+        await _service.RemoveItemLine(1);
+    }
 }
