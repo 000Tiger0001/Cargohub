@@ -77,6 +77,8 @@ public class ItemGroupTests
 
         Assert.Empty(await _service.GetItemGroups());
 
+        await _service.RemoveItemGroup(1);
+
         Assert.Empty(await _service.GetItemGroups());
     }
 
