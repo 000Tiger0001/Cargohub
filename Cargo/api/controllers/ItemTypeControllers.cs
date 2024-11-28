@@ -10,11 +10,11 @@ public class ItemTypeControllers : Controller
         _itemTypeService = itemTypeServices;
     }
 
-    [HttpGet("get-item-types")]
+    [HttpGet("item-types")]
     public async Task<IActionResult> GetItemtypes() => Ok(await _itemTypeService.GetItemTypes());
 
-    [HttpGet("get-item-type")]
-    public async Task<IActionResult> GetItemType([FromQuery] int itemTypeId)
+    [HttpGet("item-type/{itemTypeId}")]
+    public async Task<IActionResult> GetItemType(int itemTypeId)
     {
         if (itemTypeId == 0) return BadRequest("You can't use an empty id. ");
         ItemType? itemType = await _itemTypeService.GetItemType(itemTypeId);
@@ -22,7 +22,7 @@ public class ItemTypeControllers : Controller
         return Ok(itemType);
     }
 
-    [HttpPost("add-item-type")]
+    [HttpPost("item-type")]
     public async Task<IActionResult> AddItemType([FromBody] ItemType itemType)
     {
         if (itemType is null || itemType.Name == "") return BadRequest("Not enough info. ");
@@ -32,7 +32,7 @@ public class ItemTypeControllers : Controller
         return Ok("Item type added. ");
     }
 
-    [HttpPut("update-item-type")]
+    [HttpPut("item-type")]
     public async Task<IActionResult> UpdateItemType([FromBody] ItemType itemType)
     {
         if (itemType is null || itemType.Id == 0) return BadRequest("Not enough info. ");
@@ -42,7 +42,7 @@ public class ItemTypeControllers : Controller
         return Ok("Item type updated. ");
     }
 
-    [HttpDelete("remove-item-type")]
+    [HttpDelete("item-type")]
     public async Task<IActionResult> RemoveItemType([FromQuery] int itemTypeId)
     {
         if (itemTypeId == 0) return BadRequest("Can't remove item type with empty id. ");
