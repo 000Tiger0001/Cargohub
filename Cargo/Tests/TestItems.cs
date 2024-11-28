@@ -31,4 +31,18 @@ public class ItemTests
 
         Assert.Empty(await _service.GetItems());
     }
+
+    public async Task GetItem()
+    {
+        Item mockItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
+
+        await _service.AddItem(mockItem);
+
+        Assert.Equal(mockItem, await _service.GetItem(1));
+        Assert.Null(await _service.GetItem(0));
+
+        await _service.RemoveItem(1);
+
+        Assert.Null(await _service.GetItem(1));
+    }
 }
