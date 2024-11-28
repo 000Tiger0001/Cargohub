@@ -60,8 +60,8 @@ public class InventoryControllers : Controller
         return Ok("Inventory updated. ");
     }
 
-    [HttpDelete("inventory")]
-    public async Task<IActionResult> RemoveInventory([FromQuery] int inventoryId)
+    [HttpDelete("inventory/{inventoryId}")]
+    public async Task<IActionResult> RemoveInventory(int inventoryId)
     {
         if (inventoryId == 0) return BadRequest("Cannot proccess empty id. ");
 

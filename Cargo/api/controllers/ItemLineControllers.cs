@@ -42,8 +42,8 @@ public class ItemLineControllers : Controller
         return Ok("Item line updated. ");
     }
 
-    [HttpDelete("item-line")]
-    public async Task<IActionResult> RemoveItemLine([FromQuery] int itemLineId)
+    [HttpDelete("item-line/{itemLineId}")]
+    public async Task<IActionResult> RemoveItemLine(int itemLineId)
     {
         if (itemLineId == 0) return BadRequest("Can't remove item line with empty id. ");
 

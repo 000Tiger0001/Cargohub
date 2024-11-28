@@ -42,8 +42,8 @@ public class ItemGroupControllers : Controller
         return Ok("Item group updated. ");
     }
 
-    [HttpDelete("item-group")]
-    public async Task<IActionResult> RemoveItemGroup([FromQuery] int itemGroupId)
+    [HttpDelete("item-group/{itemGroupId}")]
+    public async Task<IActionResult> RemoveItemGroup(int itemGroupId)
     {
         if (itemGroupId == 0) return BadRequest("Can't remove item group with empty id. ");
 

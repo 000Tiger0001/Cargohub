@@ -43,8 +43,8 @@ public class ItemControllers : Controller
         return Ok("Item updated. ");
     }
 
-    [HttpDelete("item")]
-    public async Task<IActionResult> RemoveItem([FromQuery] int itemId)
+    [HttpDelete("item/{itemId}")]
+    public async Task<IActionResult> RemoveItem(int itemId)
     {
         if (itemId == 0) return BadRequest("Given id isn't valid");
 
@@ -54,7 +54,7 @@ public class ItemControllers : Controller
     }
 
     [HttpGet("item-type/{itemTypeId}/items")]
-    public async Task<IActionResult> GetItemsForItemType([FromQuery] int itemTypeId)
+    public async Task<IActionResult> GetItemsForItemType(int itemTypeId)
     {
         if (itemTypeId == 0) return BadRequest("Given id can't be empty. ");
 
@@ -64,7 +64,7 @@ public class ItemControllers : Controller
     }
 
     [HttpGet("item-line/{itemLineId}/items")]
-    public async Task<IActionResult> GetItemsForItemLine([FromQuery] int itemLineId)
+    public async Task<IActionResult> GetItemsForItemLine(int itemLineId)
     {
         if (itemLineId == 0) return BadRequest("Given id can't be empty. ");
 

@@ -42,8 +42,8 @@ public class ItemTypeControllers : Controller
         return Ok("Item type updated. ");
     }
 
-    [HttpDelete("item-type")]
-    public async Task<IActionResult> RemoveItemType([FromQuery] int itemTypeId)
+    [HttpDelete("item-type/{itemTypeId}")]
+    public async Task<IActionResult> RemoveItemType(int itemTypeId)
     {
         if (itemTypeId == 0) return BadRequest("Can't remove item type with empty id. ");
 

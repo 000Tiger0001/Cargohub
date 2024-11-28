@@ -53,8 +53,8 @@ public class LocationControllers : Controller
         return Ok("Location updated. ");
     }
 
-    [HttpDelete("location")]
-    public async Task<IActionResult> RemoveLocation([FromQuery] int locationId)
+    [HttpDelete("location/{locationId}")]
+    public async Task<IActionResult> RemoveLocation(int locationId)
     {
         if (locationId == 0) return BadRequest("Cannot remove location with empty id. ");
 
