@@ -5,5 +5,5 @@ public class ShipmentItemMovement : ItemMovement
     public int ShipmentId { get; set; }
 
     [ForeignKey("ShipmentId")]
-    public Shipment? Shipment { get; set; }
+    public virtual Shipment? Shipment { get; set; }
 }

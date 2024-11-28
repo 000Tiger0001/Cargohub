@@ -8,15 +8,15 @@ public class JsonToDb
         List<string> dataTypes = new List<string>()
         {
             "Client",
-            "Inventorie",
-            "Item",
+            "Supplier",
             "ItemGroup",
             "ItemLine",
             "ItemType",
+            "Item",
+            "Inventorie",
             "Location",
             "Order",
             "Shipment",
-            "Supplier",
             "Transfer",
             "Warehouse"
         };
@@ -24,15 +24,15 @@ public class JsonToDb
         List<Type> classes = new List<Type>()
         {
             typeof(Client),
-            typeof(Inventory),
-            typeof(Item),
+            typeof(Supplier),
             typeof(ItemGroup),
             typeof(ItemLine),
             typeof(ItemType),
+            typeof(Item),
+            typeof(Inventory),
             typeof(Location),
             typeof(Order),
             typeof(Shipment),
-            typeof(Supplier),
             typeof(Transfer),
             typeof(Warehouse)
         };
@@ -112,6 +112,7 @@ public class JsonToDb
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Error adding item: {ex.Message}");
+                        break;
                     }
                 }
             }

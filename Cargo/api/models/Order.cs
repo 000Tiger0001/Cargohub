@@ -51,6 +51,9 @@ public class Order : IHasId
     [JsonProperty("shipment_id")]
     public int? ShipmentId { get; set; } = null;
 
+    [ForeignKey("ShipmentId")]
+    public virtual Shipment? Shipment { get; set; }
+
     [JsonProperty("total_amount")]
     public double TotalAmount { get; set; }
 

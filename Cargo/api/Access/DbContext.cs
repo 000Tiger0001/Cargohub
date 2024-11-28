@@ -40,6 +40,34 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(sim => sim.ShipmentId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Item>(entity =>
+        {
+            entity.HasKey(i => i.Id);
+            // Configure ItemLine foreign key relationship
+            entity.HasOne(i => i.ItemLine)
+                  .WithMany()
+                  .HasForeignKey(i => i.ItemLineId)
+                  .OnDelete(DeleteBehavior.SetNull); // Set to null if ItemLine is deleted
+
+            // Configure ItemGroup foreign key relationship
+            entity.HasOne(i => i.ItemGroup)
+                  .WithMany()
+                  .HasForeignKey(i => i.ItemGroupId)
+                  .OnDelete(DeleteBehavior.SetNull); // Set to null if ItemGroup is deleted
+
+            // Configure ItemType foreign key relationship
+            entity.HasOne(i => i.ItemType)
+                  .WithMany()
+                  .HasForeignKey(i => i.ItemTypeId)
+                  .OnDelete(DeleteBehavior.SetNull); // Set to null if ItemType is deleted
+
+            // Configure Supplier foreign key relationship
+            entity.HasOne(i => i.Supplier)
+                  .WithMany()
+                  .HasForeignKey(i => i.SupplierId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            base.OnModelCreating(modelBuilder);
+        });
     }
 }

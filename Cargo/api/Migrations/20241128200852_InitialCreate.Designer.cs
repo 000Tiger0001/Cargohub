@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cargo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241127143136_ItemMovementTest")]
-    partial class ItemMovementTest
+    [Migration("20241128200852_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -107,6 +107,8 @@ namespace Cargo.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ItemId");
+
                     b.ToTable("Inventories");
                 });
 
@@ -128,16 +130,16 @@ namespace Cargo.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ItemGroupId")
+                    b.Property<int?>("ItemGroupId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ItemIdString")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ItemLineId")
+                    b.Property<int?>("ItemLineId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ItemTypeId")
+                    b.Property<int?>("ItemTypeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModelNumber")
@@ -171,6 +173,14 @@ namespace Cargo.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ItemGroupId");
+
+                    b.HasIndex("ItemLineId");
+
+                    b.HasIndex("ItemTypeId");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("Items");
                 });
@@ -267,6 +277,8 @@ namespace Cargo.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("WarehouseId");
+
                     b.ToTable("Locations");
                 });
 
@@ -334,6 +346,10 @@ namespace Cargo.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShipmentId");
+
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("Orders");
                 });
@@ -599,6 +615,77 @@ namespace Cargo.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Warehouses");
+                });
+
+            modelBuilder.Entity("Inventory", b =>
+                {
+                    b.HasOne("Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("Item", b =>
+                {
+                    b.HasOne("ItemGroup", "ItemGroup")
+                        .WithMany()
+                        .HasForeignKey("ItemGroupId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ItemLine", "ItemLine")
+                        .WithMany()
+                        .HasForeignKey("ItemLineId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ItemType", "ItemType")
+                        .WithMany()
+                        .HasForeignKey("ItemTypeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ItemGroup");
+
+                    b.Navigation("ItemLine");
+
+                    b.Navigation("ItemType");
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("Location", b =>
+                {
+                    b.HasOne("Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("Order", b =>
+                {
+                    b.HasOne("Shipment", "Shipment")
+                        .WithMany()
+                        .HasForeignKey("ShipmentId");
+
+                    b.HasOne("Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Shipment");
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("OrderItemMovement", b =>
