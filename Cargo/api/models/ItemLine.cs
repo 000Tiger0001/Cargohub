@@ -29,4 +29,15 @@ public class ItemLine : IHasId
         Name = name;
         Description = description;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is ItemLine itemLine) return itemLine.Id == Id && itemLine.Name == Name && itemLine.Description == Description;
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
 }

@@ -35,4 +35,9 @@ public class ItemGroup : IHasId
         if (obj is ItemGroup other) return Id == other.Id && Name == other.Name && Description == other.Description;
         return false;
     }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
 }
