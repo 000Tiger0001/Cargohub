@@ -83,4 +83,20 @@ public class Item : IHasId
         SupplierCode = supplierCode;
         SupplierPartNumber = supplierPartNumber;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Item item)
+        {
+            return item.Id == Id && item.Code == Code && item.Description == Description
+            && item.ShortDescription == ShortDescription && item.UpcCode == UpcCode
+            && item.ModelNumber == ModelNumber && item.CommodityCode == CommodityCode
+            && item.ItemLineId == ItemLineId && item.ItemGroupId == ItemGroupId
+            && item.ItemTypeId == ItemTypeId && item.UnitPurchaseQuantity == UnitPurchaseQuantity
+            && item.UnitOrderQuantity == UnitOrderQuantity && item.PackOrderQuantity == PackOrderQuantity
+            && item.SupplierId == SupplierId && item.SupplierCode == SupplierCode
+            && item.SupplierPartNumber == SupplierPartNumber;
+        }
+        return false;
+    }
 }
