@@ -84,4 +84,25 @@ public class ItemTypeTests
 
         Assert.Empty(await _service.GetItemTypes());
     }
+
+    [Fact]
+    public async Task AddDuplicateItem()
+    {
+        ItemType mockItemType = new(1, "Desktop", "Fast and big");
+
+        bool IsAdded1 = await _service.AddItemType(mockItemType);
+
+        Assert.True(IsAdded1);
+        Assert.Equal([mockItemType], await _service.GetItemTypes());
+
+        bool IsAdded2 = await _service.AddItemType(mockItemType);
+
+        Assert.False(IsAdded2);
+        Assert.Equal([mockItemType], await _service.GetItemTypes());
+
+        bool IsRemoved = await _service.RemoveItemType(1);
+
+        Assert.True(IsRemoved);
+        Assert.Empty(await _service.GetItemTypes());
+    }
 }
