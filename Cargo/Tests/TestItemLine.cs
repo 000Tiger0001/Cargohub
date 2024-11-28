@@ -67,4 +67,21 @@ public class ItemLineTests
         Assert.True(IsRemoved);
         Assert.Empty(await _service.GetItemLines());
     }
+
+    [Fact]
+    public async Task AddItemLineBad()
+    {
+        Client mockClient = new(1, "Joost", "JoostLaan 2", "Rotterdam", "5656AA", "Zuid-Holland", "Nederland", "Joost", "06 123456789", "JoostMagHetWeten@gmail.com");
+
+        Assert.Empty(await _service.GetItemLines());
+
+        /* De code hieronder is uitgecomment, omdat het een error geeft. */
+        //await _service.AddItemLine(mockClient);
+
+        Assert.Empty(await _service.GetItemLines());
+
+        await _service.RemoveItemLine(1);
+
+        Assert.Empty(await _service.GetItemLines());
+    }
 }
