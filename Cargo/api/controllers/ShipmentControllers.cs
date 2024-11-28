@@ -10,11 +10,11 @@ public class ShipmentControllers : Controller
         _shipmentService = shipmentServices;
     }
 
-    [HttpGet("get-shipments")]
+    [HttpGet("shipments")]
     public async Task<IActionResult> GetShipments() => Ok(await _shipmentService.GetShipments());
 
-    [HttpGet("get-shipment")]
-    public async Task<IActionResult> GetShipment([FromQuery] int shipmentId)
+    [HttpGet("shipment/{shipmentId}")]
+    public async Task<IActionResult> GetShipment(int shipmentId)
     {
         if (shipmentId == 0) return BadRequest("Not enough info given. ");
 
@@ -23,7 +23,8 @@ public class ShipmentControllers : Controller
         return Ok(shipment);
     }
 
-    public async Task<IActionResult> GetItemsInShipment([FromQuery] int shipmentId)
+    [HttpGet("shipments/{shipmentId}/items")]
+    public async Task<IActionResult> GetItemsInShipment(int shipmentId)
     {
         if (shipmentId == 0) return BadRequest("Not enough info given. ");
 
@@ -32,25 +33,28 @@ public class ShipmentControllers : Controller
         return Ok(items);
     }
 
+    [HttpPost("shipment")]
     public async Task<IActionResult> AddShipment([FromBody] Shipment shipment)
     {
-        if (shipment is null || shipment.CarrierCode == "" || shipment.CarrierDescription == "" || shipment.Items == default ||shipment.Items.Count == 0 || shipment.Notes == "" || shipment.OrderDate == DateTime.MinValue || shipment.OrderDate == DateTime.MaxValue || shipment.OrderId == 0 || shipment.PaymentType == "" || shipment.RequestDate == DateTime.MinValue || shipment.RequestDate == DateTime.MaxValue || shipment.ServiceCode == "" || shipment.ShipmentDate == DateTime.MinValue || shipment.ShipmentDate == DateTime.MaxValue || shipment.ShipmentStatus == "" || shipment.ShipmentType == default || shipment.SourceId == 0 || shipment.TotalPackageCount == 0.0 || shipment.TotalPackageWeight == 0.0 || shipment.TransferMode == "") return BadRequest("Not enough info given. ");
+        if (shipment is null || shipment.CarrierCode == "" || shipment.CarrierDescription == "" || shipment.Items == default || shipment.Items.Count == 0 || shipment.Notes == "" || shipment.OrderDate == DateTime.MinValue || shipment.OrderDate == DateTime.MaxValue || shipment.OrderId == 0 || shipment.PaymentType == "" || shipment.RequestDate == DateTime.MinValue || shipment.RequestDate == DateTime.MaxValue || shipment.ServiceCode == "" || shipment.ShipmentDate == DateTime.MinValue || shipment.ShipmentDate == DateTime.MaxValue || shipment.ShipmentStatus == "" || shipment.ShipmentType == default || shipment.SourceId == 0 || shipment.TotalPackageCount == 0.0 || shipment.TotalPackageWeight == 0.0 || shipment.TransferMode == "") return BadRequest("Not enough info given. ");
 
         bool IsAdded = await _shipmentService.AddShipment(shipment);
         if (!IsAdded) return BadRequest("Couldn't add shipment. ");
         return Ok("Shipment added. ");
     }
 
+    [HttpPut("shipment")]
     public async Task<IActionResult> UpdateShipment([FromBody] Shipment shipment)
     {
         if (shipment is null || shipment.Id == 0) return BadRequest("Not enough info given. ");
 
         bool IsUpdated = await _shipmentService.UpdateShipment(shipment);
-        if(!IsUpdated) return BadRequest("Couldn't update shipment. ");
+        if (!IsUpdated) return BadRequest("Couldn't update shipment. ");
         return Ok("Shipment updated. ");
     }
 
-    public async Task<IActionResult> RemoveShipment([FromQuery] int shipmentId)
+    [HttpDelete("shipment/{shipmentId}")]
+    public async Task<IActionResult> RemoveShipment(int shipmentId)
     {
         if (shipmentId == 0) return BadRequest("Given id is empty. ");
 
