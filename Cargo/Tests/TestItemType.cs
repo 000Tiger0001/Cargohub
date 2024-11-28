@@ -16,4 +16,20 @@ public class ItemTypeTests
         _itemTypeAccess = new ItemTypeAccess(_dbContext);
         _service = new(_itemTypeAccess);
     }
+
+    [Fact]
+    public async Task GetAllItemTypes()
+    {
+        ItemType mockItemType = new(1, "Desktop", "Fast and big");
+
+        Assert.Empty(await _service.GetItemTypes());
+
+        await _service.AddItemType(mockItemType);
+
+        Assert.Equal([mockItemType], await _service.GetItemTypes());
+
+        await _service.RemoveItemType(1);
+
+        Assert.Empty(await _service.GetItemTypes());
+    }
 }
