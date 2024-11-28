@@ -270,4 +270,20 @@ public class ItemTests
 
         await _service.RemoveItem(1);
     }
+
+    [Fact]
+    public async Task RemoveItem()
+    {
+        Item mockItem1 = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
+
+        bool IsAdded = await _service.AddItem(mockItem1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockItem1], await _service.GetItems());
+
+        bool IsRemoved = await _service.RemoveItem(1);
+
+        Assert.True(IsRemoved);
+        Assert.Empty(await _service.GetItems());
+    }
 }
