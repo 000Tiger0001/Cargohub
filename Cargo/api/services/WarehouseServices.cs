@@ -21,7 +21,6 @@ public class WarehouseServices
     public async Task<bool> UpdateWarehouse(Warehouse warehouse)
     {
         if (warehouse is null || warehouse.Id == 0) return false;
-
         warehouse.UpdatedAt = DateTime.Now;
         return await _warehouseAccess.Update(warehouse); ;
     }

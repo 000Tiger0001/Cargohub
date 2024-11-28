@@ -5,9 +5,9 @@ public class LocationControllers : Controller
 {
     private readonly LocationServices _locationAccess;
 
-    public LocationControllers(LocationServices locationAccess)
+    public LocationControllers(LocationServices locationServices)
     {
-        _locationAccess = locationAccess;
+        _locationAccess = locationServices;
     }
 
     [HttpGet("locations")]

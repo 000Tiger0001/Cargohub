@@ -22,6 +22,24 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configure entities and relationships here if needed
+        modelBuilder.Entity<Order>()
+            .HasMany(o => o.Items)
+            .WithOne(oim => oim.Order)
+            .HasForeignKey(oim => oim.OrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Transfer>()
+            .HasMany(o => o.Items)
+            .WithOne(tim => tim.Transfer)
+            .HasForeignKey(tim => tim.TransferId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Shipment>()
+            .HasMany(s => s.Items)
+            .WithOne(sim => sim.Shipment)
+            .HasForeignKey(sim => sim.ShipmentId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         base.OnModelCreating(modelBuilder);
     }
 }

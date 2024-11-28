@@ -9,6 +9,7 @@ public class InventoryServices
     public async Task<List<Inventory>> GetInventories() => await _inventoryAccess.GetAll();
 
     public async Task<Inventory?> GetInventory(int inventoryId) => await _inventoryAccess.GetById(inventoryId);
+
     public async Task<List<Inventory>> GetInventoriesforItem(int itemId)
     {
         List<Inventory> inventories = await GetInventories();
@@ -47,7 +48,6 @@ public class InventoryServices
     public async Task<bool> UpdateInventory(Inventory inventory)
     {
         if (inventory is null || inventory.Id == 0) return false;
-
         inventory.UpdatedAt = DateTime.Now;
         return await _inventoryAccess.Update(inventory);
     }

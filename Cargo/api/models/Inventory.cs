@@ -20,10 +20,7 @@ public class Inventory : IHasId
             if (!string.IsNullOrEmpty(ItemIdString) && ItemIdString.StartsWith("P"))
             {
                 string numericPart = ItemIdString.Substring(1); // Remove the "P" prefix
-                if (int.TryParse(numericPart, out int numericId))
-                {
-                    return numericId;
-                }
+                if (int.TryParse(numericPart, out int numericId)) return numericId;
             }
             return 0;
         }
@@ -80,5 +77,28 @@ public class Inventory : IHasId
         TotalOrdered = totalOrdered;
         TotalAllocated = totalAllocated;
         TotalAvailable = totalAvailable;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Inventory other)
+        {
+            return Id == other.Id &&
+                   ItemId == other.ItemId &&
+                   Description == other.Description &&
+                   ItemReference == other.ItemReference &&
+                   Locations?.SequenceEqual(other.Locations) == true &&
+                   TotalOnHand == other.TotalOnHand &&
+                   TotalExpected == other.TotalExpected &&
+                   TotalOrdered == other.TotalOrdered &&
+                   TotalAllocated == other.TotalAllocated &&
+                   TotalAvailable == other.TotalAvailable;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
     }
 }

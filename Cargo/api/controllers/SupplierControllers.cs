@@ -5,9 +5,9 @@ public class SupplierControllers : Controller
 {
     private SupplierServices _supplierService;
 
-    public SupplierControllers(SupplierServices supplierservice)
+    public SupplierControllers(SupplierServices supplierServices)
     {
-        _supplierService = supplierservice;
+        _supplierService = supplierServices;
     }
 
     [HttpGet("suppliers")]

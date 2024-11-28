@@ -5,9 +5,9 @@ public class ClientControllers : Controller
 {
     private ClientServices _clientService;
 
-    public ClientControllers(ClientServices clientService)
+    public ClientControllers(ClientServices clientServices)
     {
-        _clientService = clientService;
+        _clientService = clientServices;
     }
 
     [HttpGet("clients")]

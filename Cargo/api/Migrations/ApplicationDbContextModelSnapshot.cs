@@ -350,7 +350,7 @@ namespace Cargo.Migrations
                     b.Property<string>("ItemIdString")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -437,7 +437,7 @@ namespace Cargo.Migrations
                     b.Property<string>("ItemIdString")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ShipmentId")
+                    b.Property<int>("ShipmentId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -541,7 +541,7 @@ namespace Cargo.Migrations
                     b.Property<string>("ItemIdString")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("TransferId")
+                    b.Property<int>("TransferId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -600,23 +600,35 @@ namespace Cargo.Migrations
 
             modelBuilder.Entity("OrderItemMovement", b =>
                 {
-                    b.HasOne("Order", null)
+                    b.HasOne("Order", "Order")
                         .WithMany("Items")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("ShipmentItemMovement", b =>
                 {
-                    b.HasOne("Shipment", null)
+                    b.HasOne("Shipment", "Shipment")
                         .WithMany("Items")
-                        .HasForeignKey("ShipmentId");
+                        .HasForeignKey("ShipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Shipment");
                 });
 
             modelBuilder.Entity("TransferItemMovement", b =>
                 {
-                    b.HasOne("Transfer", null)
+                    b.HasOne("Transfer", "Transfer")
                         .WithMany("Items")
-                        .HasForeignKey("TransferId");
+                        .HasForeignKey("TransferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Transfer");
                 });
 
             modelBuilder.Entity("Order", b =>

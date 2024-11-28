@@ -23,7 +23,6 @@ public class ItemTypeServices
     public async Task<bool> UpdateItemType(ItemType itemType)
     {
         if (itemType is null || itemType.Id == 0) return false;
-
         itemType.UpdatedAt = DateTime.Now;
         return await _itemTypeAccess.Update(itemType);
     }

@@ -5,9 +5,9 @@ public class ItemLineControllers : Controller
 {
     private ItemLineServices _itemLineService;
 
-    public ItemLineControllers(ItemLineServices itemLineService)
+    public ItemLineControllers(ItemLineServices itemLineServices)
     {
-        _itemLineService = itemLineService;
+        _itemLineService = itemLineServices;
     }
 
     [HttpGet("get-item-lines")]

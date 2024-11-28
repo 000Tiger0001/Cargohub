@@ -78,20 +78,17 @@ public class JsonToDb
                 var items = JsonConvert.DeserializeObject(content, listType);
                 var data = (IEnumerable<object>)items!;
 
-                // make sure ID doesn`t start with 0
+                // make sure id is not negative and 0
+                // let EF update values for you by using [DatabaseGenerated(DatabaseGeneratedOption.Identity)] in models
                 if (data.Any())
                 {
                     var firstItem = data.ElementAt(0);
-                    // Map and increment the id for each item if the first item's index is 0
-                    int id = 1;
                     foreach (var item in data)
                     {
-                        // Here we are assuming each item has an 'Id' property, and it's of type 'int'
                         var itemProperty = item.GetType().GetProperty("Id");
                         if (itemProperty != null && itemProperty.CanWrite)
                         {
-                            itemProperty.SetValue(item, id);
-                            id++;
+                            itemProperty.SetValue(item, null);
                         }
                     }
                 }
