@@ -16,4 +16,22 @@ public class LocationTests
         _locationAccess = new LocationAccess(_dbContext);
         _service = new(_locationAccess);
     }
+
+    [Fact]
+    public async Task GetAllLocations()
+    {
+        Location mockLocation = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
+        
+        Assert.Empty(await _service.GetLocations());
+
+        bool IsAdded = await _service.AddLocation(mockLocation);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockLocation], await _service.GetLocations());
+
+        bool IsRemoved = await _service.RemoveLocation(1);
+
+        Assert.True(IsRemoved);
+        Assert.Empty(await _service.GetLocations());
+    }
 }
