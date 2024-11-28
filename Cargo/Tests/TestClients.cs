@@ -1,13 +1,13 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
 
-public class ClientControllerTests
+public class ClientTests
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly ClientAccess _clientAccess;
     private readonly ClientServices _service;
 
-    public ClientControllerTests()
+    public ClientTests()
     {
         // Use an in-memory SQLite database for testing
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()

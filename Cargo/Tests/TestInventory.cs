@@ -1,13 +1,13 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
 
-public class InventoryControllerTests
+public class InventoryTests
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly InventoryAccess _inventoryAccess;
     private readonly InventoryServices _service;
 
-    public InventoryControllerTests()
+    public InventoryTests()
     {
         // Use an in-memory SQLite database for testing
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -28,7 +28,7 @@ public class InventoryControllerTests
     {
         Inventory mockInventory = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
 
-        Assert.Equal([], await _service.GetInventories());
+        Assert.Empty(await _service.GetInventories());
 
         await _service.AddInventory(mockInventory);
 
@@ -36,7 +36,7 @@ public class InventoryControllerTests
 
         await _service.RemoveInventory(1);
 
-        Assert.Equal([], await _service.GetInventories());
+        Assert.Empty(await _service.GetInventories());
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class InventoryControllerTests
         Assert.Equal([mockInventory1, mockInventory2], await _service.GetInventories());
         Assert.Equal([mockInventory1], await _service.GetInventoriesforItem(1));
         Assert.Equal([mockInventory2], await _service.GetInventoriesforItem(2));
-        Assert.Equal([], await _service.GetInventoriesforItem(3));
+        Assert.Empty(await _service.GetInventoriesforItem(3));
 
         bool IsRemoved1 = await _service.RemoveInventory(1);
         bool IsRemoved2 = await _service.RemoveInventory(2);
@@ -127,8 +127,9 @@ public class InventoryControllerTests
 
         Assert.Equal([], await _service.GetInventories());
 
-        await _service.AddInventory(mockInventory1);
+        bool IsAdded = await _service.AddInventory(mockInventory1);
 
+        Assert.True(IsAdded);
         Assert.Equal([mockInventory1], await _service.GetInventories());
 
         await _service.RemoveInventory(1);
