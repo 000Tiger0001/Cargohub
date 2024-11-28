@@ -13,8 +13,8 @@ public class SupplierControllers : Controller
     [HttpGet("suppliers")]
     public async Task<IActionResult> GetSuppliers() => Ok(await _supplierService.GetSuppliers());
 
-    [HttpGet("supplier")]
-    public async Task<IActionResult> GetSupplier([FromQuery] int supplierId)
+    [HttpGet("supplier/{supplierId}")]
+    public async Task<IActionResult> GetSupplier(int supplierId)
     {
         if (supplierId == 0) return BadRequest("Can't get supplier with empty id. ");
 
@@ -23,7 +23,7 @@ public class SupplierControllers : Controller
         return Ok(supplier);
     }
 
-    [HttpPost("add-supplier")]
+    [HttpPost("supplier")]
     public async Task<IActionResult> AddSupplier([FromBody] Supplier supplier)
     {
         if (supplier is null || supplier.Address == "" || supplier.AddressExtra == "" || supplier.City == "" || supplier.Code == "" || supplier.ContactName == "" || supplier.Country == "" || supplier.Name == "" || supplier.Phonenumber == "" || supplier.Province == "" || supplier.Reference == "" || supplier.ZipCode == "") return BadRequest("Not enough info given. ");
@@ -33,6 +33,7 @@ public class SupplierControllers : Controller
         return Ok("Supplier added. ");
     }
 
+    [HttpPut("supplier")]
     public async Task<IActionResult> UpdateSupplier([FromBody] Supplier supplier)
     {
         if (supplier is null || supplier.Id == 0) return BadRequest("Not enough given. ");
@@ -42,7 +43,8 @@ public class SupplierControllers : Controller
         return Ok("Supplier updated. ");
     }
 
-    public async Task<IActionResult> RemoveSupplier([FromQuery] int supplierId)
+    [HttpDelete("supplier/{supplierId}")]
+    public async Task<IActionResult> RemoveSupplier(int supplierId)
     {
         if (supplierId == 0) return BadRequest("Can't remove supplier with empty id. ");
 
