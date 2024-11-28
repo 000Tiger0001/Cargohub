@@ -215,13 +215,36 @@ public class ItemTests
     {
         Item mockItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
 
-        await _service.AddItem(mockItem);
+        bool IsAdded1 = await _service.AddItem(mockItem);
 
+        Assert.True(IsAdded1);
         Assert.Equal([mockItem], await _service.GetItems());
 
-        await _service.AddItem(mockItem);
+        bool IsAdded2 = await _service.AddItem(mockItem);
 
+        Assert.False(IsAdded2);
         Assert.Equal([mockItem], await _service.GetItems());
+
+        await _service.RemoveItem(1);
+
+        Assert.Empty(await _service.GetItems());
+    }
+
+    [Fact]
+    public async Task AddItemWithDuplicateId()
+    {
+        Item mockItem1 = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
+        Item mockItem2 = new(1, "nyg48736S", "Focused transitional alliance", "may", "9733132830047", "ck-109684-VFb", "y-20588-owy", 11, 11, 11, 11, 15, 23, 11, "SUP312", "j-10730-ESk");
+
+        bool IsAdded1 = await _service.AddItem(mockItem1);
+
+        Assert.True(IsAdded1);
+        Assert.Equal([mockItem1], await _service.GetItems());
+
+        bool IsAdded2 = await _service.AddItem(mockItem2);
+
+        Assert.False(IsAdded2);
+        Assert.Equal([mockItem1], await _service.GetItems());
 
         await _service.RemoveItem(1);
 
