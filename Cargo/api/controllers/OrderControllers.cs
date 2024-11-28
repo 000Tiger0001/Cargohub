@@ -13,7 +13,8 @@ public class OrderControllers : Controller
     [HttpGet("orders")]
     public async Task<IActionResult> GetOrders() => Ok(await _orderServices.GetOrders());
 
-    public async Task<IActionResult> GetOrder([FromQuery] int orderId)
+    [HttpGet("orders/{orderId}")]
+    public async Task<IActionResult> GetOrder(int orderId)
     {
         if (orderId == 0) return BadRequest("Can't proccess this id. ");
         return Ok(await _orderServices.GetOrder(orderId));
@@ -60,7 +61,7 @@ public class OrderControllers : Controller
         return Ok("Order updated. ");
     }
 
-    [HttpDelete("order")]
+    [HttpDelete("order/{orderId}")]
     public async Task<IActionResult> DeleteOrder(int orderId)
     {
         if (orderId == 0) return BadRequest("Can't remove order with this id. ");

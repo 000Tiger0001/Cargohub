@@ -32,7 +32,7 @@ public class InventoryControllers : Controller
     }
 
     [HttpGet("inventories/item/{itemId}/totals")]
-    public async Task<IActionResult> GetInventoryTotalsForItem([FromQuery] int itemId)
+    public async Task<IActionResult> GetInventoryTotalsForItem(int itemId)
     {
         if (itemId == 0) return BadRequest("Cannot proccess empty id. ");
         Dictionary<string, int> result = await _inventoryService.GetInventoryTotalsForItem(itemId);
