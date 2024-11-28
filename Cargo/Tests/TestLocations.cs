@@ -90,4 +90,22 @@ public class LocationTests
 
         await _warehouseService.RemoveWarehouse(1);
     }
+
+    [Fact]
+    public async Task AddLocationsGood()
+    {
+        Location mockLocation1 = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
+
+        Assert.Empty(await _locationService.GetLocations());
+
+        bool IsAdded = await _locationService.AddLocation(mockLocation1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockLocation1], await _locationService.GetLocations());
+
+        bool IsRemoved = await _locationService.RemoveLocation(1);
+
+        Assert.True(IsRemoved);
+        Assert.Empty(await _locationService.GetLocations());
+    }
 }
