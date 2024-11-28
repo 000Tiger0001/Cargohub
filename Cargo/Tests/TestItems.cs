@@ -143,4 +143,45 @@ public class ItemTests
 
         Assert.Empty(await _service.GetItems());
     }
+
+    [Fact]
+    public async Task GetItemsForSupplier()
+    {
+        Item mockItem1 = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 11, 11, 11, 13, 11, 11, "SUP423", "E-86805-uTM");
+        Item mockItem2 = new(2, "nyg48736S", "Focused transitional alliance", "may", "9733132830047", "ck-109684-VFb", "y-20588-owy", 11, 11, 11, 11, 15, 23, 11, "SUP312", "j-10730-ESk");
+        Item mockItem3 = new(3, "QVm03739H", "Cloned actuating artificial intelligence", "we", "3722576017240", "aHx-68Q4", "t-541-F0g", 12, 12, 12, 12, 17, 11, 12, "SUP237", "r-920-z2C");
+        Item mockItem4 = new(4, "zdN19039A", "Pre-emptive asynchronous throughput", "take", "9668154959486", "pZ-7816", "IFq-47R1", 12, 12, 12, 12, 21, 20, 12, "SUP140", "T-210-I4M");
+
+        await _service.AddItem(mockItem1);
+        await _service.AddItem(mockItem2);
+
+        Assert.Equal([mockItem1, mockItem2], await _service.GetItems());
+        Assert.Equal([mockItem1, mockItem2], await _service.GetItemsForSupplier(11));
+        Assert.Empty(await _service.GetItemsForSupplier(10));
+        Assert.Empty(await _service.GetItemsForSupplier(12));
+
+        await _service.AddItem(mockItem3);
+        await _service.AddItem(mockItem4);
+
+        Assert.Equal([mockItem1, mockItem2, mockItem3, mockItem4], await _service.GetItems());
+        Assert.Equal([mockItem3, mockItem4], await _service.GetItemsForSupplier(12));
+        Assert.Equal([mockItem1, mockItem2], await _service.GetItemsForSupplier(11));
+        Assert.Empty(await _service.GetItemsForSupplier(13));
+
+        await _service.RemoveItem(1);
+        await _service.RemoveItem(2);
+        await _service.RemoveItem(3);
+        await _service.RemoveItem(4);
+
+        Assert.Empty(await _service.GetItems());
+    }
+
+    public async Task AddItemGood()
+    {
+        Item mockItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
+
+        Assert.Empty(await _service.GetItems());
+
+
+    }
 }
