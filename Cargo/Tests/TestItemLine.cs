@@ -1,5 +1,6 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 public class ItemLineTests
 {
@@ -82,6 +83,27 @@ public class ItemLineTests
 
         await _service.RemoveItemLine(1);
 
+        Assert.Empty(await _service.GetItemLines());
+    }
+
+    [Fact]
+    public async Task AddDuplicateItemLine()
+    {
+        ItemLine mockItemLine = new(1, "Home Appliances", "Stuff for home");
+
+        bool IsAdded1 = await _service.AddItemLine(mockItemLine);
+
+        Assert.True(IsAdded1);
+        Assert.Equal([mockItemLine], await _service.GetItemLines());
+
+        bool IsAdded2 = await _service.AddItemLine(mockItemLine);
+
+        Assert.False(IsAdded2);
+        Assert.Equal([mockItemLine], await _service.GetItemLines());
+
+        bool IsRemoved = await _service.RemoveItemLine(1);
+
+        Assert.True(IsRemoved);
         Assert.Empty(await _service.GetItemLines());
     }
 }
