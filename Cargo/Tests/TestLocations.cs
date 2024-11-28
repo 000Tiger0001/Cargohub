@@ -34,4 +34,19 @@ public class LocationTests
         Assert.True(IsRemoved);
         Assert.Empty(await _service.GetLocations());
     }
+
+    [Fact]
+    public async Task GetLocation()
+    {
+        Location mockLocation = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
+
+        await _service.AddLocation(mockLocation);
+
+        Assert.Equal(mockLocation, await _service.GetLocation(1));
+        Assert.Null(await _service.GetLocation(0));
+
+        await _service.RemoveLocation(1);
+
+        Assert.Null(await _service.GetLocation(1));
+    }
 }
