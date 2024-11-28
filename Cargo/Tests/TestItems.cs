@@ -250,4 +250,24 @@ public class ItemTests
 
         Assert.Empty(await _service.GetItems());
     }
+
+    [Fact]
+    public async Task UpdateItem()
+    {
+        Item mockItem1 = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
+        Item mockItem2 = new(1, "nyg48736S", "Focused transitional alliance", "may", "9733132830047", "ck-109684-VFb", "y-20588-owy", 11, 11, 11, 11, 15, 23, 11, "SUP312", "j-10730-ESk");
+
+        bool IsAdded = await _service.AddItem(mockItem1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockItem1], await _service.GetItems());
+
+        bool IsUpdated = await _service.UpdateItem(mockItem2);
+
+        Assert.True(IsUpdated);
+        Assert.Equal([mockItem2], await _service.GetItems());
+        Assert.NotEqual([mockItem1], await _service.GetItems());
+
+        await _service.RemoveItem(1);
+    }
 }
