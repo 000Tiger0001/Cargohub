@@ -146,4 +146,26 @@ public class LocationTests
         Assert.True(IsRemoved);
         Assert.Empty(await _locationService.GetLocations());
     }
+
+    [Fact]
+    public async Task AddLocationWithDuplicateId()
+    {
+        Location mockLocation1 = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
+        Location mockLocation2 = new(1, 1, "A.1.1", "Row: A, Rack: 1, Shelf: 1");
+
+        bool IsAdded = await _locationService.AddLocation(mockLocation1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockLocation1], await _locationService.GetLocations());
+
+        bool IsAdded1 = await _locationService.AddLocation(mockLocation2);
+
+        Assert.False(IsAdded1);
+        Assert.Equal([mockLocation1], await _locationService.GetLocations());
+
+        bool IsRemoved = await _locationService.RemoveLocation(1);
+
+        Assert.True(IsRemoved);
+        Assert.Empty(await _locationService.GetLocations());
+    }
 }
