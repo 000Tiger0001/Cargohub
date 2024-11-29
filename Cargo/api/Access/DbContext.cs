@@ -22,6 +22,15 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configure entities and relationships here if needed
+        modelBuilder.Entity<Inventory>(entity =>
+        {
+            entity.HasKey(i => i.Id);
+            entity.HasOne(i => i.Item)
+                  .WithMany()
+                  .HasForeignKey(i => i.ItemId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
         modelBuilder.Entity<Order>()
             .HasMany(o => o.Items)
             .WithOne(oim => oim.Order)
@@ -43,25 +52,21 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Item>(entity =>
         {
             entity.HasKey(i => i.Id);
-            // Configure ItemLine foreign key relationship
             entity.HasOne(i => i.ItemLine)
                   .WithMany()
                   .HasForeignKey(i => i.ItemLineId)
                   .OnDelete(DeleteBehavior.SetNull); // Set to null if ItemLine is deleted
 
-            // Configure ItemGroup foreign key relationship
             entity.HasOne(i => i.ItemGroup)
                   .WithMany()
                   .HasForeignKey(i => i.ItemGroupId)
                   .OnDelete(DeleteBehavior.SetNull); // Set to null if ItemGroup is deleted
 
-            // Configure ItemType foreign key relationship
             entity.HasOne(i => i.ItemType)
                   .WithMany()
                   .HasForeignKey(i => i.ItemTypeId)
                   .OnDelete(DeleteBehavior.SetNull); // Set to null if ItemType is deleted
 
-            // Configure Supplier foreign key relationship
             entity.HasOne(i => i.Supplier)
                   .WithMany()
                   .HasForeignKey(i => i.SupplierId)
