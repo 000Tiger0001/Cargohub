@@ -30,6 +30,14 @@ public class ApplicationDbContext : DbContext
                   .OnDelete(DeleteBehavior.Cascade);
         });
 
+        modelBuilder.Entity<Location>(entity =>
+        {
+            entity.HasOne(l => l.Warehouse)
+                .WithMany()
+                .HasForeignKey(l => l.WarehouseId)
+                .OnDelete(DeleteBehavior.Cascade); // Delete Location when Warehouse is deleted
+        });
+
         modelBuilder.Entity<Order>()
             .HasMany(o => o.Items)
             .WithOne(oim => oim.Order)
