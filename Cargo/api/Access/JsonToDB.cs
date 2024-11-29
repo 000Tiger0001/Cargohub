@@ -9,6 +9,8 @@ public class JsonToDb
         {
             "Client",
             "Supplier",
+            "Warehouse",
+            "Shipment",
             "ItemGroup",
             "ItemLine",
             "ItemType",
@@ -16,15 +18,15 @@ public class JsonToDb
             "Inventorie",
             "Location",
             "Order",
-            "Shipment",
-            "Transfer",
-            "Warehouse"
+            "Transfer"
         };
 
         List<Type> classes = new List<Type>()
         {
             typeof(Client),
             typeof(Supplier),
+            typeof(Warehouse),
+            typeof(Shipment),
             typeof(ItemGroup),
             typeof(ItemLine),
             typeof(ItemType),
@@ -32,9 +34,7 @@ public class JsonToDb
             typeof(Inventory),
             typeof(Location),
             typeof(Order),
-            typeof(Shipment),
-            typeof(Transfer),
-            typeof(Warehouse)
+            typeof(Transfer)
         };
 
         using var scope = app.Services.CreateScope();
