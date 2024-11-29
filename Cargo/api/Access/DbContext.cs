@@ -69,8 +69,8 @@ public class ApplicationDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(i => i.SupplierId)
                   .OnDelete(DeleteBehavior.Cascade);
-
-            base.OnModelCreating(modelBuilder);
         });
+
+        base.OnModelCreating(modelBuilder);
     }
 }
