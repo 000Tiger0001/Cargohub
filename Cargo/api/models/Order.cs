@@ -93,4 +93,21 @@ public class Order : IHasId
         TotalSurcharge = totalSurcharge;
         Items = items;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Order order)
+        {
+            return order.Id == Id && order.SourceId == SourceId && order.OrderDate == OrderDate 
+            && order.RequestDate == RequestDate && order.Reference == Reference && order.ExtraReference == ExtraReference
+            && order.OrderStatus == OrderStatus && order.Notes == Notes && order.ShippingNotes == ShippingNotes
+            && order.PickingNotes == PickingNotes && order.WarehouseId == WarehouseId && order.ShipTo == ShipTo
+            && order.BillTo == BillTo && order.ShipmentId == ShipmentId && order.TotalAmount == TotalAmount
+            && order.Totaldiscount == Totaldiscount && order.TotalTax == TotalTax && order.TotalSurcharge == TotalSurcharge
+            && order.Items == Items;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }
