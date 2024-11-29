@@ -24,7 +24,6 @@ public class ApplicationDbContext : DbContext
         // Configure entities and relationships here if needed
         modelBuilder.Entity<Inventory>(entity =>
         {
-            entity.HasKey(i => i.Id);
             entity.HasOne(i => i.Item)
                   .WithMany()
                   .HasForeignKey(i => i.ItemId)
