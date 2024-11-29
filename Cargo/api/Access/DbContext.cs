@@ -51,7 +51,6 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Item>(entity =>
         {
-            entity.HasKey(i => i.Id);
             entity.HasOne(i => i.ItemLine)
                   .WithMany()
                   .HasForeignKey(i => i.ItemLineId)
