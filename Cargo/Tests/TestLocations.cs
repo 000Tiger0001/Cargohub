@@ -168,4 +168,24 @@ public class LocationTests
         Assert.True(IsRemoved);
         Assert.Empty(await _locationService.GetLocations());
     }
+
+    [Fact]
+    public async Task UpdateLocation()
+    {
+        Location mockLocation1 = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
+        Location mockLocation2 = new(1, 1, "A.1.1", "Row: A, Rack: 1, Shelf: 1");
+
+        bool IsAdded = await _locationService.AddLocation(mockLocation1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockLocation1], await _locationService.GetLocations());
+
+        bool IsUpdated = await _locationService.UpdateLocation(mockLocation2);
+
+        Assert.True(IsUpdated);
+        Assert.Equal([mockLocation2], await _locationService.GetLocations());
+        Assert.NotEqual([mockLocation1], await _locationService.GetLocations());
+
+        await _locationService.RemoveLocation(1);
+    }
 }
