@@ -53,4 +53,22 @@ public class OrderTests
 
         Assert.Null(await _service.GetOrder(1));
     }
+
+    [Fact]
+    public async Task AddOrderGood()
+    {
+        Order mockOrder1 = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [new(7435, 23), new(9557, 1), new(9553, 50), new(10015, 16), new(2084, 33)]);
+
+        Assert.Empty(await _service.GetOrders());
+
+        bool IsAdded = await _service.AddOrder(mockOrder1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockOrder1], await _service.GetOrders()); // This test fails, because the items in this order don't exist. This test isn't supposed to fail
+
+        bool IsRemoved = await _service.RemoveOrder(1);
+
+        Assert.True(IsRemoved);
+        Assert.Empty(await _service.GetOrders());
+    }
 }
