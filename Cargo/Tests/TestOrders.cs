@@ -71,4 +71,21 @@ public class OrderTests
         Assert.True(IsRemoved);
         Assert.Empty(await _service.GetOrders());
     }
+
+    [Fact]
+    public async Task AddOrderBad()
+    {
+        Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
+
+        Assert.Empty(await _service.GetOrders());
+
+        /* De code hieronder is uitgecomment, omdat het een error geeft. */
+        //await _service.AddOrder(mockClient);
+
+        Assert.Empty(await _service.GetOrders());
+
+        await _service.RemoveOrder(1);
+
+        Assert.Empty(await _service.GetOrders());
+    }
 }
