@@ -33,4 +33,18 @@ public abstract class ItemMovement : IHasId
 
     [JsonProperty("amount")]
     public int Amount { get; set; }
+
+    public ItemMovement(int itemId, int amount)
+    {
+        ItemId = itemId;
+        Amount = amount;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is ItemMovement itemMovement) return itemMovement.ItemId == ItemId && itemMovement.Amount == Amount;
+        return false;
+    }
+
+    public override int GetHashCode() => ItemId.GetHashCode();
 }
