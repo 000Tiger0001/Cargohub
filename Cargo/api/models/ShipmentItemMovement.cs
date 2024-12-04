@@ -1,6 +1,6 @@
 public class ShipmentItemMovement : ItemMovement
 {
-    public ShipmentItemMovement(int itemId, int amount) : base(itemId, amount) {}
+    public ShipmentItemMovement(int itemId, int amount) : base(itemId, amount) { }
 
     public override bool Equals(object? obj)
     {
@@ -8,5 +8,5 @@ public class ShipmentItemMovement : ItemMovement
         return false;
     }
 
-    public override int GetHashCode() => ItemId.GetHashCode();
+    public override int GetHashCode() => HashCode.Combine(ItemId, Amount);
 }

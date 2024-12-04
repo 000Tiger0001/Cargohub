@@ -102,11 +102,9 @@ public class Order : IHasId
             var sortedItems = Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
             var sortedOrderItems = order.Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
 
-            bool itemsAreTheSame = false;
-            if (sortedItems != null && sortedOrderItems != null && sortedItems.Count == sortedOrderItems.Count)
-            {
-                itemsAreTheSame = !sortedItems.Where((item, index) => !item.Equals(sortedOrderItems[index])).Any();
-            }
+            bool itemsAreTheSame = sortedItems != null && sortedOrderItems != null &&
+                       sortedItems.Count == sortedOrderItems.Count &&
+                       sortedItems.SequenceEqual(sortedOrderItems);
 
             return order.Id == Id &&
                    order.SourceId == SourceId &&

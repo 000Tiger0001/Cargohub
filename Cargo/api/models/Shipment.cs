@@ -91,23 +91,20 @@ public class Shipment : IHasId
     {
         if (obj is Shipment shipment)
         {
-            bool ItemsAreTheSame = false;
-            if (Items is not null && shipment.Items is not null && Items.Count == shipment.Items.Count)
-            {
-                ItemsAreTheSame = true;
-                for (int i = 0; i < shipment.Items.Count; i++)
-                    if (shipment.Items[i] != Items[i])
-                    {
-                        ItemsAreTheSame = false;
-                        break;
-                    }
-            }
+            // Sort the items lists before comparing them
+            var sortedItems = Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
+            var sortedShipmentItems = shipment.Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
+
+            bool itemsAreTheSame = sortedItems != null && sortedShipmentItems != null &&
+                       sortedItems.Count == sortedShipmentItems.Count &&
+                       sortedItems.SequenceEqual(sortedShipmentItems);
+
             return shipment.Id == Id && shipment.OrderId == OrderId && shipment.SourceId == SourceId
             && shipment.OrderDate == OrderDate && shipment.RequestDate == RequestDate && shipment.ShipmentDate == ShipmentDate
             && shipment.ShipmentType == ShipmentType && shipment.ShipmentStatus == ShipmentStatus && shipment.Notes == Notes
             && shipment.CarrierCode == CarrierCode && shipment.CarrierDescription == CarrierDescription && shipment.ServiceCode == ServiceCode
             && shipment.PaymentType == PaymentType && shipment.TransferMode == TransferMode && shipment.TotalPackageCount == TotalPackageCount
-            && shipment.TotalPackageWeight == TotalPackageWeight && ItemsAreTheSame;
+            && shipment.TotalPackageWeight == TotalPackageWeight && itemsAreTheSame;
         }
         return false;
     }
