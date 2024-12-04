@@ -99,11 +99,15 @@ public class Order : IHasId
         if (obj is Order order)
         {
             bool ItemsAreTheSame = false;
-            int amountOfItemsAreTheSame = 0;
             if (Items is not null && order.Items is not null && Items.Count == order.Items.Count)
             {
-                for (int i = 0; i < order.Items.Count; i++) if (order.Items[i] == Items[i]) amountOfItemsAreTheSame++;
-                if (amountOfItemsAreTheSame == Items.Count) ItemsAreTheSame = true;
+                ItemsAreTheSame = true;
+                for (int i = 0; i < order.Items.Count; i++) 
+                    if (order.Items[i] != Items[i]) 
+                    {
+                        ItemsAreTheSame = false;
+                        break;
+                    }
             }
             return order.Id == Id && order.SourceId == SourceId && order.OrderDate == OrderDate 
             && order.RequestDate == RequestDate && order.Reference == Reference && order.ExtraReference == ExtraReference
