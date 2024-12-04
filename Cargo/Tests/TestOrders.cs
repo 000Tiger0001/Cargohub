@@ -27,7 +27,7 @@ public class OrderTests
 
         await _service.AddOrder(mockOrder1);
 
-        Assert.Equal([mockOrder1], await _service.GetOrders()); // This test fails, because the items in this order don't exist. This test isn't supposed to fail
+        Assert.Equal([mockOrder1], await _service.GetOrders());
 
         await _service.AddOrder(mockOrder2);
 
@@ -46,7 +46,7 @@ public class OrderTests
 
         await _service.AddOrder(mockOrder1);
 
-        Assert.Equal(mockOrder1, await _service.GetOrder(1)); // This test fails, because the items in this order don't exist. This test isn't supposed to fail
+        Assert.Equal(mockOrder1, await _service.GetOrder(1));
         Assert.Null(await _service.GetOrder(0));
 
         await _service.RemoveOrder(1);
@@ -99,7 +99,7 @@ public class OrderTests
         bool IsRemoved1 = await _service.RemoveOrder(1);
         bool IsRemoved2 = await _service.RemoveOrder(2);
         bool IsRemoved3 = await _service.RemoveOrder(3);
-        
+
         Assert.True(IsRemoved1);
         Assert.True(IsRemoved2);
         Assert.True(IsRemoved3);
@@ -149,7 +149,7 @@ public class OrderTests
         bool IsAdded = await _service.AddOrder(mockOrder1);
 
         Assert.True(IsAdded);
-        Assert.Equal([mockOrder1], await _service.GetOrders()); // This test fails, because the items in this order don't exist. This test isn't supposed to fail
+        Assert.Equal([mockOrder1], await _service.GetOrders());
 
         bool IsRemoved = await _service.RemoveOrder(1);
 
@@ -182,12 +182,12 @@ public class OrderTests
         bool IsAdded = await _service.AddOrder(mockOrder1);
 
         Assert.True(IsAdded);
-        Assert.Equal([mockOrder1], await _service.GetOrders()); // This test fails, because the items in this order don't exist. This test isn't supposed to fail
+        Assert.Equal([mockOrder1], await _service.GetOrders());
 
         bool IsAdded1 = await _service.AddOrder(mockOrder1);
 
         Assert.False(IsAdded1);
-        Assert.Equal([mockOrder1], await _service.GetOrders()); // This test fails, because the items in this order don't exist. This test isn't supposed to fail
+        Assert.Equal([mockOrder1], await _service.GetOrders());
 
         bool IsRemoved = await _service.RemoveOrder(1);
 

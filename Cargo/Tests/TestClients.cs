@@ -16,10 +16,10 @@ public class ClientTests
 
         _dbContext = new ApplicationDbContext(options);
 
-        // Create a new instance of ClientAccess with the in-memory DbContext
+        // Create a new instance of Access with the in-memory DbContext
         _clientAccess = new ClientAccess(_dbContext);
 
-        // Create new instance of clientService
+        // Create new instance of Service
         _service = new(_clientAccess);
     }
 
