@@ -86,4 +86,31 @@ public class Shipment : IHasId
         TotalPackageWeight = totalPackageWeight;
         Items = items;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Shipment shipment)
+        {
+            bool ItemsAreTheSame = false;
+            if (Items is not null && shipment.Items is not null && Items.Count == shipment.Items.Count)
+            {
+                ItemsAreTheSame = true;
+                for (int i = 0; i < shipment.Items.Count; i++)
+                    if (shipment.Items[i] != Items[i])
+                    {
+                        ItemsAreTheSame = false;
+                        break;
+                    }
+            }
+            return shipment.Id == Id && shipment.OrderId == OrderId && shipment.SourceId == SourceId
+            && shipment.OrderDate == OrderDate && shipment.RequestDate == RequestDate && shipment.ShipmentDate == ShipmentDate
+            && shipment.ShipmentType == ShipmentType && shipment.ShipmentStatus == ShipmentStatus && shipment.Notes == Notes
+            && shipment.CarrierCode == CarrierCode && shipment.CarrierDescription == CarrierDescription && shipment.ServiceCode == ServiceCode
+            && shipment.PaymentType == PaymentType && shipment.TransferMode == TransferMode && shipment.TotalPackageCount == TotalPackageCount
+            && shipment.TotalPackageWeight == TotalPackageWeight && ItemsAreTheSame;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }
