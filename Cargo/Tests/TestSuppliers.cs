@@ -38,4 +38,19 @@ public class SupplierTests
 
         Assert.Empty(await _service.GetSuppliers());
     }
+
+    [Fact]
+    public async Task GetSupplier()
+    {
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        await _service.AddSupplier(mockSupplier);
+
+        Assert.Equal(mockSupplier, await _service.GetSupplier(1));
+        Assert.Null(await _service.GetSupplier(0));
+
+        await _service.RemoveSupplier(1);
+
+        Assert.Null(await _service.GetSupplier(1));
+    }
 }
