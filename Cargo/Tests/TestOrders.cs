@@ -55,6 +55,25 @@ public class OrderTests
     }
 
     [Fact]
+    public async Task GetItemsInOrder()
+    {
+        Order mockOrder1 = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [new(7435, 23), new(9557, 1), new(9553, 50), new(10015, 16), new(2084, 33)]);
+        List<OrderItemMovement> items = [new(7435, 23), new(9557, 1), new(9553, 50), new(10015, 16), new(2084, 33)];
+        List<OrderItemMovement> wrongItems = [new(8352, 67), new(5326, 90), new(6534, 78), new(8780, 20), new(9809, 34)];
+
+        await _service.AddOrder(mockOrder1);
+
+        Assert.Equal([mockOrder1], await _service.GetOrders());
+        Assert.Empty(await _service.GetItemsInOrder(2));
+        Assert.NotEqual(wrongItems, await _service.GetItemsInOrder(1));
+        Assert.Equal(items, await _service.GetItemsInOrder(1));
+        Assert.Empty(await _service.GetItemsInOrder(0));
+        Assert.Empty(await _service.GetItemsInOrder(-1));
+
+        await _service.RemoveOrder(1);
+    }
+
+    [Fact]
     public async Task AddOrderGood()
     {
         Order mockOrder1 = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [new(7435, 23), new(9557, 1), new(9553, 50), new(10015, 16), new(2084, 33)]);
