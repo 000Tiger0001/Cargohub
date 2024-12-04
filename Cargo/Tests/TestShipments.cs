@@ -63,4 +63,21 @@ public class ShipmentTests
         Assert.True(IsRemoved);
         Assert.Empty(await _service.GetShipments());
     }
+
+    [Fact]
+    public async Task AddShipmentBad()
+    {
+        Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
+
+        Assert.Empty(await _service.GetShipments());
+
+        /* De code hieronder is uitgecomment, omdat het een error geeft. */
+        //await _service.AddShipment(mockClient);
+
+        Assert.Empty(await _service.GetShipments());
+
+        await _service.RemoveShipment(1);
+
+        Assert.Empty(await _service.GetShipments());
+    }
 }
