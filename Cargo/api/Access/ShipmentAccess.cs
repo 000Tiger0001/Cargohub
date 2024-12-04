@@ -19,4 +19,38 @@ public class ShipmentAccess : BaseAccess<Shipment>
             .FirstOrDefaultAsync(s => s.Id == shipmentId);
         return shipment;
     }
+
+    public override async Task<bool> Update(Shipment shipment)
+    {
+        if (shipment == null) return false;
+
+        DetachEntity(shipment);
+
+        var existingOrder = await GetById(shipment.Id!);
+        if (existingOrder == null)
+        {
+            return false;
+        }
+
+        if (existingOrder.Items != null)
+        {
+            foreach (ShipmentItemMovement item in existingOrder.Items)
+            {
+                var existingItem = await _context.Set<ShipmentItemMovement>().FirstOrDefaultAsync(i => i.Id == item.Id);
+                if (existingItem != null)
+                {
+                    existingItem.Amount = item.Amount;
+                    existingItem.ItemId = item.ItemId;
+                }
+                else
+                {
+                    _context.Set<ShipmentItemMovement>().Add(item);
+                }
+            }
+        }
+        _context.Update(shipment);
+        var changes = await _context.SaveChangesAsync();
+        ClearChangeTracker();
+        return changes > 0;
+    }
 }
