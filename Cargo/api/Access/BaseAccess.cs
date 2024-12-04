@@ -104,7 +104,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
         return false;
     }
 
-    private void DetachEntity(T entity)
+    public void DetachEntity(T entity)
     {
         if (_context.Entry(entity).State == EntityState.Detached)
             return;
@@ -112,7 +112,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
         _context.Entry(entity).State = EntityState.Detached;
     }
 
-    private void ClearChangeTracker()
+    public void ClearChangeTracker()
     {
         foreach (var entry in _context.ChangeTracker.Entries())
         {

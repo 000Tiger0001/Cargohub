@@ -23,6 +23,35 @@ public class OrderAccess : BaseAccess<Order>
 
     public override async Task<bool> Update(Order order)
     {
-        return true;
+        if (order == null) return false;
+
+        DetachEntity(order);
+
+        var existingOrder = await GetById(order.Id!);
+        if (existingOrder == null)
+        {
+            return false;
+        }
+
+        if (existingOrder.Items != null)
+        {
+            foreach (OrderItemMovement item in existingOrder.Items)
+            {
+                var existingItem = await _context.Set<OrderItemMovement>().FirstOrDefaultAsync(i => i.Id == item.Id);
+                if (existingItem != null)
+                {
+                    existingItem.Amount = item.Amount;
+                    existingItem.ItemId = item.ItemId;
+                }
+                else
+                {
+                    _context.Set<OrderItemMovement>().Add(item);
+                }
+            }
+        }
+        _context.Update(order);
+        var changes = await _context.SaveChangesAsync();
+        ClearChangeTracker();
+        return changes > 0;
     }
 }
