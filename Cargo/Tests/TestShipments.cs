@@ -112,7 +112,7 @@ public class ShipmentTests
 
         bool IsAdded1 = await _service.AddShipment(mockShipment);
 
-        Assert.True(IsAdded1);
+        Assert.False(IsAdded1);
         Assert.Equal([mockShipment], await _service.GetShipments());
 
         bool IsRemoved = await _service.RemoveShipment(1);

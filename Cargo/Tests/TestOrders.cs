@@ -64,11 +64,11 @@ public class OrderTests
         await _service.AddOrder(mockOrder1);
 
         Assert.Equal([mockOrder1], await _service.GetOrders());
-        Assert.Empty(await _service.GetItemsInOrder(2));
+        Assert.Null(await _service.GetItemsInOrder(2));
         Assert.NotEqual(wrongItems, await _service.GetItemsInOrder(1));
         Assert.Equal(items, await _service.GetItemsInOrder(1));
-        Assert.Empty(await _service.GetItemsInOrder(0));
-        Assert.Empty(await _service.GetItemsInOrder(-1));
+        Assert.Null(await _service.GetItemsInOrder(0));
+        Assert.Null(await _service.GetItemsInOrder(-1));
 
         await _service.RemoveOrder(1);
     }
