@@ -49,6 +49,25 @@ public class ShipmentTests
     }
 
     [Fact]
+    public async Task GetItemsInShipment()
+    {
+        Shipment mockShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 18, 594.42, [new(7435, 23), new(9557, 1), new(9553, 50)]);
+        List<ShipmentItemMovement> items = [new(7435, 23), new(9557, 1), new(9553, 50)];
+        List<ShipmentItemMovement> wrongItems = [new(4533, 75), new(7546, 43), new(8633, 37)];
+
+        await _service.AddShipment(mockShipment);
+
+        Assert.Equal([mockShipment], await _service.GetShipments());
+        Assert.Empty(await _service.GetItemsInShipment(2));
+        Assert.NotEqual(wrongItems, await _service.GetItemsInShipment(1));
+        Assert.Equal(items, await _service.GetItemsInShipment(1));
+        Assert.Empty(await _service.GetItemsInShipment(0));
+        Assert.Empty(await _service.GetItemsInShipment(-1));
+        
+        await _service.RemoveShipment(1);
+    }
+
+    [Fact]
     public async Task AddShipmentGood()
     {
         Shipment mockShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 18, 594.42, [new(7435, 23), new(9557, 1), new(9553, 50)]);
