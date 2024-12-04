@@ -71,4 +71,25 @@ public class SupplierTests
         Assert.True(IsRemoved);
         Assert.Empty(await _service.GetSuppliers());
     }
+
+    [Fact]
+    public async Task AddDuplicateSupplier()
+    {
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsAdded1 = await _service.AddSupplier(mockSupplier);
+
+        Assert.True(IsAdded1);
+        Assert.Equal([mockSupplier], await _service.GetSuppliers());
+
+        bool IsAdded2 = await _service.AddSupplier(mockSupplier);
+
+        Assert.False(IsAdded2);
+        Assert.Equal([mockSupplier], await _service.GetSuppliers());
+
+        bool IsRemoved = await _service.RemoveSupplier(1);
+
+        Assert.True(IsRemoved);
+        Assert.Empty(await _service.GetSuppliers());
+    }
 }
