@@ -16,10 +16,10 @@ public class InventoryTests
 
         _dbContext = new ApplicationDbContext(options);
 
-        // Create a new instance of ClientAccess with the in-memory DbContext
+        // Create a new instance of Access with the in-memory DbContext
         _inventoryAccess = new InventoryAccess(_dbContext);
 
-        // Create new instance of clientService
+        // Create new instance of Service
         _service = new(_inventoryAccess);
     }
 
@@ -179,7 +179,7 @@ public class InventoryTests
     public async Task AddInventoryWithDuplicateId()
     {
         Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
-        Inventory mockInventory2 = new(1, 2, "Focused transitional alliance", "nyg48736S", [19800,23653,3068,3334,20477,20524,17579,2271,2293,22717], 194, 0, 139, 0, 55);
+        Inventory mockInventory2 = new(1, 2, "Focused transitional alliance", "nyg48736S", [19800, 23653, 3068, 3334, 20477, 20524, 17579, 2271, 2293, 22717], 194, 0, 139, 0, 55);
 
         bool IsAdded = await _service.AddInventory(mockInventory1);
 
