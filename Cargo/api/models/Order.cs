@@ -98,24 +98,35 @@ public class Order : IHasId
     {
         if (obj is Order order)
         {
-            bool ItemsAreTheSame = false;
-            if (Items is not null && order.Items is not null && Items.Count == order.Items.Count)
+            // Sort the items lists before comparing them
+            var sortedItems = Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
+            var sortedOrderItems = order.Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
+
+            bool itemsAreTheSame = false;
+            if (sortedItems != null && sortedOrderItems != null && sortedItems.Count == sortedOrderItems.Count)
             {
-                ItemsAreTheSame = true;
-                for (int i = 0; i < order.Items.Count; i++) 
-                    if (order.Items[i] != Items[i]) 
-                    {
-                        ItemsAreTheSame = false;
-                        break;
-                    }
+                itemsAreTheSame = !sortedItems.Where((item, index) => !item.Equals(sortedOrderItems[index])).Any();
             }
-            return order.Id == Id && order.SourceId == SourceId && order.OrderDate == OrderDate 
-            && order.RequestDate == RequestDate && order.Reference == Reference && order.ExtraReference == ExtraReference
-            && order.OrderStatus == OrderStatus && order.Notes == Notes && order.ShippingNotes == ShippingNotes
-            && order.PickingNotes == PickingNotes && order.WarehouseId == WarehouseId && order.ShipTo == ShipTo
-            && order.BillTo == BillTo && order.ShipmentId == ShipmentId && order.TotalAmount == TotalAmount
-            && order.Totaldiscount == Totaldiscount && order.TotalTax == TotalTax && order.TotalSurcharge == TotalSurcharge
-            && ItemsAreTheSame;
+
+            return order.Id == Id &&
+                   order.SourceId == SourceId &&
+                   order.OrderDate == OrderDate &&
+                   order.RequestDate == RequestDate &&
+                   order.Reference == Reference &&
+                   order.ExtraReference == ExtraReference &&
+                   order.OrderStatus == OrderStatus &&
+                   order.Notes == Notes &&
+                   order.ShippingNotes == ShippingNotes &&
+                   order.PickingNotes == PickingNotes &&
+                   order.WarehouseId == WarehouseId &&
+                   order.ShipTo == ShipTo &&
+                   order.BillTo == BillTo &&
+                   order.ShipmentId == ShipmentId &&
+                   order.TotalAmount == TotalAmount &&
+                   order.Totaldiscount == Totaldiscount &&
+                   order.TotalTax == TotalTax &&
+                   order.TotalSurcharge == TotalSurcharge &&
+                   itemsAreTheSame;
         }
         return false;
     }
