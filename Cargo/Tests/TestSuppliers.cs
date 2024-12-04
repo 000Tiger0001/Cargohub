@@ -22,4 +22,20 @@ public class SupplierTests
         // Create new instance of clientService
         _service = new(_supplierAccess);
     }
+
+    [Fact]
+    public async Task GetAllSuppliers()
+    {
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        Assert.Empty(await _service.GetSuppliers());
+
+        await _service.AddSupplier(mockSupplier);
+
+        Assert.Equal([mockSupplier], await _service.GetSuppliers());
+
+        await _service.RemoveSupplier(1);
+
+        Assert.Empty(await _service.GetSuppliers());
+    }
 }
