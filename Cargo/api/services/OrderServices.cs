@@ -28,7 +28,7 @@ public class OrderServices
     public async Task<List<Order>> GetOrdersForClient(int clientId)
     {
         List<Order> orders = await GetOrders();
-        return orders.Where(o => o.ShipTo == clientId || o.BillTo == clientId).ToList();
+        return orders.Where(o => o.SourceId == clientId).ToList();
     }
 
     public async Task<bool> AddOrder(Order order)

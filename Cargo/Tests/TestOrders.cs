@@ -107,6 +107,39 @@ public class OrderTests
     }
 
     [Fact]
+    public async Task GetOrdersForClient()
+    {
+        Order mockOrder1 = new(1, 1, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [new(7435, 23), new(9557, 1), new(9553, 50), new(10015, 16), new(2084, 33)]);
+        Order mockOrder2 = new(2, 1, DateTime.Parse("1999-07-05T19:31:10Z"), DateTime.Parse("1999-07-09T19:31:10Z"), "ORD00002", "Vergelijken raak geluid beetje altijd.", "Delivered", "We hobby thee compleet wiel fijn.", "Nood provincie hier.", "Borstelen dit verf suiker.", 20, 0, 0, 2, 8484.98, 214.52, 665.09, 42.12, [new(3790, 10), new(7369, 15), new(7311, 21)]);
+        Order mockOrder3 = new(3, 2, DateTime.Parse("1983-09-26T19:06:08Z"), DateTime.Parse("1983-09-30T19:06:08Z"), "ORD00003", "Vergeven kamer goed enkele wiel tussen.", "Delivered", "Zeil hoeveel onze map sex ding.", "Ontvangen schoon voorzichtig instrument ster vijver kunnen raam.", "Grof geven politie suiker bodem zuid.", 11, 0, 0, 3, 1156.14, 420.45, 677.42, 86.03, [new(10669, 16)]);
+
+        bool IsAdded1 = await _service.AddOrder(mockOrder1);
+        bool IsAdded2 = await _service.AddOrder(mockOrder2);
+        bool IsAdded3 = await _service.AddOrder(mockOrder3);
+
+        Assert.True(IsAdded1);
+        Assert.True(IsAdded2);
+        Assert.True(IsAdded3);
+
+        Assert.Equal([mockOrder1, mockOrder2, mockOrder3], await _service.GetOrders());
+        Assert.Equal([mockOrder1, mockOrder2], await _service.GetOrdersForClient(1));
+        Assert.Equal([mockOrder3], await _service.GetOrdersForClient(2));
+
+        Assert.Empty(await _service.GetOrdersForClient(-1));
+        Assert.Empty(await _service.GetOrdersForClient(0));
+        Assert.Empty(await _service.GetOrdersForClient(3));
+
+        bool IsRemoved1 = await _service.RemoveOrder(1);
+        bool IsRemoved2 = await _service.RemoveOrder(2);
+        bool IsRemoved3 = await _service.RemoveOrder(3);
+
+        Assert.True(IsRemoved1);
+        Assert.True(IsRemoved2);
+        Assert.True(IsRemoved3);
+        Assert.Empty(await _service.GetOrders());
+    }
+
+    [Fact]
     public async Task AddOrderGood()
     {
         Order mockOrder1 = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [new(7435, 23), new(9557, 1), new(9553, 50), new(10015, 16), new(2084, 33)]);
