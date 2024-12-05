@@ -26,17 +26,22 @@ public class ItemMovementAccess<TEntity, TItemMovement> : BaseAccess<TEntity>
     {
         if (entity == null) return false;
 
-        DetachEntity(entity);
-
+        // Fetch the existing entity
         var existingEntity = await GetById(entity.Id);
         if (existingEntity == null) return false;
 
-        // Handle item movements
+        // Handle item movements (update or add)
         if (entity.Items != null)
         {
+            // remove any items that are present in the existing list but not in the updated list
+            var updatedItemsIds = entity.Items.Select(i => i.Id).ToList();
+            var itemsToRemove = existingEntity.Items?.Where(i => !updatedItemsIds.Contains(i.Id)).ToList();
+            if (itemsToRemove is not null) _context.Set<TItemMovement>().RemoveRange(itemsToRemove);
+
+            // Items to update or add
             foreach (var item in entity.Items)
             {
-                var existingItem = await _context.Set<TItemMovement>().FirstOrDefaultAsync(i => i.Id == item.Id);
+                var existingItem = await _context.Set<TItemMovement>().FindAsync(item.Id);
                 if (existingItem != null)
                 {
                     // Update existing item
@@ -50,8 +55,8 @@ public class ItemMovementAccess<TEntity, TItemMovement> : BaseAccess<TEntity>
             }
         }
 
-        // Update the entity
-        _context.Update(entity);
+        // Update the entity itself (if any other properties have changed)
+        _context.Entry(entity).State = EntityState.Modified;
         var changes = await _context.SaveChangesAsync();
         ClearChangeTracker();
         return changes > 0;
