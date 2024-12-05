@@ -153,4 +153,20 @@ public class TransferTests
 
         await _service.RemoveTransfer(2);
     }
+
+    [Fact]
+    public async Task RemoveTransfer()
+    {
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+
+        bool IsAdded = await _service.AddTransfer(mockTransfer1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockTransfer1], await _service.GetTransfers());
+
+        bool IsRemoved = await _service.RemoveTransfer(2);
+
+        Assert.True(IsRemoved);
+        Assert.Empty(await _service.GetTransfers());
+    }
 }
