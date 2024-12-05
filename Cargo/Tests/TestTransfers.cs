@@ -22,4 +22,20 @@ public class TransferTests
         // Create new instance of Service
         _service = new(_transferAccess);
     }
+
+    [Fact]
+    public async Task GetAllTransfers()
+    {
+        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+        
+        Assert.Empty(await _service.GetTransfers());
+        
+        await _service.AddTransfer(mockTransfer);
+
+        Assert.Equal([mockTransfer], await _service.GetTransfers());
+
+        await _service.RemoveTransfer(1);
+
+        Assert.Empty(await _service.GetTransfers());
+    }
 }
