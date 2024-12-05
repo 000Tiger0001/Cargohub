@@ -1,5 +1,12 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 public class ShipmentItemMovement : ItemMovement
 {
+    public int ShipmentId { get; set; }
+
+    [ForeignKey("ShipmentId")]
+    public virtual Shipment? Shipment { get; set; }
+
     public ShipmentItemMovement(int itemId, int amount) : base(itemId, amount) { }
 
     public override bool Equals(object? obj)

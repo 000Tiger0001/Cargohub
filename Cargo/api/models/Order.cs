@@ -39,6 +39,9 @@ public class Order : IHasId
     [JsonProperty("warehouse_id")]
     public int WarehouseId { get; set; }
 
+    [ForeignKey("WarehouseId")]
+    public virtual Warehouse? Warehouse { get; set; }
+
     [JsonProperty("ship_to")]
     public int? ShipTo { get; set; } = null;
 
@@ -47,6 +50,9 @@ public class Order : IHasId
 
     [JsonProperty("shipment_id")]
     public int? ShipmentId { get; set; } = null;
+
+    [ForeignKey("ShipmentId")]
+    public virtual Shipment? Shipment { get; set; }
 
     [JsonProperty("total_amount")]
     public double TotalAmount { get; set; }

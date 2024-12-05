@@ -1230,8 +1230,8 @@ class ApiRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.handle_delete_version_1(path[3:], user)
             except Exception:
                 # if an exception occurs, it returns a 500 (Internal Server Error)
-                self.send_response(500)
-                self.end_headers()
+                    self.send_response(500)
+                    self.end_headers()
 
 
 if __name__ == "__main__":

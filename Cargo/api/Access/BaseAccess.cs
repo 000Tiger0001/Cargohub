@@ -27,16 +27,14 @@ public abstract class BaseAccess<T> where T : class, IHasId
         // data = data.OrderBy(e => e.Id).ToList();
         foreach (var entity in data)
         {
-            if (entity == null) return false;
+            if (entity == null) continue;
 
             // Detach the entity from the context if it is already being tracked
             DetachEntity(entity);
             var existingEntity = await GetById(entity.Id);
 
-            if (existingEntity != null)
-            {
-                return false;
-            }
+            if (existingEntity != null) continue;
+
             await DB.AddAsync(entity);
         }
 
@@ -55,12 +53,10 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
         // Detach the entity from the context if it is already being tracked
         DetachEntity(entity);
-        var existingEntity = await GetById(entity.Id!);
 
-        if (existingEntity != null)
-        {
-            return false;
-        }
+        var existingEntity = await GetById(entity.Id!);
+        if (existingEntity != null) return false;
+
         await DB.AddAsync(entity);
         var changes = await _context.SaveChangesAsync();
 
@@ -78,10 +74,9 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
         // Check if the entity exists before updating
         var existingEntity = await GetById(entity.Id!);
-        if (existingEntity == null)
-        {
-            return false;
-        }
+
+        if (existingEntity == null) return false;
+
         DB.Update(entity);
         var changes = await _context.SaveChangesAsync();
 
