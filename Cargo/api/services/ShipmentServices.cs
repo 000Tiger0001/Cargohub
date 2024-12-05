@@ -1,9 +1,14 @@
 public class ShipmentServices
 {
     private ShipmentAccess _shipmentAccess;
-    public ShipmentServices(ShipmentAccess shipmentAccess)
+
+    private ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private InventoryAccess _inventoryAccess;
+    public ShipmentServices(ShipmentAccess shipmentAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, InventoryAccess inventoryAccess)
     {
         _shipmentAccess = shipmentAccess;
+        _shipmentItemMovementAccess = shipmentItemMovementAccess;
+        _inventoryAccess = inventoryAccess;
     }
     public async Task<List<Shipment>> GetShipments() => await _shipmentAccess.GetAll();
 
@@ -34,42 +39,48 @@ public class ShipmentServices
         return await _shipmentAccess.Update(shipment); ;
     }
 
-    /*public async Task<bool> UpdateItemsInShipment(Guid shipmentId, List<Item> items)
+    public async Task<bool> UpdateItemsinShipment(int shipmentId, List<ShipmentItemMovement> items)
     {
-        InventoryServices IS = new();
-        if (shipmentId == Guid.Empty) return false;
-        Shipment foundShipment = GetShipment(shipmentId);
-        if (foundShipment is null) return false;
-        Dictionary<Guid, int> currentItemsInShipment = foundShipment.Items;
-        foreach (var x in currentItemsInShipment)
+        List<ShipmentItemMovement> shipmentItemMovements = await _shipmentItemMovementAccess.GetAllByOrderId(shipmentId);
+        Shipment shipment = await _shipmentAccess.GetById(shipmentId);
+        foreach (ShipmentItemMovement shipmentItemMovement in shipmentItemMovements)
         {
-            bool found = false;
-            foreach (Item y in items)
+            ShipmentItemMovement changeInItems = items.First(item => item.Id == shipmentItemMovement.ItemId);
+
+            if (items.Select(item => item.ItemId).Contains(shipmentItemMovement.ItemId))
             {
-                if (x.Key == y.Id)
-                {
-                    found = true;
-                    break;
-                }
+                changeInItems.Id = shipmentItemMovement.Id;
+                await _shipmentItemMovementAccess.Update(changeInItems);
             }
-            if (!found)
+            else
             {
-                List<Inventory> inventories = IS.GetInventoriesforItem(x.Key);
-                int maxOrdered = -1;
-                Inventory maxInventory;
-                foreach (Inventory z in inventories)
+                await _shipmentItemMovementAccess.Remove(shipmentItemMovement.Id);
+            }
+
+
+            //update inventory based on order
+            Inventory inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovement.ItemId);
+            if (shipment!.ShipmentType == 'O')
+            {
+                if (shipment!.ShipmentStatus == "pending")
                 {
-                    if (z.TotalOrdered > maxOrdered)
-                    {
-                        maxOrdered = z.TotalOrdered;
-                        maxInventory = z;
-                    }
+                    int changeamount = changeInItems.Amount - shipmentItemMovement.Amount;
+                    inventory.TotalAllocated -= changeamount;
+                    await _inventoryAccess.Update(inventory);
                 }
-                maxInventory.TotalOrdered -= x.Value
-                maxInventory.TotalExpected = y
             }
         }
-    }*/
+
+        //check for new Items that were not in old
+        foreach (ShipmentItemMovement shipmentItemMovementNew in items)
+        {
+            if (!shipmentItemMovements.Contains(shipmentItemMovementNew))
+            {
+                await _shipmentItemMovementAccess.Add(shipmentItemMovementNew);
+            }
+        }
+        return true;
+    }
 
     public async Task<bool> RemoveShipment(int shipmentId) => await _shipmentAccess.Remove(shipmentId);
 }

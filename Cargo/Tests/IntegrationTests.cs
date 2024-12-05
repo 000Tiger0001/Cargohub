@@ -38,6 +38,12 @@ public class IntegrationTests
     private readonly SupplierAccess _supplierAccess;
     private readonly SupplierServices _serviceSupplier;
 
+    private ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private OrderItemMovementAccess _orderItemMovementAccess;
+    private TransferItemMovementAccess _transferItemMovementAccess;
+    private InventoryAccess _inventoryAccess;
+
+
 
 
     public IntegrationTests()
@@ -66,14 +72,18 @@ public class IntegrationTests
         _itemTypeAccess = new ItemTypeAccess(_dbContext);
         _serviceItemType = new(_itemTypeAccess);
 
+        _orderItemMovementAccess = new OrderItemMovementAccess(_dbContext);
+        _shipmentItemMovementAccess = new ShipmentItemMovementAccess(_dbContext);
+        _transferItemMovementAccess = new TransferItemMovementAccess(_dbContext);
+
         _orderAccess = new OrderAccess(_dbContext);
-        _serviceOrder = new(_orderAccess);
+        _serviceOrder = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _serviceShipment);
 
         _shipmentAccess = new ShipmentAccess(_dbContext);
-        _serviceShipment = new(_shipmentAccess);
+        _serviceShipment = new(_shipmentAccess, _shipmentItemMovementAccess, _inventoryAccess);
 
         _transferAccess = new TransferAccess(_dbContext);
-        _serviceTransfer = new(_transferAccess);
+        _serviceTransfer = new(_transferAccess, _transferItemMovementAccess);
 
         _warehouseAccess = new WarehouseAccess(_dbContext);
         _serviceWarehouse = new(_warehouseAccess);

@@ -1,10 +1,12 @@
 public class TransferServices
 {
     private TransferAccess _transferAccess;
+    private TransferItemMovementAccess _transferItemMovementAccess;
 
-    public TransferServices(TransferAccess transferAccess)
+    public TransferServices(TransferAccess transferAccess, TransferItemMovementAccess transferItemMovementAccess)
     {
         _transferAccess = transferAccess;
+        _transferItemMovementAccess = transferItemMovementAccess;
     }
     public async Task<List<Transfer>> GetTransfers() => await _transferAccess.GetAll();
 

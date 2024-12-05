@@ -1,12 +1,20 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using SQLitePCL;
 
 public class OrderServices
 {
     private OrderAccess _orderAccess;
+    private OrderItemMovementAccess _orderItemMovementAccess;
+    private InventoryAccess _inventoryAccess;
+    private ShipmentServices _shipmentServices;
 
-    public OrderServices(OrderAccess orderAccess)
+    public OrderServices(OrderAccess orderAccess, OrderItemMovementAccess orderItemMovementAccess, InventoryAccess inventoryAccess, ShipmentServices shipmentServices)
     {
+        _orderItemMovementAccess = orderItemMovementAccess;
         _orderAccess = orderAccess;
+        _inventoryAccess = inventoryAccess;
+        _shipmentServices = shipmentServices;
     }
     public async Task<List<Order>> GetOrders() => await _orderAccess.GetAll();
 
@@ -50,6 +58,78 @@ public class OrderServices
 
         order.UpdatedAt = DateTime.Now;
         return await _orderAccess.Update(order); ;
+    }
+    /*public async Task<List<ShipmentItemMovement> convertOrderItemMovement(List<OrderItemMovement> orderItemMovements){
+        List<ShipmentItemMovement> shipmentItemMovements = new();
+        foreach(OrderItemMovement orderItemMovement in orderItemMovements){
+            ShipmentItemMovement shipmentItemMovement = new();
+
+        }
+    }*/
+
+    private void _updateItemsinInventory(Order order, Inventory inventory, int oldAmount, OrderItemMovement newItemMovement)
+    {
+        if (order!.OrderStatus == "pending")
+        {
+            int changeamount = newItemMovement.Amount - oldAmount;
+            inventory.TotalOrdered += changeamount;
+            inventory.TotalOnHand -= changeamount;
+            _inventoryAccess.Update(inventory);
+        }
+        if (order!.OrderStatus == "packed")
+        {
+            int changeamount = newItemMovement.Amount - oldAmount;
+            inventory.TotalAllocated += changeamount;
+            inventory.TotalOnHand -= changeamount;
+            _inventoryAccess.Update(inventory);
+        }
+    }
+    public async Task<bool> UpdateItemsinOrders(int orderId, List<OrderItemMovement> items)
+    {
+
+        //check for old items to update or to remove
+        Order order = await _orderAccess.GetById(orderId);
+        List<OrderItemMovement> orderItemMovements = await _orderItemMovementAccess.GetAllByOrderId(orderId);
+        foreach (OrderItemMovement orderItemMovement in orderItemMovements)
+        {
+            OrderItemMovement changeInItem = items.First(item => item.Id == orderItemMovement.ItemId);
+            Inventory inventory = await _inventoryAccess.GetInventoryByItemId(orderItemMovement.ItemId);
+            changeInItem.Id = orderItemMovement.Id;
+
+            //update existing item
+            if (items.Select(item => item.ItemId).Contains(orderItemMovement.ItemId))
+            {
+                //item is getting updated
+                await _orderItemMovementAccess.Update(changeInItem);
+
+                //update inventory based on order
+                _updateItemsinInventory(order, inventory, orderItemMovement.Amount, changeInItem);
+
+            }
+
+            //remove item completely
+            else
+            {
+                await _orderItemMovementAccess.Remove(orderItemMovement.Id);
+
+                //update inventory based on order
+                _updateItemsinInventory(order, inventory, orderItemMovement.Amount, changeInItem);
+            }
+        }
+
+        //check for new Items that were not in old
+        foreach (OrderItemMovement orderItemMovementNew in items)
+        {
+            Inventory inventory = await _inventoryAccess.GetInventoryByItemId(orderItemMovementNew.ItemId);
+            if (!orderItemMovements.Contains(orderItemMovementNew))
+            {
+                await _orderItemMovementAccess.Add(orderItemMovementNew);
+
+                //update inventory based on order
+                _updateItemsinInventory(order, inventory, 0, orderItemMovementNew);
+            }
+        }
+        return true;
     }
 
     public async Task<bool> RemoveOrder(int orderId) => await _orderAccess.Remove(orderId);

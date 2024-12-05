@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 public abstract class BaseAccess<T> where T : class, IHasId
 {
     protected readonly DbContext _context;
-    private DbSet<T> DB;
+    protected DbSet<T> DB;
 
     public BaseAccess(DbContext context)
     {
