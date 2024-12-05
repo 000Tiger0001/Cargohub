@@ -64,4 +64,18 @@ public class Supplier : IHasId
         Phonenumber = phonenumber;
         Reference = reference;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Supplier supplier)
+        {
+            return supplier.Id == Id && supplier.Code == Code && supplier.Name == Name && supplier.Address == Address
+            && supplier.AddressExtra == AddressExtra && supplier.City == City && supplier.ZipCode == ZipCode
+            && supplier.Province == Province && supplier.Country == Country && supplier.ContactName == ContactName
+            && supplier.Phonenumber == Phonenumber && supplier.Reference == Reference;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }

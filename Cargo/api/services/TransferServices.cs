@@ -19,10 +19,10 @@ public class TransferServices
 
     public async Task<bool> AddTransfer(Transfer transfer)
     {
-        if (transfer is null || transfer.Reference == "" || (transfer.TransferFrom == 0 && transfer.TransferTo == 0) || transfer.TransferStatus == "") return false;
+        if (transfer is null || transfer.Reference == "" || transfer.TransferStatus == "") return false;
         List<Transfer> transfers = await GetTransfers();
         Transfer doubleTransfer = transfers.FirstOrDefault(t => t.Reference == transfer.Reference && t.TransferFrom == transfer.TransferFrom && t.TransferTo == transfer.TransferTo && t.TransferStatus == transfer.TransferStatus)!;
-        if (doubleTransfer is null) return false;
+        if (doubleTransfer is not null) return false;
         return await _transferAccess.Add(transfer);
     }
 

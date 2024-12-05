@@ -37,4 +37,16 @@ public class Location : IHasId
         Code = code;
         Name = name;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Location location)
+        {
+            return location.Id == Id && location.WarehouseId == WarehouseId
+            && location.Code == Code && location.Name == Name;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }
