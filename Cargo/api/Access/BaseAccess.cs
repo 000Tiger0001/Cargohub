@@ -24,7 +24,6 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
     public async Task<bool> AddMany(List<T> data)
     {
-        // data = data.OrderBy(e => e.Id).ToList();
         foreach (var entity in data)
         {
             if (entity == null) continue;
