@@ -1,53 +1,24 @@
-using Microsoft.EntityFrameworkCore;
-
 public class OrderAccess : BaseAccess<Order>
 {
-    public OrderAccess(ApplicationDbContext context) : base(context) { }
+    private readonly ItemMovementAccess<Order, OrderItemMovement> _itemMovementAccess;
+
+    public OrderAccess(ApplicationDbContext context) : base(context)
+    {
+        _itemMovementAccess = new ItemMovementAccess<Order, OrderItemMovement>(context);
+    }
 
     public override async Task<List<Order>> GetAll()
     {
-        List<Order> orders = await _context.Set<Order>().AsNoTracking()
-            .Include(order => order.Items)
-            .ToListAsync();
-        return orders;
+        return await _itemMovementAccess.GetAll();
     }
 
-    public override async Task<Order?> GetById(int orderId)
+    public override async Task<Order?> GetById(int id)
     {
-        Order? order = await _context.Set<Order>().AsNoTracking()
-            .Include(o => o.Items)
-            .FirstOrDefaultAsync(o => o.Id == orderId);
-        return order;
+        return await _itemMovementAccess.GetById(id);
     }
 
     public override async Task<bool> Update(Order order)
     {
-        if (order == null) return false;
-
-        DetachEntity(order);
-
-        var existingOrder = await GetById(order.Id!);
-        if (existingOrder == null) return false;
-
-        if (existingOrder.Items != null)
-        {
-            foreach (OrderItemMovement item in existingOrder.Items)
-            {
-                var existingItem = await _context.Set<OrderItemMovement>().FirstOrDefaultAsync(i => i.Id == item.Id);
-                if (existingItem != null)
-                {
-                    existingItem.Amount = item.Amount;
-                    existingItem.ItemId = item.ItemId;
-                }
-                else
-                {
-                    _context.Set<OrderItemMovement>().Add(item);
-                }
-            }
-        }
-        _context.Update(order);
-        var changes = await _context.SaveChangesAsync();
-        ClearChangeTracker();
-        return changes > 0;
+        return await _itemMovementAccess.Update(order);
     }
 }
