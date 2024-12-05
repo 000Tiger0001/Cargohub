@@ -34,7 +34,7 @@ public class ShipmentControllers : Controller
 
     public async Task<IActionResult> AddShipment([FromBody] Shipment shipment)
     {
-        if (shipment is null || shipment.CarrierCode == "" || shipment.CarrierDescription == "" || shipment.Items == default ||shipment.Items.Count == 0 || shipment.Notes == "" || shipment.OrderDate == DateTime.MinValue || shipment.OrderDate == DateTime.MaxValue || shipment.OrderId == 0 || shipment.PaymentType == "" || shipment.RequestDate == DateTime.MinValue || shipment.RequestDate == DateTime.MaxValue || shipment.ServiceCode == "" || shipment.ShipmentDate == DateTime.MinValue || shipment.ShipmentDate == DateTime.MaxValue || shipment.ShipmentStatus == "" || shipment.ShipmentType == default || shipment.SourceId == 0 || shipment.TotalPackageCount == 0.0 || shipment.TotalPackageWeight == 0.0 || shipment.TransferMode == "") return BadRequest("Not enough info given. ");
+        if (shipment is null || shipment.CarrierCode == "" || shipment.CarrierDescription == "" || shipment.Items == default || shipment.Items.Count == 0 || shipment.Notes == "" || shipment.OrderDate == DateTime.MinValue || shipment.OrderDate == DateTime.MaxValue || shipment.OrderId == 0 || shipment.PaymentType == "" || shipment.RequestDate == DateTime.MinValue || shipment.RequestDate == DateTime.MaxValue || shipment.ServiceCode == "" || shipment.ShipmentDate == DateTime.MinValue || shipment.ShipmentDate == DateTime.MaxValue || shipment.ShipmentStatus == "" || shipment.ShipmentType == default || shipment.SourceId == 0 || shipment.TotalPackageCount == 0.0 || shipment.TotalPackageWeight == 0.0 || shipment.TransferMode == "") return BadRequest("Not enough info given. ");
 
         bool IsAdded = await _shipmentService.AddShipment(shipment);
         if (!IsAdded) return BadRequest("Couldn't add shipment. ");
@@ -46,8 +46,18 @@ public class ShipmentControllers : Controller
         if (shipment is null || shipment.Id == 0) return BadRequest("Not enough info given. ");
 
         bool IsUpdated = await _shipmentService.UpdateShipment(shipment);
-        if(!IsUpdated) return BadRequest("Couldn't update shipment. ");
+        if (!IsUpdated) return BadRequest("Couldn't update shipment. ");
         return Ok("Shipment updated. ");
+    }
+
+    [HttpPut("update-items-in-shipment")]
+    public async Task<IActionResult> UpdateItemsInOrder([FromBody] List<ShipmentItemMovement> shipmentItemMovements, int shipmentId)
+    {
+        if (await _shipmentService.UpdateItemsinShipment(shipmentId, shipmentItemMovements))
+        {
+            return Ok("Items updated");
+        }
+        return BadRequest("Couldn't update items.");
     }
 
     public async Task<IActionResult> RemoveShipment([FromQuery] int shipmentId)

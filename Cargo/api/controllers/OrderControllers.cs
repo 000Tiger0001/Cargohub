@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("Cargohub")]
@@ -58,6 +59,16 @@ public class OrderControllers : Controller
         bool IsUpdated = await _orderServices.UpdateOrder(order);
         if (!IsUpdated) return BadRequest("Couldn't update order. ");
         return Ok("Order updated. ");
+    }
+
+    [HttpPut("update-items-in-order")]
+    public async Task<IActionResult> UpdateItemsInOrder([FromBody] List<OrderItemMovement> orderItemMovements, int orderId)
+    {
+        if (await _orderServices.UpdateItemsinOrders(orderId, orderItemMovements))
+        {
+            return Ok("Items updated");
+        }
+        return BadRequest("Couldn't update items.");
     }
 
     [HttpDelete("delete-order")]
