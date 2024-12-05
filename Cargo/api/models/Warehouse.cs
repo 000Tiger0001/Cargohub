@@ -111,4 +111,6 @@ public class Warehouse : IHasId
         }
         return false;
     }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }
