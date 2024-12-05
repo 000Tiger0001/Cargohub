@@ -42,7 +42,7 @@ public class TransferTests
     [Fact]
     public async Task GetTransfer()
     {
-        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
 
         await _service.AddTransfer(mockTransfer);
 
@@ -52,5 +52,24 @@ public class TransferTests
         await _service.RemoveTransfer(1);
 
         Assert.Null(await _service.GetTransfer(1));
+    }
+
+    [Fact]
+    public async Task GetItemsInTransfer()
+    {
+        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+        List<TransferItemMovement> items = [new(7435, 23)];
+
+        await _service.AddTransfer(mockTransfer);
+
+        List<TransferItemMovement> transferItems = await _service.GetItemsInTransfer(2);
+        int listSize = transferItems.Count;
+
+        Assert.Equal(items, transferItems);
+        Assert.Equal(1, listSize);
+
+        await _service.RemoveTransfer(2);
+
+        Assert.Empty(await _service.GetTransfers());
     }
 }

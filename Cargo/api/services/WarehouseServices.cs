@@ -16,13 +16,13 @@ public class WarehouseServices
 
         Warehouse doubleWarehouse = warehouses.FirstOrDefault(w => w.Code == warehouse.Code && w.Name == warehouse.Name && w.Address == warehouse.Address && w.Zip == warehouse.Zip && w.City == warehouse.City && w.Province == warehouse.Province && w.Country == warehouse.Country)!;
         if (doubleWarehouse is not null) return false;
-        return await _warehouseAccess.Add(warehouse); ;
+        return await _warehouseAccess.Add(warehouse);
     }
     public async Task<bool> UpdateWarehouse(Warehouse warehouse)
     {
         if (warehouse is null || warehouse.Id == 0) return false;
         warehouse.UpdatedAt = DateTime.Now;
-        return await _warehouseAccess.Update(warehouse); ;
+        return await _warehouseAccess.Update(warehouse);
     }
 
     public async Task<bool> RemoveWarehouse(int warehouseId) => await _warehouseAccess.Remove(warehouseId);
