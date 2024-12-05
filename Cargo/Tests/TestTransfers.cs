@@ -72,4 +72,22 @@ public class TransferTests
 
         Assert.Empty(await _service.GetTransfers());
     }
+
+    [Fact]
+    public async Task AddTransfer()
+    {
+        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+
+        Assert.Empty(await _service.GetTransfers());
+
+        bool IsAdded = await _service.AddTransfer(mockTransfer);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockTransfer], await _service.GetTransfers());
+
+        bool IsRemoved = await _service.RemoveTransfer(1);
+
+        Assert.True(IsRemoved);
+        Assert.Empty(await _service.GetTransfers());
+    }
 }
