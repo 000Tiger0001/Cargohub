@@ -27,9 +27,9 @@ public class TransferTests
     public async Task GetAllTransfers()
     {
         Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
-        
+
         Assert.Empty(await _service.GetTransfers());
-        
+
         await _service.AddTransfer(mockTransfer);
 
         Assert.Equal([mockTransfer], await _service.GetTransfers());
@@ -62,8 +62,8 @@ public class TransferTests
 
         await _service.AddTransfer(mockTransfer);
 
-        List<TransferItemMovement> transferItems = await _service.GetItemsInTransfer(2);
-        int listSize = transferItems.Count;
+        List<TransferItemMovement>? transferItems = await _service.GetItemsInTransfer(2);
+        int listSize = transferItems!.Count;
 
         Assert.Equal(items, transferItems);
         Assert.Equal(1, listSize);
