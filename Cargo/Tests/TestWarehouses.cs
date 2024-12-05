@@ -38,4 +38,19 @@ public class WarehouseTests
 
         Assert.Empty(await _service.GetWarehouses());
     }
+
+    [Fact]
+    public async Task GetWarehouse()
+    {
+        Warehouse mockWarehouse = new(1, "YQZZNL56", "Heemskerk cargo hub", "Karlijndreef 281", "4002 AS", "Heemskerk", "Friesland", "NL", "Fem Keijzer", "(078) 0013363", "blamore@example.net");
+
+        await _service.AddWarehouse(mockWarehouse);
+
+        Assert.Equal(mockWarehouse, await _service.GetWarehouse(1));
+        Assert.Null(await _service.GetWarehouse(0));
+
+        await _service.RemoveWarehouse(1);
+
+        Assert.Null(await _service.GetWarehouse(1));
+    }
 }
