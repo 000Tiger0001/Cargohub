@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class Shipment : IHasId
+public class Shipment : IHasId, IHasItemMovements<ShipmentItemMovement>
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

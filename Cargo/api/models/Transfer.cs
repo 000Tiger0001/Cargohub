@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class Transfer : IHasId
+public class Transfer : IHasId, IHasItemMovements<TransferItemMovement>
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -52,7 +52,7 @@ public class Transfer : IHasId
             bool itemsAreTheSame = sortedItems != null && sortedShipmentItems != null &&
                        sortedItems.Count == sortedShipmentItems.Count &&
                        sortedItems.SequenceEqual(sortedShipmentItems);
-            
+
             return transfer.Id == Id && transfer.Reference == Reference && transfer.TransferFrom == TransferFrom
             && transfer.TransferTo == TransferTo && transfer.TransferStatus == TransferStatus && itemsAreTheSame;
         }

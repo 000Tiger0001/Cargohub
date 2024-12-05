@@ -1,53 +1,24 @@
-using Microsoft.EntityFrameworkCore;
-
 public class TransferAccess : BaseAccess<Transfer>
 {
-    public TransferAccess(ApplicationDbContext context) : base(context) { }
+    private readonly ItemMovementAccess<Transfer, TransferItemMovement> _itemMovementAccess;
+
+    public TransferAccess(ApplicationDbContext context) : base(context)
+    {
+        _itemMovementAccess = new ItemMovementAccess<Transfer, TransferItemMovement>(context);
+    }
 
     public override async Task<List<Transfer>> GetAll()
     {
-        List<Transfer> transfers = await _context.Set<Transfer>().AsNoTracking()
-            .Include(transfer => transfer.Items)
-            .ToListAsync();
-        return transfers;
+        return await _itemMovementAccess.GetAll();
     }
 
-    public override async Task<Transfer?> GetById(int transferId)
+    public override async Task<Transfer?> GetById(int id)
     {
-        Transfer? transfer = await _context.Set<Transfer>().AsNoTracking()
-            .Include(transfer => transfer.Items)
-            .FirstOrDefaultAsync(transfer => transfer.Id == transferId);
-        return transfer;
+        return await _itemMovementAccess.GetById(id);
     }
 
     public override async Task<bool> Update(Transfer transfer)
     {
-        if (transfer == null) return false;
-
-        DetachEntity(transfer);
-
-        var existingTransfer = await GetById(transfer.Id!);
-        if (existingTransfer == null) return false;
-
-        if (existingTransfer.Items != null)
-        {
-            foreach (TransferItemMovement item in existingTransfer.Items)
-            {
-                var existingItem = await _context.Set<TransferItemMovement>().FirstOrDefaultAsync(i => i.Id == item.Id);
-                if (existingItem != null)
-                {
-                    existingItem.Amount = item.Amount;
-                    existingItem.ItemId = item.ItemId;
-                }
-                else
-                {
-                    _context.Set<TransferItemMovement>().Add(item);
-                }
-            }
-        }
-        _context.Update(transfer);
-        var changes = await _context.SaveChangesAsync();
-        ClearChangeTracker();
-        return changes > 0;
+        return await _itemMovementAccess.Update(transfer);
     }
 }
