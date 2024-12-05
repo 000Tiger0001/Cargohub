@@ -27,10 +27,7 @@ public class ShipmentAccess : BaseAccess<Shipment>
         DetachEntity(shipment);
 
         var existingOrder = await GetById(shipment.Id!);
-        if (existingOrder == null)
-        {
-            return false;
-        }
+        if (existingOrder == null) return false;
 
         if (existingOrder.Items != null)
         {

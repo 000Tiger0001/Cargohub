@@ -7,7 +7,7 @@ public class OrderAccess : BaseAccess<Order>
     public override async Task<List<Order>> GetAll()
     {
         List<Order> orders = await _context.Set<Order>().AsNoTracking()
-            .Include(order => order.Items) // Include OrderItemMovement entities
+            .Include(order => order.Items)
             .ToListAsync();
         return orders;
     }
@@ -15,9 +15,8 @@ public class OrderAccess : BaseAccess<Order>
     public override async Task<Order?> GetById(int orderId)
     {
         Order? order = await _context.Set<Order>().AsNoTracking()
-            .Include(o => o.Items)  // Explicitly include related OrderItemMovements
+            .Include(o => o.Items)
             .FirstOrDefaultAsync(o => o.Id == orderId);
-
         return order;
     }
 
@@ -28,10 +27,7 @@ public class OrderAccess : BaseAccess<Order>
         DetachEntity(order);
 
         var existingOrder = await GetById(order.Id!);
-        if (existingOrder == null)
-        {
-            return false;
-        }
+        if (existingOrder == null) return false;
 
         if (existingOrder.Items != null)
         {
