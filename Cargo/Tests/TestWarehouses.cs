@@ -114,4 +114,24 @@ public class WarehouseTests
         Assert.True(IsRemoved);
         Assert.Empty(await _service.GetWarehouses());
     }
+
+    [Fact]
+    public async Task UpdateWarehouse()
+    {
+        Warehouse mockWarehouse1 = new(1, "YQZZNL56", "Heemskerk cargo hub", "Karlijndreef 281", "4002 AS", "Heemskerk", "Friesland", "NL", "Fem Keijzer", "(078) 0013363", "blamore@example.net");
+        Warehouse mockWarehouse2 = new(1, "GIOMNL90", "Petten longterm hub", "Owenweg 731", "4615 RB", "Petten", "Noord-Holland", "NL", "Maud Adryaens", "+31836 752702", "nickteunissen@example.com");
+
+        bool IsAdded = await _service.AddWarehouse(mockWarehouse1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockWarehouse1], await _service.GetWarehouses());
+
+        bool IsUpdated = await _service.UpdateWarehouse(mockWarehouse2);
+
+        Assert.True(IsUpdated);
+        Assert.Equal([mockWarehouse2], await _service.GetWarehouses());
+        Assert.NotEqual([mockWarehouse1], await _service.GetWarehouses());
+
+        await _service.RemoveWarehouse(1);
+    }
 }
