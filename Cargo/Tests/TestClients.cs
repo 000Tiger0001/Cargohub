@@ -1,13 +1,13 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
 
-public class ClientControllerTests
+public class ClientTests
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly ClientAccess _clientAccess;
     private readonly ClientServices _service;
 
-    public ClientControllerTests()
+    public ClientTests()
     {
         // Use an in-memory SQLite database for testing
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -16,10 +16,10 @@ public class ClientControllerTests
 
         _dbContext = new ApplicationDbContext(options);
 
-        // Create a new instance of ClientAccess with the in-memory DbContext
+        // Create a new instance of Access with the in-memory DbContext
         _clientAccess = new ClientAccess(_dbContext);
 
-        // Create new instance of clientService
+        // Create new instance of Service
         _service = new(_clientAccess);
     }
 
@@ -35,7 +35,7 @@ public class ClientControllerTests
         Assert.Equal(await _service.GetClient(mockClient.Id), mockClient);
 
         await _service.RemoveClient(1);
-        Assert.Equal([], await _service.GetClients());
+        Assert.Empty(await _service.GetClients());
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class ClientControllerTests
     {
         Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
 
         bool IsAdded = await _service.AddClient(mockClient);
 
@@ -67,7 +67,7 @@ public class ClientControllerTests
 
         await _service.RemoveClient(1);
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
     }
 
     [Fact]
@@ -75,16 +75,16 @@ public class ClientControllerTests
     {
         Location mockLocation = new(1, 1, "", "");
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
 
         /*This line beneath gives an error, because the method "AddClient()" can't get a location. */
         //bool IsAdded = await _service.AddClient(mockLocation);
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
 
         await _service.RemoveClient(1);
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
     }
 
     [Fact]
@@ -95,16 +95,16 @@ public class ClientControllerTests
         bool IsAdded1 = await _service.AddClient(mockClient);
 
         Assert.True(IsAdded1);
-        Assert.Equal(await _service.GetClient(1), mockClient);
+        Assert.Equal(mockClient, await _service.GetClient(1));
 
         bool IsAdded2 = await _service.AddClient(mockClient);
 
         Assert.False(IsAdded2);
-        Assert.Equal(await _service.GetClient(1), mockClient);
+        Assert.Equal(mockClient, await _service.GetClient(1));
 
         await _service.RemoveClient(1);
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public class ClientControllerTests
 
         await _service.RemoveClient(1);
 
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
     }
 
     [Fact]
@@ -164,6 +164,6 @@ public class ClientControllerTests
         bool IsRemoved = await _service.RemoveClient(1);
 
         Assert.True(IsRemoved);
-        Assert.Equal(await _service.GetClients(), []);
+        Assert.Empty(await _service.GetClients());
     }
 }

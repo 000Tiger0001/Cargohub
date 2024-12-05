@@ -10,11 +10,11 @@ public class ItemLineControllers : Controller
         _itemLineService = itemLineServices;
     }
 
-    [HttpGet("get-item-lines")]
+    [HttpGet("item-lines")]
     public async Task<IActionResult> GetItemLines() => Ok(await _itemLineService.GetItemLines());
 
-    [HttpGet("get-item-line")]
-    public async Task<IActionResult> GetItemLine([FromQuery] int itemLineId)
+    [HttpGet("item-line/{itemLineId}")]
+    public async Task<IActionResult> GetItemLine(int itemLineId)
     {
         if (itemLineId == 0) return BadRequest("You can't use an empty string. ");
         ItemLine? itemLine = await _itemLineService.GetItemLine(itemLineId);
@@ -22,7 +22,7 @@ public class ItemLineControllers : Controller
         return Ok(itemLine);
     }
 
-    [HttpPost("add-item-line")]
+    [HttpPost("item-line")]
     public async Task<IActionResult> AddItemLine([FromBody] ItemLine itemLine)
     {
         if (itemLine is null || itemLine.Name == "") return BadRequest("Not enough info. ");
@@ -32,7 +32,7 @@ public class ItemLineControllers : Controller
         return Ok("Item line added. ");
     }
 
-    [HttpPut("update-item-line")]
+    [HttpPut("item-line")]
     public async Task<IActionResult> UpdateItemLine([FromBody] ItemLine itemLine)
     {
         if (itemLine is null || itemLine.Id == 0) return BadRequest("Not enough info. ");
@@ -42,8 +42,8 @@ public class ItemLineControllers : Controller
         return Ok("Item line updated. ");
     }
 
-    [HttpDelete("remove-item-line")]
-    public async Task<IActionResult> RemoveItemLine([FromQuery] int itemLineId)
+    [HttpDelete("item-line/{itemLineId}")]
+    public async Task<IActionResult> RemoveItemLine(int itemLineId)
     {
         if (itemLineId == 0) return BadRequest("Can't remove item line with empty id. ");
 

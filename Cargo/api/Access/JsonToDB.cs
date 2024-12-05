@@ -8,33 +8,33 @@ public class JsonToDb
         List<string> dataTypes = new List<string>()
         {
             "Client",
-            "Inventorie",
-            "Item",
+            "Supplier",
+            "Warehouse",
+            "Shipment",
             "ItemGroup",
             "ItemLine",
             "ItemType",
+            "Item",
+            "Inventorie",
             "Location",
             "Order",
-            "Shipment",
-            "Supplier",
-            "Transfer",
-            "Warehouse"
+            "Transfer"
         };
 
         List<Type> classes = new List<Type>()
         {
             typeof(Client),
-            typeof(Inventory),
-            typeof(Item),
+            typeof(Supplier),
+            typeof(Warehouse),
+            typeof(Shipment),
             typeof(ItemGroup),
             typeof(ItemLine),
             typeof(ItemType),
+            typeof(Item),
+            typeof(Inventory),
             typeof(Location),
             typeof(Order),
-            typeof(Shipment),
-            typeof(Supplier),
-            typeof(Transfer),
-            typeof(Warehouse)
+            typeof(Transfer)
         };
 
         using var scope = app.Services.CreateScope();
@@ -112,6 +112,7 @@ public class JsonToDb
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Error adding item: {ex.Message}");
+                        break;
                     }
                 }
             }

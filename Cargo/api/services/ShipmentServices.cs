@@ -11,11 +11,11 @@ public class ShipmentServices
 
     public async Task<Shipment?> GetShipment(int shipmentId) => await _shipmentAccess.GetById(shipmentId);
 
-    public async Task<List<ShipmentItemMovement>?> GetItemsInShipment(int shipmentId)
+    public async Task<List<ShipmentItemMovement>> GetItemsInShipment(int shipmentId)
     {
         Shipment? shipment = await GetShipment(shipmentId);
         if (shipment is null) return [];
-        return shipment.Items;
+        return shipment.Items!;
     }
 
     public async Task<bool> AddShipment(Shipment shipment)

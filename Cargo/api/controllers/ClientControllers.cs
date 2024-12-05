@@ -13,8 +13,8 @@ public class ClientControllers : Controller
     [HttpGet("clients")]
     public async Task<IActionResult> GetClients() => Ok(await _clientService.GetClients());
 
-    [HttpGet("client")]
-    public async Task<IActionResult> GetClient([FromQuery] int clientId)
+    [HttpGet("client/{clientId}")]
+    public async Task<IActionResult> GetClient(int clientId)
     {
         if (clientId == 0) return BadRequest("Can't get client with empty id. ");
 
@@ -23,7 +23,7 @@ public class ClientControllers : Controller
         return Ok(client);
     }
 
-    [HttpPost("add-client")]
+    [HttpPost("client")]
     public async Task<IActionResult> AddClient([FromBody] Client client)
     {
         if (client is null || client.Name == "" || client.Address == "" || client.City == "" || client.ZipCode == "" || client.Province == "" || client.Country == "" || client.ContactName == "" || client.ContactPhone == "" || client.ContactEmail == "") return BadRequest("Not enough info given. ");
@@ -33,7 +33,7 @@ public class ClientControllers : Controller
         return Ok("Client added. ");
     }
 
-    [HttpPut("update-client")]
+    [HttpPut("client")]
     public async Task<IActionResult> UpdateClient([FromBody] Client client)
     {
         if (client is null || client.Id == 0) return BadRequest("Not enough info given. ");
@@ -43,7 +43,8 @@ public class ClientControllers : Controller
         return Ok("Client updated. ");
     }
 
-    public async Task<IActionResult> RemoveClient([FromQuery] int clientId)
+    [HttpDelete("client/{clientId}")]
+    public async Task<IActionResult> RemoveClient(int clientId)
     {
         if (clientId == 0) return BadRequest("Can't remove client with empty id. ");
 

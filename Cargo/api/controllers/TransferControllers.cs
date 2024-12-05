@@ -10,11 +10,11 @@ public class TransferControllers : Controller
         _transferServices = transferServices;
     }
 
-    [HttpGet("get-transfers")]
+    [HttpGet("transfers")]
     public async Task<IActionResult> GetTransfers() => Ok(await _transferServices.GetTransfers());
 
-    [HttpGet("get-transfer")]
-    public async Task<IActionResult> GetTransfer([FromQuery] int transferId)
+    [HttpGet("transfer/{transferId}")]
+    public async Task<IActionResult> GetTransfer(int transferId)
     {
         if (transferId == 0) return BadRequest("Can't proccess empty id. ");
 
@@ -23,8 +23,8 @@ public class TransferControllers : Controller
         return Ok(transfer);
     }
 
-    [HttpGet("get-items-in-tranfer")]
-    public async Task<IActionResult> GetItemsInTransfer([FromQuery] int transferId)
+    [HttpGet("tranfer/{transferId}/items")]
+    public async Task<IActionResult> GetItemsInTransfer(int transferId)
     {
         if (transferId == 0) return BadRequest("Can't proccess empty id. ");
 
@@ -33,7 +33,7 @@ public class TransferControllers : Controller
         return Ok(items);
     }
 
-    [HttpPost("add-transfer")]
+    [HttpPost("transfer")]
     public async Task<IActionResult> AddTransfer([FromBody] Transfer transfer)
     {
         if (transfer is null || transfer.Reference == "" || (transfer.TransferFrom == 0 && transfer.TransferTo == 0) || transfer.TransferStatus == "") return BadRequest("Not enough given. ");
@@ -43,7 +43,7 @@ public class TransferControllers : Controller
         return Ok("Transfer added. ");
     }
 
-    [HttpPut("update-transfer")]
+    [HttpPut("transfer")]
     public async Task<IActionResult> UpdateTransfer([FromBody] Transfer transfer)
     {
         if (transfer is null || transfer.Id == 0) return BadRequest("Not enough info given. ");
@@ -53,8 +53,8 @@ public class TransferControllers : Controller
         return Ok("Transfer updated. ");
     }
 
-    [HttpDelete("remove-transfer")]
-    public async Task<IActionResult> RemoveTransfer([FromQuery] int transferId)
+    [HttpDelete("transfer/{transferId}")]
+    public async Task<IActionResult> RemoveTransfer(int transferId)
     {
         if (transferId == 0) BadRequest("Can't proccess empty string. ");
 

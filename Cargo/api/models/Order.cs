@@ -39,6 +39,9 @@ public class Order : IHasId
     [JsonProperty("warehouse_id")]
     public int WarehouseId { get; set; }
 
+    [ForeignKey("WarehouseId")]
+    public virtual Warehouse? Warehouse { get; set; }
+
     [JsonProperty("ship_to")]
     public int? ShipTo { get; set; } = null;
 
@@ -47,6 +50,9 @@ public class Order : IHasId
 
     [JsonProperty("shipment_id")]
     public int? ShipmentId { get; set; } = null;
+
+    [ForeignKey("ShipmentId")]
+    public virtual Shipment? Shipment { get; set; }
 
     [JsonProperty("total_amount")]
     public double TotalAmount { get; set; }
@@ -93,4 +99,41 @@ public class Order : IHasId
         TotalSurcharge = totalSurcharge;
         Items = items;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Order order)
+        {
+            // Sort the items lists before comparing them
+            var sortedItems = Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
+            var sortedOrderItems = order.Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
+
+            bool itemsAreTheSame = sortedItems != null && sortedOrderItems != null &&
+                       sortedItems.Count == sortedOrderItems.Count &&
+                       sortedItems.SequenceEqual(sortedOrderItems);
+
+            return order.Id == Id &&
+                   order.SourceId == SourceId &&
+                   order.OrderDate == OrderDate &&
+                   order.RequestDate == RequestDate &&
+                   order.Reference == Reference &&
+                   order.ExtraReference == ExtraReference &&
+                   order.OrderStatus == OrderStatus &&
+                   order.Notes == Notes &&
+                   order.ShippingNotes == ShippingNotes &&
+                   order.PickingNotes == PickingNotes &&
+                   order.WarehouseId == WarehouseId &&
+                   order.ShipTo == ShipTo &&
+                   order.BillTo == BillTo &&
+                   order.ShipmentId == ShipmentId &&
+                   order.TotalAmount == TotalAmount &&
+                   order.Totaldiscount == Totaldiscount &&
+                   order.TotalTax == TotalTax &&
+                   order.TotalSurcharge == TotalSurcharge &&
+                   itemsAreTheSame;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }

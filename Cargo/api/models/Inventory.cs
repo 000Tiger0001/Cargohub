@@ -29,6 +29,10 @@ public class Inventory : IHasId
             ItemIdString = "P" + value.ToString();
         }
     }
+
+    [ForeignKey("ItemId")]
+    public virtual Item? Item { get; set; }
+
     [JsonProperty("description")]
     public string? Description { get; set; }
 
@@ -83,7 +87,8 @@ public class Inventory : IHasId
                    ItemId == other.ItemId &&
                    Description == other.Description &&
                    ItemReference == other.ItemReference &&
-                   Locations?.SequenceEqual(other.Locations) == true &&
+                   // Check Locations for null explicitly before using SequenceEqual
+                   (Locations == null && other.Locations == null || Locations != null && other.Locations != null && Locations.SequenceEqual(other.Locations)) &&
                    TotalOnHand == other.TotalOnHand &&
                    TotalExpected == other.TotalExpected &&
                    TotalOrdered == other.TotalOrdered &&
@@ -93,8 +98,5 @@ public class Inventory : IHasId
         return false;
     }
 
-    public override int GetHashCode()
-    {
-        return Id.GetHashCode();
-    }
+    public override int GetHashCode() => Id.GetHashCode();
 }

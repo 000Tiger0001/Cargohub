@@ -22,6 +22,22 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configure entities and relationships here if needed
+        modelBuilder.Entity<Inventory>(entity =>
+        {
+            entity.HasOne(i => i.Item)
+                  .WithMany()
+                  .HasForeignKey(i => i.ItemId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Location>(entity =>
+        {
+            entity.HasOne(l => l.Warehouse)
+                .WithMany()
+                .HasForeignKey(l => l.WarehouseId)
+                .OnDelete(DeleteBehavior.Cascade); // Delete Location when Warehouse is deleted
+        });
+
         modelBuilder.Entity<Order>()
             .HasMany(o => o.Items)
             .WithOne(oim => oim.Order)
@@ -39,6 +55,29 @@ public class ApplicationDbContext : DbContext
             .WithOne(sim => sim.Shipment)
             .HasForeignKey(sim => sim.ShipmentId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Item>(entity =>
+        {
+            entity.HasOne(i => i.ItemLine)
+                  .WithMany()
+                  .HasForeignKey(i => i.ItemLineId)
+                  .OnDelete(DeleteBehavior.SetNull); // Set to null if ItemLine is deleted
+
+            entity.HasOne(i => i.ItemGroup)
+                  .WithMany()
+                  .HasForeignKey(i => i.ItemGroupId)
+                  .OnDelete(DeleteBehavior.SetNull); // Set to null if ItemGroup is deleted
+
+            entity.HasOne(i => i.ItemType)
+                  .WithMany()
+                  .HasForeignKey(i => i.ItemTypeId)
+                  .OnDelete(DeleteBehavior.SetNull); // Set to null if ItemType is deleted
+
+            entity.HasOne(i => i.Supplier)
+                  .WithMany()
+                  .HasForeignKey(i => i.SupplierId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
 
         base.OnModelCreating(modelBuilder);
     }

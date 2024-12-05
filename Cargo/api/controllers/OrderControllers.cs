@@ -10,37 +10,38 @@ public class OrderControllers : Controller
         _orderServices = orderServices;
     }
 
-    [HttpGet("get-orders")]
+    [HttpGet("orders")]
     public async Task<IActionResult> GetOrders() => Ok(await _orderServices.GetOrders());
 
-    public async Task<IActionResult> GetOrder([FromQuery] int orderId)
+    [HttpGet("orders/{orderId}")]
+    public async Task<IActionResult> GetOrder(int orderId)
     {
         if (orderId == 0) return BadRequest("Can't proccess this id. ");
         return Ok(await _orderServices.GetOrder(orderId));
     }
 
-    [HttpGet("get-items-in-order")]
-    public async Task<IActionResult> GetItemsInOrder([FromQuery] int orderId)
+    [HttpGet("order/{orderId}/items")]
+    public async Task<IActionResult> GetItemsInOrder(int orderId)
     {
         if (orderId == 0) return BadRequest("Can't proccess this id. ");
         return Ok(await _orderServices.GetItemsInOrder(orderId));
     }
 
-    [HttpGet("get-orders-in-shipment")]
-    public async Task<IActionResult> GetOrdersInShipment([FromQuery] int shipmentId)
+    [HttpGet("shipment/{shipmentId}/orders")]
+    public async Task<IActionResult> GetOrdersInShipment(int shipmentId)
     {
         if (shipmentId == 0) return BadRequest("Can't proccess this id. ");
         return Ok(await _orderServices.GetOrdersInShipment(shipmentId));
     }
 
-    [HttpGet("get-orders-for-client")]
-    public async Task<IActionResult> GetOrdersForClient([FromQuery] int clientId)
+    [HttpGet("client/{clientId}/orders")]
+    public async Task<IActionResult> GetOrdersForClient(int clientId)
     {
         if (clientId == 0) return BadRequest("Can't proccess this id. ");
         return Ok(await _orderServices.GetOrdersForClient(clientId));
     }
 
-    [HttpPost("add-order")]
+    [HttpPost("order")]
     public async Task<IActionResult> AddOrder([FromBody] Order order)
     {
         if (order is null) return BadRequest("Not enough info. ");
@@ -50,7 +51,7 @@ public class OrderControllers : Controller
         return Ok("Order added. ");
     }
 
-    [HttpPut("update-order")]
+    [HttpPut("order")]
     public async Task<IActionResult> UpdateOrder([FromBody] Order order)
     {
         if (order.Id == 0) return BadRequest("Can't update this order. ");
@@ -60,8 +61,8 @@ public class OrderControllers : Controller
         return Ok("Order updated. ");
     }
 
-    [HttpDelete("delete-order")]
-    public async Task<IActionResult> DeleteOrder([FromQuery] int orderId)
+    [HttpDelete("order/{orderId}")]
+    public async Task<IActionResult> DeleteOrder(int orderId)
     {
         if (orderId == 0) return BadRequest("Can't remove order with this id. ");
 

@@ -16,7 +16,7 @@ public class ItemTypeServices
         if (itemType is null || itemType.Name == "") return false;
         List<ItemType> itemTypes = await GetItemTypes();
         ItemType doubleItemType = itemTypes.FirstOrDefault(i => i.Name == itemType.Name)!;
-        if (doubleItemType is null) return false;
+        if (doubleItemType is not null) return false;
         return await _itemTypeAccess.Add(itemType);
     }
 

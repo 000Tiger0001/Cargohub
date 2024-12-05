@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 public abstract class BaseAccess<T> where T : class, IHasId
 {
     protected readonly DbContext _context;
-    private DbSet<T> DB;
+    protected DbSet<T> DB;
 
     public BaseAccess(DbContext context)
     {
@@ -11,12 +11,12 @@ public abstract class BaseAccess<T> where T : class, IHasId
         DB = _context.Set<T>();
     }
 
-    public async Task<List<T>> GetAll()
+    public virtual async Task<List<T>> GetAll()
     {
         return await DB.AsNoTracking().ToListAsync();
     }
 
-    public async Task<T?> GetById(int id)
+    public virtual async Task<T?> GetById(int id)
     {
         return await DB.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id)!;
     }
@@ -24,7 +24,6 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
     public async Task<bool> AddMany(List<T> data)
     {
-        // data = data.OrderBy(e => e.Id).ToList();
         foreach (var entity in data)
         {
             if (entity == null) continue;
@@ -65,7 +64,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
         return changes > 0;
     }
 
-    public async Task<bool> Update(T entity)
+    public virtual async Task<bool> Update(T entity)
     {
         if (entity == null) return false;
 
@@ -99,7 +98,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
         return false;
     }
 
-    private void DetachEntity(T entity)
+    public void DetachEntity(T entity)
     {
         if (_context.Entry(entity).State == EntityState.Detached)
             return;
@@ -107,7 +106,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
         _context.Entry(entity).State = EntityState.Detached;
     }
 
-    private void ClearChangeTracker()
+    public void ClearChangeTracker()
     {
         foreach (var entry in _context.ChangeTracker.Entries())
         {

@@ -86,4 +86,28 @@ public class Shipment : IHasId
         TotalPackageWeight = totalPackageWeight;
         Items = items;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Shipment shipment)
+        {
+            // Sort the items lists before comparing them
+            var sortedItems = Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
+            var sortedShipmentItems = shipment.Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
+
+            bool itemsAreTheSame = sortedItems != null && sortedShipmentItems != null &&
+                       sortedItems.Count == sortedShipmentItems.Count &&
+                       sortedItems.SequenceEqual(sortedShipmentItems);
+
+            return shipment.Id == Id && shipment.OrderId == OrderId && shipment.SourceId == SourceId
+            && shipment.OrderDate == OrderDate && shipment.RequestDate == RequestDate && shipment.ShipmentDate == ShipmentDate
+            && shipment.ShipmentType == ShipmentType && shipment.ShipmentStatus == ShipmentStatus && shipment.Notes == Notes
+            && shipment.CarrierCode == CarrierCode && shipment.CarrierDescription == CarrierDescription && shipment.ServiceCode == ServiceCode
+            && shipment.PaymentType == PaymentType && shipment.TransferMode == TransferMode && shipment.TotalPackageCount == TotalPackageCount
+            && shipment.TotalPackageWeight == TotalPackageWeight && itemsAreTheSame;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }

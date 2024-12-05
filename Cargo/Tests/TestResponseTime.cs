@@ -26,7 +26,6 @@
 //         _httpClient = new HttpClient();
 //     }
 
-//     [Theory]
 //     [InlineData(5, 20)] // 1 second = 1000 ms, n requests per endpoint
 //     public async Task ApiResponseTime_ShouldBeWithinLimit(int maxResponseTimeSeconds, int requestCount)
 //     {
@@ -36,8 +35,6 @@
 //             "http://localhost:3000/Cargohub/clients",
 //             "http://localhost:3000/Cargohub/get-orders",
 //             "http://localhost:3000/Cargohub/locations",
-//             "http://localhost:3000/Cargohub/get-shipments",
-//             "http://localhost:3000/Cargohub/get-shipment?shipmentId=1"
 //         };
 
 //         // Track total response time across all requests
