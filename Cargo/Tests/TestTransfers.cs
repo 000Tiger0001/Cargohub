@@ -111,4 +111,46 @@ public class TransferTests
         Assert.True(IsRemoved);
         Assert.Empty(await _service.GetTransfers());
     }
+
+    [Fact]
+    public async Task AddTransferWithDuplicateId()
+    {
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Completed", [new(7435, 23)]);
+
+        bool IsAdded1 = await _service.AddTransfer(mockTransfer1);
+
+        Assert.True(IsAdded1);
+        Assert.Equal([mockTransfer1], await _service.GetTransfers());
+
+        bool IsAdded2 = await _service.AddTransfer(mockTransfer2);
+
+        Assert.False(IsAdded2);
+        Assert.Equal([mockTransfer1], await _service.GetTransfers());
+
+        bool IsRemoved = await _service.RemoveTransfer(2);
+
+        Assert.True(IsRemoved);
+        Assert.Empty(await _service.GetTransfers());
+    }
+
+    [Fact]
+    public async Task UpdateTransfer()
+    {
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Completed", [new(7435, 23)]);
+
+        bool IsAdded = await _service.AddTransfer(mockTransfer1);
+
+        Assert.True(IsAdded);
+        Assert.Equal([mockTransfer1], await _service.GetTransfers());
+
+        bool IsUpdated = await _service.UpdateTransfer(mockTransfer2);
+
+        Assert.True(IsUpdated);
+        Assert.Equal([mockTransfer2], await _service.GetTransfers());
+        Assert.NotEqual([mockTransfer1], await _service.GetTransfers());
+
+        await _service.RemoveTransfer(2);
+    }
 }
