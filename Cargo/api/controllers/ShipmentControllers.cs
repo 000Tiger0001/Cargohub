@@ -23,7 +23,7 @@ public class ShipmentControllers : Controller
         return Ok(shipment);
     }
 
-    [HttpGet("shipments/{shipmentId}/items")]
+    [HttpGet("shipment/{shipmentId}/items")]
     public async Task<IActionResult> GetItemsInShipment(int shipmentId)
     {
         if (shipmentId == 0) return BadRequest("Not enough info given. ");

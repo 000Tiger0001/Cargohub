@@ -1,12 +1,8 @@
-// using System;
-// using System.Collections.Generic;
 // using System.Diagnostics;
-// using System.Net.Http;
-// using System.Threading.Tasks;
 // using Microsoft.EntityFrameworkCore;
 // using Xunit;
-
-// // dotnet test --logger:"console;verbosity=detailed"
+// // make sure the server is running
+// // Run the tests using: dotnet test --logger:"console;verbosity=detailed"
 // public class ResponseTimeTests
 // {
 //     private readonly ApplicationDbContext _dbContext;
@@ -14,7 +10,7 @@
 
 //     public ResponseTimeTests()
 //     {
-//         // Use an in-memory SQLite database for testing
+//         // Use an in-memory SQLite database
 //         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
 //                         .UseSqlite("Data Source=cargohub.db")
 //                         .Options;
@@ -22,47 +18,90 @@
 //         _dbContext = new ApplicationDbContext(options);
 //         _dbContext.Database.EnsureCreated();
 
-//         // Initialize HttpClient for making API requests
+//         // Initialize a single HttpClient instance
 //         _httpClient = new HttpClient();
 //     }
 
-//     [InlineData(5, 20)] // 1 second = 1000 ms, n requests per endpoint
-//     public async Task ApiResponseTime_ShouldBeWithinLimit(int maxResponseTimeSeconds, int requestCount)
+//     [Theory]
+//     [InlineData(5)] // requestCount
+//     public async Task ApiResponseTime(int requestCount)
 //     {
 //         // List of endpoints to test
 //         var endpoints = new List<string>
 //         {
 //             "http://localhost:3000/Cargohub/clients",
-//             "http://localhost:3000/Cargohub/get-orders",
+//             "http://localhost:3000/Cargohub/client/1",
+
+//             "http://localhost:3000/Cargohub/inventories",
+//             "http://localhost:3000/Cargohub/inventory/1",
+//             "http://localhost:3000/Cargohub/inventories/item/1",
+//             "http://localhost:3000/Cargohub/inventories/item/1/totals",
+
+//             "http://localhost:3000/Cargohub/items",
+//             "http://localhost:3000/Cargohub/item/1",
+
+//             "http://localhost:3000/Cargohub/item-types",
+//             "http://localhost:3000/Cargohub/item-type/1",
+//             "http://localhost:3000/Cargohub/item-type/1/items",
+
+//             "http://localhost:3000/Cargohub/item-lines",
+//             "http://localhost:3000/Cargohub/item-line/1",
+//             "http://localhost:3000/Cargohub/item-line/1/items",
+
+//             "http://localhost:3000/Cargohub/item-groups",
+//             "http://localhost:3000/Cargohub/item-group/1",
+//             "http://localhost:3000/Cargohub/item-group/1/items",
+
 //             "http://localhost:3000/Cargohub/locations",
+//             "http://localhost:3000/Cargohub/location/1",
+
+//             "http://localhost:3000/Cargohub/orders",
+//             "http://localhost:3000/Cargohub/order/1",
+//             "http://localhost:3000/Cargohub/order/1/items",
+//             "http://localhost:3000/Cargohub/client/1/orders",
+//             "http://localhost:3000/Cargohub/shipment/1/orders",
+
+//             "http://localhost:3000/Cargohub/locations",
+//             "http://localhost:3000/Cargohub/location/1",
+
+//             "http://localhost:3000/Cargohub/shipments",
+//             "http://localhost:3000/Cargohub/shipment/1",
+//             "http://localhost:3000/Cargohub/shipment/1/items",
+
+//             "http://localhost:3000/Cargohub/suppliers",
+//             "http://localhost:3000/Cargohub/supplier/1",
+
+//             "http://localhost:3000/Cargohub/transfers",
+//             "http://localhost:3000/Cargohub/transfer/1",
+//             "http://localhost:3000/Cargohub/transfer/1/items",
+
+//             "http://localhost:3000/Cargohub/warehouse/1/locations",
+
+//             "http://localhost:3000/Cargohub/warehouses",
+//             "http://localhost:3000/Cargohub/warehouse/1",
 //         };
 
 //         // Track total response time across all requests
-//         double totalResponseTimeSeconds = 0;
+//         double totalResponseTimeSeconds;
 //         var tasks = new List<Task<double>>(); // Each task will return its response time
 
-//         // Loop through each endpoint separately
+//         // Loop through each endpoint and create tasks for concurrent requests
 //         foreach (var url in endpoints)
 //         {
 //             Console.WriteLine($"Testing endpoint: {url}");
 
-//             var clientForEndpoint = new HttpClient { BaseAddress = new Uri(url) };
-
 //             for (int i = 1; i <= requestCount; i++)
 //             {
-//                 tasks.Add(SendRequestAsync(clientForEndpoint, url, i));
+//                 tasks.Add(SendRequestAsync(_httpClient, url, i));
 //             }
 //         }
 
+//         // Wait for all requests to complete
 //         var responseTimes = await Task.WhenAll(tasks);
 //         totalResponseTimeSeconds = responseTimes.Sum();
 
 //         double averageResponseTimeSeconds = totalResponseTimeSeconds / (endpoints.Count * requestCount);
 //         Console.WriteLine($"Average response time: {averageResponseTimeSeconds:F4} seconds");
-
-//         // Ensure that the average response time is within the allowed limit
-//         Assert.True(averageResponseTimeSeconds <= maxResponseTimeSeconds,
-//             $"Average response time {averageResponseTimeSeconds:F4} seconds exceeds the limit of {maxResponseTimeSeconds} seconds.");
 //     }
 
 //     private async Task<double> SendRequestAsync(HttpClient client, string url, int requestNumber)
@@ -71,7 +110,7 @@
 //         try
 //         {
 //             // Send GET request to the specified URL
-//             var response = await client.GetAsync("");
+//             var response = await client.GetAsync(url);
 //             stopwatch.Stop();
 
 //             // Convert milliseconds to seconds
@@ -85,6 +124,7 @@
 //         }
 //         catch (HttpRequestException ex)
 //         {
+//             stopwatch.Stop();
 //             Console.WriteLine($"Request {requestNumber} to {url} failed: {ex.Message}");
 //             throw;
 //         }
