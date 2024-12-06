@@ -90,40 +90,43 @@ public class IntegrationTests
     [Fact]
     public async Task ItemGroupDelete()
     {
-        //Arrange
         ItemGroup testItemGroup = new(1, "Furniture", "");
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
         //Add the mock locations to the in-memory database
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([testItem], await _serviceItems.GetItems());
+
         bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(1);
 
-        //Act
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
         Item? result = await _serviceItems.GetItem(1);
         int? id = result!.ItemGroupId;
 
-        //Assert
-        Assert.True(IsItemGroupAdded);
-        Assert.True(IsItemAdded);
-        Assert.True(IsItemGroupRemoved);
         Assert.Equal(0, id);
+        Assert.NotEqual(testItem, result);
     }
 
     [Fact]
     public async Task ItemLineDelete()
     {
-        //Arrange
         ItemLine testItemLine = new(1, "Home Appliances", "");
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
         //Add the mock locations to the in-memory database
         bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
         bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(1);
-        //Act
         Item? result = await _serviceItems.GetItem(1);
         int? id = result!.ItemLineId;
 
-        //Assert
         Assert.True(IsItemLineAdded);
         Assert.True(IsItemAdded);
         Assert.True(IsItemLineRemoved);
@@ -133,18 +136,14 @@ public class IntegrationTests
     [Fact]
     public async Task ItemTypeDelete()
     {
-        //Arrange
         ItemType testItemType = new(1, "Desktop", "");
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
-        //Add the mock locations to the in-memory database
         bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
         bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(1);
-        //Act
         Item? result = await _serviceItems.GetItem(1);
         var id = result!.ItemTypeId;
 
-        //Assert
         Assert.True(IsItemTypeAdded);
         Assert.True(IsItemAdded);
         Assert.True(IsItemTypeRemoved);
