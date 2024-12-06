@@ -8,8 +8,10 @@ using System.Data.Common;
 public class IntegrationTests
 {
     private readonly ApplicationDbContext _dbContext;
+
     private readonly ItemGroupAccess _itemGroupAccess;
     private readonly ItemGroupServices _serviceItemGroup;
+
     private readonly ItemAccess _itemAccess;
     private readonly ItemServices _serviceItems;
 
@@ -60,69 +62,72 @@ public class IntegrationTests
 
         // Initialize the controller with LocationAccess
 
-        _itemLineAccess = new ItemLineAccess(_dbContext);
+        _itemLineAccess = new(_dbContext);
         _serviceItemLine = new(_itemLineAccess);
 
-        _itemTypeAccess = new ItemTypeAccess(_dbContext);
+        _itemTypeAccess = new(_dbContext);
         _serviceItemType = new(_itemTypeAccess);
 
-        _orderAccess = new OrderAccess(_dbContext);
+        _orderAccess = new(_dbContext);
         _serviceOrder = new(_orderAccess);
 
-        _shipmentAccess = new ShipmentAccess(_dbContext);
+        _shipmentAccess = new(_dbContext);
         _serviceShipment = new(_shipmentAccess);
 
-        _transferAccess = new TransferAccess(_dbContext);
+        _transferAccess = new(_dbContext);
         _serviceTransfer = new(_transferAccess);
 
-        _warehouseAccess = new WarehouseAccess(_dbContext);
+        _warehouseAccess = new(_dbContext);
         _serviceWarehouse = new(_warehouseAccess);
 
-        _locationAccess = new LocationAccess(_dbContext);
+        _locationAccess = new(_dbContext);
         _serviceLocation = new(_locationAccess);
 
-        _locationAccess = new LocationAccess(_dbContext);
-        _serviceLocation = new(_locationAccess);
+        _supplierAccess = new(_dbContext);
+        _serviceSupplier = new(_supplierAccess);
     }
 
     [Fact]
     public async Task ItemGroupDelete()
     {
         //Arrange
-        var testItemGroup = new ItemGroup { Id = 1 };
-        var testItem = new Item { Id = 1, ItemGroupId = 1 };
+        ItemGroup testItemGroup = new(1, "Furniture", "");
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
         //Add the mock locations to the in-memory database
-        await _dbContext.ItemGroups.AddAsync(testItemGroup);
-        await _dbContext.Items.AddAsync(testItem);
-        await _dbContext.SaveChangesAsync();
-        await _serviceItemGroup.RemoveItemGroup(1);
-        await _dbContext.SaveChangesAsync();
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(1);
+
         //Act
-        Item result = await _serviceItems.GetItem(1);
-        var id = result.ItemGroupId;
+        Item? result = await _serviceItems.GetItem(1);
+        int? id = result!.ItemGroupId;
 
         //Assert
-        Assert.Null(id);
+        Assert.True(IsItemGroupAdded);
+        Assert.True(IsItemAdded);
+        Assert.True(IsItemGroupRemoved);
+        Assert.Equal(0, id);
     }
 
     [Fact]
     public async Task ItemLineDelete()
     {
         //Arrange
-        var testItemLine = new ItemLine { Id = 1 };
-        var testItem = new Item { Id = 1, ItemLineId = 1 };
+        ItemLine testItemLine = new(1, "Home Appliances", "");
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
         //Add the mock locations to the in-memory database
-        await _dbContext.ItemLines.AddAsync(testItemLine);
-        await _dbContext.Items.AddAsync(testItem);
-        await _dbContext.SaveChangesAsync();
-        await _serviceItemLine.RemoveItemLine(1);
-        await _dbContext.SaveChangesAsync();
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(1);
         //Act
-        Item result = await _serviceItems.GetItem(1);
-        var id = result.ItemLineId;
+        Item? result = await _serviceItems.GetItem(1);
+        int? id = result!.ItemLineId;
 
         //Assert
-        Assert.Null(id);
+        Assert.True(IsItemLineAdded);
+        Assert.True(IsItemAdded);
+        Assert.True(IsItemLineRemoved);
+        Assert.Equal(0, id);
     }
 
     [Fact]
@@ -190,7 +195,7 @@ public class IntegrationTests
         await _dbContext.Locations.AddAsync(testLocation);
         _serviceWarehouse.RemoveWarehouse(1);
         Location location = await _serviceLocation.GetLocation(1);
-        Assert.Null(location.WarehouseId);
+        Assert.Equal(0, location.WarehouseId);
     }
 
     [Fact]
@@ -296,7 +301,7 @@ public class IntegrationTests
     public async Task AddTransferWithoutItem()
     {
         TransferItemMovement testTransferItemMovement = new TransferItemMovement(1, 3);
-        Transfer testTransfer = new Transfer { Id = 1, Items = { testTransferItemMovement } };
+        Transfer testTransfer = new Transfer { Id = 1, Items = [testTransferItemMovement] };
         await _serviceTransfer.AddTransfer(testTransfer);
         Assert.Null(await _serviceTransfer.GetTransfer(1));
     }
