@@ -157,8 +157,8 @@ public class IntegrationTests
         var testOrderItemMovement = new OrderItemMovement(1, 1);
         var testOrder = new Order { Id = 1 };
         var testItem = new Item { Id = 1 };
-        await _dbContext.Orders.AddAsync(testOrder);
-        await _dbContext.Items.AddAsync(testItem);
+        await _serviceOrder.AddOrder(testOrder);
+        await _serviceItems.AddItem(testItem);
         await _serviceItems.RemoveItem(1);
         Assert.NotNull(_serviceItems.GetItem(1));
     }
@@ -169,8 +169,8 @@ public class IntegrationTests
         var testShipmentItemMovement = new ShipmentItemMovement(1, 1);
         var testShipment = new Shipment { Id = 1 };
         var testItem = new Item { Id = 1 };
-        await _dbContext.Shipments.AddAsync(testShipment);
-        await _dbContext.Items.AddAsync(testItem);
+        await _serviceShipment.AddShipment(testShipment);
+        await _serviceItems.AddItem(testItem);
         await _serviceItems.RemoveItem(1);
         Assert.NotNull(_serviceItems.GetItem(1));
     }
@@ -181,8 +181,8 @@ public class IntegrationTests
         var testTransferItemMovement = new TransferItemMovement(1, 1);
         var testTransfer = new Transfer { Id = 1 };
         var testItem = new Item { Id = 1 };
-        await _dbContext.Transfers.AddAsync(testTransfer);
-        await _dbContext.Items.AddAsync(testItem);
+        await _serviceTransfer.AddTransfer(testTransfer);
+        await _serviceItems.AddItem(testItem);
         await _serviceItems.RemoveItem(1);
         Assert.NotNull(_serviceItems.GetItem(1));
     }
@@ -192,11 +192,11 @@ public class IntegrationTests
     {
         var testWarehouse = new Warehouse { Id = 1 };
         var testLocation = new Location { WarehouseId = 1 };
-        await _dbContext.Warehouses.AddAsync(testWarehouse);
-        await _dbContext.Locations.AddAsync(testLocation);
-        _serviceWarehouse.RemoveWarehouse(1);
-        Location location = await _serviceLocation.GetLocation(1);
-        Assert.Equal(0, location.WarehouseId);
+        await _serviceWarehouse.AddWarehouse(testWarehouse);
+        await _serviceLocation.AddLocation(testLocation);
+        await _serviceWarehouse.RemoveWarehouse(1);
+        Location? location = await _serviceLocation.GetLocation(1);
+        Assert.Equal(0, location!.WarehouseId);
     }
 
     [Fact]
@@ -204,11 +204,11 @@ public class IntegrationTests
     {
         var testWarehouse = new Warehouse { Id = 1 };
         var testOrder = new Order { WarehouseId = 1 };
-        await _dbContext.Warehouses.AddAsync(testWarehouse);
-        await _dbContext.Orders.AddAsync(testOrder);
-        _serviceWarehouse.RemoveWarehouse(1);
-        Order order = await _serviceOrder.GetOrder(1);
-        Assert.Null(order.WarehouseId);
+        await _serviceWarehouse.AddWarehouse(testWarehouse);
+        await _serviceOrder.AddOrder(testOrder);
+        await _serviceWarehouse.RemoveWarehouse(1);
+        Order? order = await _serviceOrder.GetOrder(1);
+        Assert.Equal(0, order!.WarehouseId);
     }
 
     [Fact]
@@ -267,9 +267,9 @@ public class IntegrationTests
         await _serviceSupplier.AddSupplier(testSupplier);
         await _serviceItems.AddItem(testItem);
         await _serviceSupplier.RemoveSupplier(1);
-        Item result = await _serviceItems.GetItem(1);
-        Assert.Null(result.Code);
-        Assert.Null(result.SupplierId);
+        Item? result = await _serviceItems.GetItem(1);
+        Assert.Null(result!.Code);
+        Assert.Equal(0, result.SupplierId);
     }
 
     [Fact]
@@ -284,7 +284,7 @@ public class IntegrationTests
     public async Task AddShipmentWithoutItem()
     {
         ShipmentItemMovement testShipmentItemMovement = new ShipmentItemMovement(1, 3);
-        Shipment testShipment = new Shipment { Id = 1, Items = { testShipmentItemMovement } };
+        Shipment testShipment = new Shipment { Id = 1, Items = [testShipmentItemMovement] };
         await _serviceShipment.AddShipment(testShipment);
         Assert.Null(await _serviceShipment.GetShipment(1));
     }
@@ -293,7 +293,7 @@ public class IntegrationTests
     public async Task AddOrderWithoutItem()
     {
         OrderItemMovement testOrderItemMovement = new OrderItemMovement(1, 3);
-        Order testOrder = new Order { Id = 1, Items = { testOrderItemMovement } };
+        Order testOrder = new Order { Id = 1, Items = [testOrderItemMovement] };
         await _serviceOrder.AddOrder(testOrder);
         Assert.Null(await _serviceOrder.GetOrder(1));
     }
