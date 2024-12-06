@@ -114,7 +114,7 @@ public class IntegrationTests
     {
         //Arrange
         ItemLine testItemLine = new(1, "Home Appliances", "");
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
         //Add the mock locations to the in-memory database
         bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
@@ -134,20 +134,21 @@ public class IntegrationTests
     public async Task ItemTypeDelete()
     {
         //Arrange
-        var testItemType = new ItemType { Id = 1 };
-        var testItem = new Item { Id = 1, ItemTypeId = 1 };
+        ItemType testItemType = new(1, "Desktop", "");
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
         //Add the mock locations to the in-memory database
-        await _dbContext.ItemTypes.AddAsync(testItemType);
-        await _dbContext.Items.AddAsync(testItem);
-        await _dbContext.SaveChangesAsync();
-        await _serviceItemType.RemoveItemType(1);
-        await _dbContext.SaveChangesAsync();
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(1);
         //Act
-        Item result = await _serviceItems.GetItem(1);
-        var id = result.ItemTypeId;
+        Item? result = await _serviceItems.GetItem(1);
+        var id = result!.ItemTypeId;
 
         //Assert
-        Assert.Null(id);
+        Assert.True(IsItemTypeAdded);
+        Assert.True(IsItemAdded);
+        Assert.True(IsItemTypeRemoved);
+        Assert.Equal(0, id);
     }
 
     [Fact]
