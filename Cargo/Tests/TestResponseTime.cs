@@ -10,7 +10,7 @@ public class ResponseTimeTests
 
     public ResponseTimeTests()
     {
-        // Use an in-memory SQLite database for testing
+        // Use an in-memory SQLite database
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseSqlite("Data Source=cargohub.db")
                         .Options;
@@ -18,7 +18,7 @@ public class ResponseTimeTests
         _dbContext = new ApplicationDbContext(options);
         _dbContext.Database.EnsureCreated();
 
-        // Initialize a single HttpClient instance for testing
+        // Initialize a single HttpClient instance
         _httpClient = new HttpClient();
     }
 
@@ -31,10 +31,54 @@ public class ResponseTimeTests
         {
             "http://localhost:3000/Cargohub/clients",
             "http://localhost:3000/Cargohub/client/1",
-            "http://localhost:3000/Cargohub/orders",
-            "http://localhost:3000/Cargohub/order/1",
+
+            "http://localhost:3000/Cargohub/inventories",
+            "http://localhost:3000/Cargohub/inventory/1",
+            "http://localhost:3000/Cargohub/inventories/item/1",
+            "http://localhost:3000/Cargohub/inventories/item/1/totals",
+
+            "http://localhost:3000/Cargohub/items",
+            "http://localhost:3000/Cargohub/item/1",
+
+            "http://localhost:3000/Cargohub/item-types",
+            "http://localhost:3000/Cargohub/item-type/1",
+            "http://localhost:3000/Cargohub/item-type/1/items",
+
+            "http://localhost:3000/Cargohub/item-lines",
+            "http://localhost:3000/Cargohub/item-line/1",
+            "http://localhost:3000/Cargohub/item-line/1/items",
+
+            "http://localhost:3000/Cargohub/item-groups",
+            "http://localhost:3000/Cargohub/item-group/1",
+            "http://localhost:3000/Cargohub/item-group/1/items",
+
             "http://localhost:3000/Cargohub/locations",
             "http://localhost:3000/Cargohub/location/1",
+
+            "http://localhost:3000/Cargohub/orders",
+            "http://localhost:3000/Cargohub/order/1",
+            "http://localhost:3000/Cargohub/order/1/items",
+            "http://localhost:3000/Cargohub/client/1/orders",
+            "http://localhost:3000/Cargohub/shipment/1/orders",
+
+            "http://localhost:3000/Cargohub/locations",
+            "http://localhost:3000/Cargohub/location/1",
+
+            "http://localhost:3000/Cargohub/shipments",
+            "http://localhost:3000/Cargohub/shipment/1",
+            "http://localhost:3000/Cargohub/shipment/1/items",
+
+            "http://localhost:3000/Cargohub/suppliers",
+            "http://localhost:3000/Cargohub/supplier/1",
+
+            "http://localhost:3000/Cargohub/transfers",
+            "http://localhost:3000/Cargohub/transfer/1",
+            "http://localhost:3000/Cargohub/transfer/1/items",
+
+            "http://localhost:3000/Cargohub/warehouse/1/locations",
+
+            "http://localhost:3000/Cargohub/warehouses",
+            "http://localhost:3000/Cargohub/warehouse/1",
         };
 
         // Track total response time across all requests
