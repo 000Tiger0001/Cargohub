@@ -155,24 +155,30 @@ public class IntegrationTests
     public async Task ItemDeleteOrder()
     {
         var testOrderItemMovement = new OrderItemMovement(1, 1);
-        var testOrder = new Order { Id = 1 };
-        var testItem = new Item { Id = 1 };
+        Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [testOrderItemMovement]);
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
         await _serviceOrder.AddOrder(testOrder);
         await _serviceItems.AddItem(testItem);
         await _serviceItems.RemoveItem(1);
         Assert.NotNull(_serviceItems.GetItem(1));
+        
     }
 
     [Fact]
     public async Task ItemDeleteShipment()
     {
-        var testShipmentItemMovement = new ShipmentItemMovement(1, 1);
-        var testShipment = new Shipment { Id = 1 };
-        var testItem = new Item { Id = 1 };
-        await _serviceShipment.AddShipment(testShipment);
-        await _serviceItems.AddItem(testItem);
-        await _serviceItems.RemoveItem(1);
-        Assert.NotNull(_serviceItems.GetItem(1));
+        ShipmentItemMovement testShipmentItemMovement = new(1, 1);
+        Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, [testShipmentItemMovement]);
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
+        bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+        bool IsItemRemoved = await _serviceItems.RemoveItem(1);
+        Shipment? dbShipment = await _serviceShipment.GetShipment(1)!;
+        Assert.True(IsShipmentAdded);
+        Assert.True(IsItemAdded);
+        Assert.True(IsItemRemoved);
+        Assert.Null(await _serviceItems.GetItem(1));
+        Assert.Empty(dbShipment!.Items!);
     }
 
     [Fact]
