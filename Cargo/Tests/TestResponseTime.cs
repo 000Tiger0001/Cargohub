@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
-
+// make sure the server is running
 // Run the tests using: dotnet test --logger:"console;verbosity=detailed"
 public class ResponseTimeTests
 {
