@@ -147,17 +147,28 @@ public class IntegrationTests
     public async Task ItemTypeDelete()
     {
         ItemType testItemType = new(1, "Desktop", "");
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
+        //Add the mock locations to the in-memory database
         bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([testItem], await _serviceItems.GetItems());
+
         bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(1);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
+
         Item? result = await _serviceItems.GetItem(1);
         var id = result!.ItemTypeId;
 
-        Assert.True(IsItemTypeAdded);
-        Assert.True(IsItemAdded);
-        Assert.True(IsItemTypeRemoved);
         Assert.Equal(0, id);
+        Assert.NotEqual(testItem, result);
     }
 
     [Fact]
