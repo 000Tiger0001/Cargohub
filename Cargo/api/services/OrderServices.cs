@@ -15,7 +15,7 @@ public class OrderServices
     public async Task<List<OrderItemMovement>?> GetItemsInOrder(int orderId)
     {
         Order? order = await GetOrder(orderId);
-        if (order is null) return null;
+        if (order is null || order.Items is null) return [];
         return order.Items;
     }
 

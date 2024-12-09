@@ -174,14 +174,28 @@ public class IntegrationTests
     [Fact]
     public async Task ItemDeleteOrder()
     {
-        var testOrderItemMovement = new OrderItemMovement(1, 1);
+        OrderItemMovement testOrderItemMovement = new(1, 1);
         Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [testOrderItemMovement]);
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
-        await _serviceOrder.AddOrder(testOrder);
-        await _serviceItems.AddItem(testItem);
-        await _serviceItems.RemoveItem(1);
-        Assert.NotNull(_serviceItems.GetItem(1));
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
+        //Add the mock locations to the in-memory database
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
 
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
+
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([testItem], await _serviceItems.GetItems());
+
+        bool IsItemRemoved = await _serviceItems.RemoveItem(1);
+
+        Assert.True(IsItemRemoved);
+        Assert.Empty(await _serviceItems.GetItems());
+        Assert.Null(await _serviceItems.GetItem(1));
+
+        Assert.Empty(testOrder.Items!);
+        Assert.Null(await _serviceOrder.GetItemsInOrder(1));
     }
 
     [Fact]
