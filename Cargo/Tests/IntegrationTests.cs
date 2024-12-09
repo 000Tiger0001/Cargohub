@@ -122,15 +122,25 @@ public class IntegrationTests
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
         //Add the mock locations to the in-memory database
         bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([testItem], await _serviceItems.GetItems());
+
         bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(1);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
         Item? result = await _serviceItems.GetItem(1);
         int? id = result!.ItemLineId;
 
-        Assert.True(IsItemLineAdded);
-        Assert.True(IsItemAdded);
-        Assert.True(IsItemLineRemoved);
         Assert.Equal(0, id);
+        Assert.NotEqual(testItem, result);
     }
 
     [Fact]
@@ -160,7 +170,7 @@ public class IntegrationTests
         await _serviceItems.AddItem(testItem);
         await _serviceItems.RemoveItem(1);
         Assert.NotNull(_serviceItems.GetItem(1));
-        
+
     }
 
     [Fact]
