@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 public class ShipmentItemMovementTests
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly OrderItemMovementAccess _orderItemMovementAccess;
+    private readonly TransferItemMovementAccess _transferItemMovementAccess;
     private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
     private readonly ShipmentItemMovementServices _service;
     private readonly ItemAccess _itemAccess;
@@ -15,10 +17,12 @@ public class ShipmentItemMovementTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
         _dbContext = new ApplicationDbContext(options);
+        _orderItemMovementAccess = new(_dbContext);
+        _transferItemMovementAccess = new(_dbContext);
         _shipmentItemMovementAccess = new ShipmentItemMovementAccess(_dbContext);
         _service = new(_shipmentItemMovementAccess);
         _itemAccess = new(_dbContext);
-        _serviceItems = new(_itemAccess);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
     }
     [Fact]
     public async Task GetShipmentItemMovements()

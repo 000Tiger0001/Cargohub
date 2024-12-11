@@ -61,9 +61,9 @@ public class ItemServices
 
     public async Task<bool> RemoveItem(int itemId)
     {
-        bool IsRemoved1 = await _shipmentItemMovementAccess.Remove(itemId);
-        bool IsRemoved2 = await _orderItemMovementAccess.Remove(itemId);
-        bool IsRemoved3 = await _transferItemMovementAccess.Remove(itemId);
+        await _shipmentItemMovementAccess.Remove(itemId);
+        await _orderItemMovementAccess.Remove(itemId);
+        await _transferItemMovementAccess.Remove(itemId);
         return await _itemAccess.Remove(itemId);
     }
 }
