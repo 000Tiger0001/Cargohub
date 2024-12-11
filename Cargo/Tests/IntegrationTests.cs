@@ -84,7 +84,7 @@ public class IntegrationTests
         _serviceLocation = new(_locationAccess);
 
         _warehouseAccess = new(_dbContext);
-        _serviceWarehouse = new(_warehouseAccess, _locationAccess);
+        _serviceWarehouse = new(_warehouseAccess, _locationAccess, _orderAccess);
 
         _supplierAccess = new(_dbContext);
         _serviceSupplier = new(_supplierAccess);
@@ -212,7 +212,8 @@ public class IntegrationTests
         Assert.Empty(await _serviceItems.GetItems());
         Assert.Null(await _serviceItems.GetItem(1));
 
-        Assert.Empty(testOrder.Items!);
+        Order? order = await _serviceOrder.GetOrder(1);
+        Assert.Empty(order!.Items!);
         Assert.Null(await _serviceOrder.GetItemsInOrder(1));
 
         bool IsOrderRemoved = await _serviceOrder.RemoveOrder(1);

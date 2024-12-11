@@ -7,6 +7,7 @@ public class LocationTests
     private readonly LocationAccess _locationAccess;
     private readonly LocationServices _locationService;
     private readonly WarehouseServices _warehouseService;
+    private readonly OrderAccess _orderAccess;
 
     public LocationTests()
     {
@@ -14,9 +15,10 @@ public class LocationTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
         _dbContext = new ApplicationDbContext(options);
+        _orderAccess = new(_dbContext);
         _locationAccess = new LocationAccess(_dbContext);
         _locationService = new(_locationAccess);
-        _warehouseService = new(new(_dbContext), _locationAccess);
+        _warehouseService = new(new(_dbContext), _locationAccess, _orderAccess);
     }
 
     [Fact]

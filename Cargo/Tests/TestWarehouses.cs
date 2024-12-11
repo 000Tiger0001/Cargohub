@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 public class WarehouseTests
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly OrderAccess _orderAccess;
     private readonly LocationAccess _locationAccess;
     private readonly WarehouseAccess _warehouseAccess;
     private readonly WarehouseServices _service;
@@ -18,11 +19,12 @@ public class WarehouseTests
         _dbContext = new(options);
 
         // Create a new instance of Access with the in-memory DbContext
+        _orderAccess = new(_dbContext);
         _warehouseAccess = new(_dbContext);
         _locationAccess = new(_dbContext);
 
         // Create new instance of Service
-        _service = new(_warehouseAccess, _locationAccess);
+        _service = new(_warehouseAccess, _locationAccess, _orderAccess);
     }
 
     [Fact]

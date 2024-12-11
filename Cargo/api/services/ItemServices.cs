@@ -61,9 +61,15 @@ public class ItemServices
 
     public async Task<bool> RemoveItem(int itemId)
     {
-        await _shipmentItemMovementAccess.Remove(itemId);
-        await _orderItemMovementAccess.Remove(itemId);
-        await _transferItemMovementAccess.Remove(itemId);
+        List<ShipmentItemMovement> shipmentItemMovement = await _shipmentItemMovementAccess.GetAll();
+        List<OrderItemMovement> orderItemMovements = await _orderItemMovementAccess.GetAll();
+        List<TransferItemMovement> transferItemMovements = await _transferItemMovementAccess.GetAll();
+        List<ShipmentItemMovement> shipmentItemMovementsToDelete = shipmentItemMovement.Where(s => s.ItemId == itemId).ToList();
+        List<OrderItemMovement> orderItemMovementsToDelete = orderItemMovements.Where(o => o.ItemId == itemId).ToList();
+        List<TransferItemMovement> transferItemMovementsToDelete = transferItemMovements.Where(t => t.ItemId == itemId).ToList();
+        foreach (ShipmentItemMovement shipmentItem in shipmentItemMovementsToDelete) await _shipmentItemMovementAccess.Remove(shipmentItem.Id);
+        foreach (OrderItemMovement orderItem in orderItemMovementsToDelete) await _orderItemMovementAccess.Remove(itemId);
+        foreach (TransferItemMovement transferItem in transferItemMovementsToDelete) await _transferItemMovementAccess.Remove(itemId);
         return await _itemAccess.Remove(itemId);
     }
 }

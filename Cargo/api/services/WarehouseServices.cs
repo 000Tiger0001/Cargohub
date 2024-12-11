@@ -2,11 +2,13 @@ public class WarehouseServices
 {
     private readonly WarehouseAccess _warehouseAccess;
     private readonly LocationAccess _locationAccess;
+    private readonly OrderAccess _orderAccess;
 
-    public WarehouseServices(WarehouseAccess warehouseAccess, LocationAccess locationAccess)
+    public WarehouseServices(WarehouseAccess warehouseAccess, LocationAccess locationAccess, OrderAccess orderAccess)
     {
         _warehouseAccess = warehouseAccess;
         _locationAccess = locationAccess;
+        _orderAccess = orderAccess;
     } 
     public async Task<List<Warehouse>> GetWarehouses() => await _warehouseAccess.GetAll();
 
@@ -30,8 +32,11 @@ public class WarehouseServices
     public async Task<bool> RemoveWarehouse(int warehouseId)
     {
         List<Location> locations = await _locationAccess.GetAll();
+        List<Order> orders = await _orderAccess.GetAll();
         locations.ForEach(l => { if (l.WarehouseId == warehouseId) l.WarehouseId = 0; });
+        orders.ForEach(o => { if (o.WarehouseId == warehouseId) o.WarehouseId = 0;});
         await _locationAccess.UpdateMany(locations);
+        await _orderAccess.UpdateMany(orders);
         return await _warehouseAccess.Remove(warehouseId);
     }
 }
