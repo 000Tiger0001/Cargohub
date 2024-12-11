@@ -333,8 +333,12 @@ public class IntegrationTests
     [Fact]
     public async Task AddItemWithoutItemType()
     {
-        var testItem = new Item { Id = 1, ItemTypeId = 1 };
-        await _serviceItems.AddItem(testItem);
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
+
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
+        Assert.False(IsItemAdded);
+        Assert.Empty(await _serviceItems.GetItems());
         Assert.Null(await _serviceItems.GetItem(1));
     }
 
