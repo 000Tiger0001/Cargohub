@@ -1,10 +1,12 @@
 public class ItemGroupServices
 {
     private ItemGroupAccess _itemGroupAccess;
+    private ItemAccess _itemAccess;
 
-    public ItemGroupServices(ItemGroupAccess itemGroupAccess)
+    public ItemGroupServices(ItemGroupAccess itemGroupAccess, ItemAccess itemAccess)
     {
         _itemGroupAccess = itemGroupAccess;
+        _itemAccess = itemAccess;
     }
 
     public async Task<List<ItemGroup>> GetItemGroups() => await _itemGroupAccess.GetAll();
@@ -27,5 +29,12 @@ public class ItemGroupServices
         return await _itemGroupAccess.Update(itemGroup);
     }
 
-    public async Task<bool> RemoveItemGroup(int itemGroupId) => await _itemGroupAccess.Remove(itemGroupId);
+    public async Task<bool> RemoveItemGroup(int itemGroupId)
+    {
+        List<Item> items = await _itemAccess.GetAll();
+        items.ForEach(i => { if (itemGroupId == i.ItemGroupId) i.ItemGroupId = 0; });
+        await _itemAccess.UpdateMany(items);
+        bool IsRemoved = await _itemGroupAccess.Remove(itemGroupId);
+        return IsRemoved;
+    }
 }

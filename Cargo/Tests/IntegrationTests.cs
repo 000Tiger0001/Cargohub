@@ -53,7 +53,7 @@ public class IntegrationTests
         _itemAccess = new ItemAccess(_dbContext);
 
         // Create new instance of locationService
-        _serviceItemGroup = new(_itemGroupAccess);
+        _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItems = new(_itemAccess);
 
         // Initialize the controller with LocationAccess

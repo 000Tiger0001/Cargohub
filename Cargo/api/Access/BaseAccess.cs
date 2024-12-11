@@ -43,6 +43,25 @@ public abstract class BaseAccess<T> where T : class, IHasId
         return changes > 0;
     }
 
+    public async Task<bool> UpdateMany(List<T> data)
+    {
+        foreach (T entity in data)
+        {
+            if (entity == null) continue;
+
+            DetachEntity(entity);
+            T? existingEntity = await GetById(entity.Id);
+
+            if (existingEntity == null) continue;
+
+            DB.Update(entity);
+        }
+
+        int changes = await _context.SaveChangesAsync();
+        ClearChangeTracker();
+        return changes > 0;
+    }
+
     //When you call await _context.SaveChangesAsync(), it returns an integer 
     //representing the number of rows affected by the changes you attempted to persist to the database.
 

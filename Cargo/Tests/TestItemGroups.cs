@@ -6,6 +6,7 @@ public class ItemGroupTests
     private readonly ApplicationDbContext _dbContext;
     private readonly ItemGroupAccess _itemGroupAccess;
     private readonly ItemGroupServices _service;
+    private readonly ItemAccess _itemAccess;
 
     public ItemGroupTests()
     {
@@ -13,8 +14,9 @@ public class ItemGroupTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
         _dbContext = new ApplicationDbContext(options);
+        _itemAccess = new ItemAccess(_dbContext);
         _itemGroupAccess = new ItemGroupAccess(_dbContext);
-        _service = new (_itemGroupAccess);
+        _service = new ItemGroupServices(_itemGroupAccess, _itemAccess);
     }
 
     [Fact]
