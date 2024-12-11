@@ -23,7 +23,7 @@ public class TransferItemMovementTests
     [Fact]
     public async Task GetTransferItemMovements()
     {
-        Item item = new() { Id = 1 };
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 
@@ -44,7 +44,7 @@ public class TransferItemMovementTests
     [Fact]
     public async Task GetTransferItemMovement()
     {
-        Item item = new() { Id = 1 };
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 
@@ -63,7 +63,7 @@ public class TransferItemMovementTests
     [Fact]
     public async Task AddTransferItemMovement()
     {
-        Item item = new() { Id = 1 };
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 
@@ -81,7 +81,7 @@ public class TransferItemMovementTests
     [Fact]
     public async Task AddDuplicateId()
     {
-        Item item = new() { Id = 1 };
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 
@@ -106,7 +106,7 @@ public class TransferItemMovementTests
     [Fact]
     public async Task RemoveTransferItemMovement()
     {
-        Item item = new() { Id = 1 };
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 
@@ -137,7 +137,7 @@ public class TransferItemMovementTests
     [Fact]
     public async Task UpdateTransferItemMovement()
     {
-        Item item = new() { Id = 1 };
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 
