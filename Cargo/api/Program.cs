@@ -73,4 +73,6 @@ Console.WriteLine($"Time taken by TransferJsonToDb: {minutes} minutes, {seconds}
 Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalMinutes:F2} minutes");
 Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalSeconds:F2} seconds");
 
+
+Console.WriteLine("Demo PR");
 app.Run();
