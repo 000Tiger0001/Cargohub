@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-
 public class OrderServices
 {
-    private OrderAccess _orderAccess;
+    private readonly OrderAccess _orderAccess;
 
     public OrderServices(OrderAccess orderAccess)
     {

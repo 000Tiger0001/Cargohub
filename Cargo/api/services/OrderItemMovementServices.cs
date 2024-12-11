@@ -1,6 +1,6 @@
 public class OrderItemMovementServices
 {
-    private OrderItemMovementAccess _access;
+    private readonly OrderItemMovementAccess _access;
 
     public OrderItemMovementServices(OrderItemMovementAccess orderItemMovementAccess)
     {

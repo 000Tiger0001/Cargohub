@@ -1,6 +1,6 @@
 public class InventoryServices
 {
-    private InventoryAccess _inventoryAccess;
+    private readonly InventoryAccess _inventoryAccess;
 
     public InventoryServices(InventoryAccess inventoryAccess)
     {

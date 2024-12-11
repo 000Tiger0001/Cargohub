@@ -1,10 +1,12 @@
 public class ItemLineServices
 {
-    private ItemLineAccess _itemLineAccess;
+    private readonly ItemLineAccess _itemLineAccess;
+    private readonly ItemAccess _itemAccess;
 
-    public ItemLineServices(ItemLineAccess itemLineAccess)
+    public ItemLineServices(ItemLineAccess itemLineAccess, ItemAccess itemAccess)
     {
         _itemLineAccess = itemLineAccess;
+        _itemAccess = itemAccess;
     }
     public async Task<List<ItemLine>> GetItemLines() => await _itemLineAccess.GetAll();
 

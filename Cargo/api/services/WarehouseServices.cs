@@ -1,6 +1,6 @@
 public class WarehouseServices
 {
-    WarehouseAccess _warehouseAccess;
+    private readonly WarehouseAccess _warehouseAccess;
 
     public WarehouseServices(WarehouseAccess warehouseAccess)
     {

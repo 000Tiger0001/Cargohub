@@ -1,7 +1,7 @@
 public class ItemGroupServices
 {
-    private ItemGroupAccess _itemGroupAccess;
-    private ItemAccess _itemAccess;
+    private readonly ItemGroupAccess _itemGroupAccess;
+    private readonly ItemAccess _itemAccess;
 
     public ItemGroupServices(ItemGroupAccess itemGroupAccess, ItemAccess itemAccess)
     {

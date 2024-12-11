@@ -1,6 +1,6 @@
 public class ItemTypeServices
 {
-    private ItemTypeAccess _itemTypeAccess;
+    private readonly ItemTypeAccess _itemTypeAccess;
 
     public ItemTypeServices(ItemTypeAccess itemTypeAccess)
     {

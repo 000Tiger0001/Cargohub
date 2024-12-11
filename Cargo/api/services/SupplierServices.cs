@@ -1,6 +1,6 @@
 public class SupplierServices
 {
-    private SupplierAccess _supplierAccess;
+    private readonly SupplierAccess _supplierAccess;
 
     public SupplierServices(SupplierAccess supplierAccess)
     {

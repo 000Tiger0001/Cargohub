@@ -1,6 +1,6 @@
 public class LocationServices
 {
-    private LocationAccess _locationAccess;
+    private readonly LocationAccess _locationAccess;
 
     public LocationServices(LocationAccess locationAcces)
     {

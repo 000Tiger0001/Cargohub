@@ -1,6 +1,6 @@
 public class ClientServices
 {
-    private ClientAccess _clientAccess;
+    private readonly ClientAccess _clientAccess;
 
     public ClientServices(ClientAccess clientAccess)
     {

@@ -1,6 +1,6 @@
 public class ShipmentItemMovementServices
 {
-    private ShipmentItemMovementAccess _access;
+    private readonly ShipmentItemMovementAccess _access;
 
     public ShipmentItemMovementServices(ShipmentItemMovementAccess shipmentItemMovementAccess)
     {

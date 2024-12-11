@@ -1,6 +1,6 @@
 public class TransferItemMovementServices
 {
-    private TransferItemMovementAccess _access;
+    private readonly TransferItemMovementAccess _access;
 
     public TransferItemMovementServices(TransferItemMovementAccess transferItemMovementAccess)
     {

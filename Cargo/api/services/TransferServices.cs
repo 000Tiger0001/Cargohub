@@ -1,6 +1,6 @@
 public class TransferServices
 {
-    private TransferAccess _transferAccess;
+    private readonly TransferAccess _transferAccess;
 
     public TransferServices(TransferAccess transferAccess)
     {
