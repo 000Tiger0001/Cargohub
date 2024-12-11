@@ -12,10 +12,10 @@ public class OrderServices
 
     public async Task<Order?> GetOrder(int orderId) => await _orderAccess.GetById(orderId)!;
 
-    public async Task<List<OrderItemMovement>?> GetItemsInOrder(int orderId)
+    public async Task<List<OrderItemMovement>> GetItemsInOrder(int orderId)
     {
         Order? order = await GetOrder(orderId);
-        if (order is null || order.Items is null) return [];
+        if (order is null || order.Items is null || order.Items.Count <= 0) return [];
         return order.Items;
     }
 
