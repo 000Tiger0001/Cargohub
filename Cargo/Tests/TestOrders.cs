@@ -227,8 +227,8 @@ public class OrderTests
     [Fact]
     public async Task GetOrdersForClient()
     {
-        Client mockClient1 = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
-        Client mockClient2 = new(2, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
+        Client mockClient1 = new(1, "testName1", "LOC1", "testCity1", "1234AB1", "testProvince1", "testCountry1", "testName1", "testPhone1", "testEmail1");
+        Client mockClient2 = new(2, "testName2", "LOC2", "testCity2", "1234AB2", "testProvince2", "testCountry2", "testName2", "testPhone2", "testEmail2");
 
         bool IsClientAdded1 = await _serviceClients.AddClient(mockClient1);
 

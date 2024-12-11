@@ -1,9 +1,5 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Data.Common;
 
 public class IntegrationTests
 {
