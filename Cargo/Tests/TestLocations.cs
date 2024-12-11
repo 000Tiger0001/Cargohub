@@ -16,7 +16,7 @@ public class LocationTests
         _dbContext = new ApplicationDbContext(options);
         _locationAccess = new LocationAccess(_dbContext);
         _locationService = new(_locationAccess);
-        _warehouseService = new(new(_dbContext));
+        _warehouseService = new(new(_dbContext), _locationAccess);
     }
 
     [Fact]

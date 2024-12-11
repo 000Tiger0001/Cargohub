@@ -5,6 +5,10 @@ public class IntegrationTests
 {
     private readonly ApplicationDbContext _dbContext;
 
+    private readonly OrderItemMovementAccess _orderItemMovementAccess;
+    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private readonly TransferItemMovementAccess _transferItemMovementAccess;
+
     private readonly ItemGroupAccess _itemGroupAccess;
     private readonly ItemGroupServices _serviceItemGroup;
 
@@ -52,12 +56,15 @@ public class IntegrationTests
 
         _itemAccess = new ItemAccess(_dbContext);
 
+        _orderItemMovementAccess = new(_dbContext);
+        _shipmentItemMovementAccess = new(_dbContext);
+        _transferItemMovementAccess = new(_dbContext);
+
         // Create new instance of locationService
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
-        _serviceItems = new(_itemAccess);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
 
         // Initialize the controller with LocationAccess
-
         _itemLineAccess = new(_dbContext);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
 
@@ -73,11 +80,11 @@ public class IntegrationTests
         _transferAccess = new(_dbContext);
         _serviceTransfer = new(_transferAccess);
 
-        _warehouseAccess = new(_dbContext);
-        _serviceWarehouse = new(_warehouseAccess);
-
         _locationAccess = new(_dbContext);
         _serviceLocation = new(_locationAccess);
+
+        _warehouseAccess = new(_dbContext);
+        _serviceWarehouse = new(_warehouseAccess, _locationAccess);
 
         _supplierAccess = new(_dbContext);
         _serviceSupplier = new(_supplierAccess);
