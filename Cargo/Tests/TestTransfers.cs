@@ -4,10 +4,13 @@ using Microsoft.EntityFrameworkCore;
 public class TransferTests
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly TransferItemMovementAccess _transferItemMovementAccess;
     private readonly TransferAccess _transferAccess;
     private readonly TransferServices _service;
     private readonly ItemAccess _itemAccess;
     private readonly ItemServices _serviceItems;
+    private readonly OrderItemMovementAccess _orderItemMovementAccess;
+    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
 
     public TransferTests()
     {
@@ -16,15 +19,18 @@ public class TransferTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
 
-        _dbContext = new ApplicationDbContext(options);
+        _dbContext = new(options);
 
         // Create a new instance of Access with the in-memory DbContext
-        _transferAccess = new TransferAccess(_dbContext);
+        _transferAccess = new(_dbContext);
+        _orderItemMovementAccess = new(_dbContext);
+        _transferItemMovementAccess = new(_dbContext);
+        _shipmentItemMovementAccess = new(_dbContext);
 
         // Create new instance of Service
         _service = new(_transferAccess);
         _itemAccess = new(_dbContext);
-        _serviceItems = new(_itemAccess);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
     }
 
     [Fact]

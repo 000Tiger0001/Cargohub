@@ -8,17 +8,23 @@ public class ShipmentTests
     private readonly ShipmentServices _service;
     private readonly ItemAccess _itemAccess;
     private readonly ItemServices _serviceItems;
+    private readonly TransferItemMovementAccess _transferItemMovementAccess;
+    private readonly OrderItemMovementAccess _orderItemMovementAccess;
+    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
 
     public ShipmentTests()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
-        _dbContext = new ApplicationDbContext(options);
-        _shipmentAccess = new ShipmentAccess(_dbContext);
+        _dbContext = new(options);
+        _shipmentAccess = new(_dbContext);
+        _orderItemMovementAccess = new(_dbContext);
+        _transferItemMovementAccess = new(_dbContext);
+        _shipmentItemMovementAccess = new(_dbContext);
         _service = new(_shipmentAccess);
         _itemAccess = new(_dbContext);
-        _serviceItems = new(_itemAccess);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
     }
 
     [Fact]
