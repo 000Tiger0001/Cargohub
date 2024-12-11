@@ -8,7 +8,7 @@ public class TransferItemMovement : ItemMovement
     [ForeignKey("TransferId")]
     public virtual Transfer? Transfer { get; set; }
 
-    public TransferItemMovement(int itemId, int amount) : base(itemId, amount) {}
+    public TransferItemMovement(int itemId, int amount) : base(itemId, amount) { }
 
     public override bool Equals(object? obj)
     {
