@@ -283,13 +283,27 @@ public class IntegrationTests
     [Fact]
     public async Task WarehouseDeleteOrder()
     {
-        var testWarehouse = new Warehouse { Id = 1 };
-        var testOrder = new Order { WarehouseId = 1 };
-        await _serviceWarehouse.AddWarehouse(testWarehouse);
-        await _serviceOrder.AddOrder(testOrder);
-        await _serviceWarehouse.RemoveWarehouse(1);
+        Warehouse testWarehouse = new(1, "YQZZNL56", "Heemskerk cargo hub", "Karlijndreef 281", "4002 AS", "Heemskerk", "Friesland", "NL", "Fem Keijzer", "(078) 0013363", "blamore@example.net");
+        Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 1, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, []);
+        
+        bool IsWarehouseAdded = await _serviceWarehouse.AddWarehouse(testWarehouse);
+
+        Assert.True(IsWarehouseAdded);
+        Assert.Equal([testWarehouse], await _serviceWarehouse.GetWarehouses());
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
+
+        bool IsWarehouseRemoved = await _serviceWarehouse.RemoveWarehouse(1);
+
+        Assert.True(IsWarehouseRemoved);
+        Assert.Empty(await _serviceWarehouse.GetWarehouses());
+
         Order? order = await _serviceOrder.GetOrder(1);
         Assert.Equal(0, order!.WarehouseId);
+        Assert.NotEqual(testOrder, order);
     }
 
     [Fact]
