@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 public class ItemTypeTests
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly ItemAccess _itemAccess;
     private readonly ItemTypeAccess _itemTypeAccess;
     private readonly ItemTypeServices _service;
 
@@ -13,8 +14,9 @@ public class ItemTypeTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
         _dbContext = new ApplicationDbContext(options);
+        _itemAccess = new(_dbContext);
         _itemTypeAccess = new ItemTypeAccess(_dbContext);
-        _service = new(_itemTypeAccess);
+        _service = new(_itemTypeAccess, _itemAccess);
     }
 
     [Fact]

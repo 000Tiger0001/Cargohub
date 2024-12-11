@@ -1,10 +1,12 @@
 public class ItemTypeServices
 {
     private readonly ItemTypeAccess _itemTypeAccess;
+    private readonly ItemAccess _itemAccess;
 
-    public ItemTypeServices(ItemTypeAccess itemTypeAccess)
+    public ItemTypeServices(ItemTypeAccess itemTypeAccess, ItemAccess itemAccess)
     {
         _itemTypeAccess = itemTypeAccess;
+        _itemAccess = itemAccess;
     }
 
     public async Task<List<ItemType>> GetItemTypes() => await _itemTypeAccess.GetAll();
@@ -27,5 +29,11 @@ public class ItemTypeServices
         return await _itemTypeAccess.Update(itemType);
     }
 
-    public async Task<bool> RemoveItemType(int itemTypeId) => await _itemTypeAccess.Remove(itemTypeId);
+    public async Task<bool> RemoveItemType(int itemTypeId)
+    {
+        List<Item> items = await _itemAccess.GetAll();
+        items.ForEach(i => { if (itemTypeId == i.ItemTypeId) i.ItemTypeId = 0; });
+        await _itemAccess.UpdateMany(items);
+        return await _itemTypeAccess.Remove(itemTypeId);
+    }
 }

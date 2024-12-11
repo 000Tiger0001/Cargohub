@@ -62,7 +62,7 @@ public class IntegrationTests
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
 
         _itemTypeAccess = new(_dbContext);
-        _serviceItemType = new(_itemTypeAccess);
+        _serviceItemType = new(_itemTypeAccess, _itemAccess);
 
         _orderAccess = new(_dbContext);
         _serviceOrder = new(_orderAccess);
