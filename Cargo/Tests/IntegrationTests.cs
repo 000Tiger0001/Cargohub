@@ -475,8 +475,12 @@ public class IntegrationTests
     public async Task AddOrderWithoutItem()
     {
         OrderItemMovement testOrderItemMovement = new(1, 3);
-        Order testOrder = new Order { Id = 1, Items = [testOrderItemMovement] };
-        await _serviceOrder.AddOrder(testOrder);
+        Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 1, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [testOrderItemMovement]);
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.False(IsOrderAdded);
+        Assert.Empty(await _serviceOrder.GetOrders());
         Assert.Null(await _serviceOrder.GetOrder(1));
     }
 
