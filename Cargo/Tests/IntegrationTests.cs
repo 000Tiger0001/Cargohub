@@ -313,8 +313,8 @@ public class IntegrationTests
 
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
 
-        Assert.True(IsItemAdded);
-        Assert.Equal([testItem], await _serviceItems.GetItems());
+        Assert.False(IsItemAdded);
+        Assert.Empty(await _serviceItems.GetItems());
         
         Assert.Null(await _serviceItems.GetItem(1));
     }
