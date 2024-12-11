@@ -385,8 +385,12 @@ public class IntegrationTests
     [Fact]
     public async Task AddShipmentWithoutOrder()
     {
-        var testShipment = new Shipment { Id = 1, OrderId = 1 };
-        await _serviceShipment.AddShipment(testShipment);
+        Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, []);
+
+        bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
+
+        Assert.False(IsShipmentAdded);
+        Assert.Empty(await _serviceShipment.GetShipments());
         Assert.Null(await _serviceShipment.GetShipment(1));
     }
 
