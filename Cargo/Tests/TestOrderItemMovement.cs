@@ -33,8 +33,8 @@ public class OrderItemMovementTests
 
         Assert.Equal(await _service.GetOrderItemMovements(), []);
 
-        OrderItemMovement sIM1 = new(1, 2) { Id = 1 };
-        OrderItemMovement sIM2 = new(1, 3) { Id = 2 };
+        OrderItemMovement sIM1 = new(1, 1, 2);
+        OrderItemMovement sIM2 = new(2, 1, 3);
 
         await _service.AddOrderItemMovement(sIM1);
         await _service.AddOrderItemMovement(sIM2);
@@ -54,7 +54,7 @@ public class OrderItemMovementTests
 
         Assert.Equal(await _service.GetOrderItemMovements(), []);
 
-        OrderItemMovement sIM1 = new(1, 2) { Id = 1 };
+        OrderItemMovement sIM1 = new(1, 1, 2);
 
         await _service.AddOrderItemMovement(sIM1);
 
@@ -73,7 +73,7 @@ public class OrderItemMovementTests
 
         Assert.Equal(await _service.GetOrderItemMovements(), []);
 
-        OrderItemMovement sIM1 = new(1, 3) { Id = 1 };
+        OrderItemMovement sIM1 = new(1, 1, 3);
         bool success = await _service.AddOrderItemMovement(sIM1);
 
         Assert.True(success);
@@ -91,13 +91,13 @@ public class OrderItemMovementTests
 
         Assert.Equal(await _service.GetOrderItemMovements(), []);
 
-        OrderItemMovement sIM1 = new(1, 3) { Id = 1 };
+        OrderItemMovement sIM1 = new(1, 1, 3);
 
         await _service.AddOrderItemMovement(sIM1);
 
         Assert.Equal([sIM1], await _service.GetOrderItemMovements());
 
-        OrderItemMovement sIM2 = new(1, 2) { Id = 1 };
+        OrderItemMovement sIM2 = new(1, 1, 2);
 
         bool success = await _service.AddOrderItemMovement(sIM2);
 
@@ -116,8 +116,8 @@ public class OrderItemMovementTests
 
         Assert.Equal(await _service.GetOrderItemMovements(), []);
 
-        OrderItemMovement sIM1 = new(1, 3) { Id = 1 };
-        OrderItemMovement sIM2 = new(1, 2) { Id = 1 };
+        OrderItemMovement sIM1 = new(1, 1, 3);
+        OrderItemMovement sIM2 = new(2, 1, 2);
 
         await _service.AddOrderItemMovement(sIM1);
         await _service.AddOrderItemMovement(sIM2);
@@ -147,13 +147,13 @@ public class OrderItemMovementTests
 
         Assert.Equal(await _service.GetOrderItemMovements(), []);
 
-        OrderItemMovement sIM1 = new(1, 2) { Id = 1 };
+        OrderItemMovement sIM1 = new(1, 1, 2);
 
         await _service.AddOrderItemMovement(sIM1);
 
         Assert.Equal([sIM1], await _service.GetOrderItemMovements());
 
-        OrderItemMovement sIM2 = new(1, 3) { Id = 1 };
+        OrderItemMovement sIM2 = new(1, 1, 3);
 
         bool success = await _service.UpdateOrderItemMovement(sIM2);
 

@@ -34,8 +34,8 @@ public class TransferItemMovementTests
 
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
-        TransferItemMovement sIM1 = new(1, 2) { Id = 1 };
-        TransferItemMovement sIM2 = new(1, 3) { Id = 2 };
+        TransferItemMovement sIM1 = new(1, 1, 2);
+        TransferItemMovement sIM2 = new(2, 1, 3);
 
         await _service.AddTransferItemMovement(sIM1);
         await _service.AddTransferItemMovement(sIM2);
@@ -55,7 +55,7 @@ public class TransferItemMovementTests
 
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
-        TransferItemMovement sIM1 = new(1, 2) { Id = 1 };
+        TransferItemMovement sIM1 = new(1, 1, 2);
 
         await _service.AddTransferItemMovement(sIM1);
 
@@ -74,7 +74,7 @@ public class TransferItemMovementTests
 
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
-        TransferItemMovement sIM1 = new(1, 3) { Id = 1 };
+        TransferItemMovement sIM1 = new(1, 1, 3);
         bool success = await _service.AddTransferItemMovement(sIM1);
 
         Assert.True(success);
@@ -92,13 +92,13 @@ public class TransferItemMovementTests
 
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
-        TransferItemMovement sIM1 = new(1, 3) { Id = 1 };
+        TransferItemMovement sIM1 = new(1, 1, 3);
 
         await _service.AddTransferItemMovement(sIM1);
 
         Assert.Equal([sIM1], await _service.GetTransferItemMovements());
 
-        TransferItemMovement sIM2 = new(1, 2) { Id = 1 };
+        TransferItemMovement sIM2 = new(1, 1, 2);
 
         bool success = await _service.AddTransferItemMovement(sIM2);
 
@@ -117,8 +117,8 @@ public class TransferItemMovementTests
 
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
-        TransferItemMovement sIM1 = new(1, 3) { Id = 1 };
-        TransferItemMovement sIM2 = new(1, 2) { Id = 1 };
+        TransferItemMovement sIM1 = new(1, 1, 3);
+        TransferItemMovement sIM2 = new(2, 1, 2);
 
         await _service.AddTransferItemMovement(sIM1);
         await _service.AddTransferItemMovement(sIM2);
@@ -148,13 +148,13 @@ public class TransferItemMovementTests
 
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
-        TransferItemMovement sIM1 = new(1, 2) { Id = 1 };
+        TransferItemMovement sIM1 = new(1, 1, 2);
 
         await _service.AddTransferItemMovement(sIM1);
 
         Assert.Equal([sIM1], await _service.GetTransferItemMovements());
 
-        TransferItemMovement sIM2 = new(1, 3) { Id = 1 };
+        TransferItemMovement sIM2 = new(1, 1, 3);
 
         bool success = await _service.UpdateTransferItemMovement(sIM2);
 
