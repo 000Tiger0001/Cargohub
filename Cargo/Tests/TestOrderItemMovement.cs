@@ -4,9 +4,7 @@ using Microsoft.EntityFrameworkCore;
 public class OrderItemMovementTests
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly TransferItemMovementAccess _transferItemMovementAccess;
-    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
-    private readonly OrderItemMovementAccess _orderItemMovementAccess;
+    private readonly OrderItemMovementAccess _OrderItemMovementAccess;
     private readonly OrderItemMovementServices _service;
     private readonly ItemAccess _itemAccess;
     private readonly ItemServices _serviceItems;
@@ -17,12 +15,10 @@ public class OrderItemMovementTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
         _dbContext = new ApplicationDbContext(options);
-        _transferItemMovementAccess = new(_dbContext);
-        _shipmentItemMovementAccess = new(_dbContext);
-        _orderItemMovementAccess = new OrderItemMovementAccess(_dbContext);
-        _service = new(_orderItemMovementAccess);
+        _OrderItemMovementAccess = new OrderItemMovementAccess(_dbContext);
+        _service = new(_OrderItemMovementAccess);
         _itemAccess = new(_dbContext);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
+        _serviceItems = new(_itemAccess);
     }
     [Fact]
     public async Task GetOrderItemMovements()

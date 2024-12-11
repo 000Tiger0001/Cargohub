@@ -5,10 +5,6 @@ public class IntegrationTests
 {
     private readonly ApplicationDbContext _dbContext;
 
-    private readonly OrderItemMovementAccess _orderItemMovementAccess;
-    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
-    private readonly TransferItemMovementAccess _transferItemMovementAccess;
-
     private readonly ItemGroupAccess _itemGroupAccess;
     private readonly ItemGroupServices _serviceItemGroup;
 
@@ -57,21 +53,8 @@ public class IntegrationTests
         _itemAccess = new ItemAccess(_dbContext);
 
         // Create new instance of locationService
-        _orderAccess = new(_dbContext);
-        _serviceOrder = new(_orderAccess);
-
-        _shipmentAccess = new(_dbContext);
-        _serviceShipment = new(_shipmentAccess);
-
-        _transferAccess = new(_dbContext);
-        _serviceTransfer = new(_transferAccess);
-
-        _orderItemMovementAccess = new(_dbContext);
-        _transferItemMovementAccess = new(_dbContext);
-        _shipmentItemMovementAccess = new(_dbContext);
-
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
+        _serviceItems = new(_itemAccess);
 
         // Initialize the controller with LocationAccess
 
@@ -80,6 +63,15 @@ public class IntegrationTests
 
         _itemTypeAccess = new(_dbContext);
         _serviceItemType = new(_itemTypeAccess, _itemAccess);
+
+        _orderAccess = new(_dbContext);
+        _serviceOrder = new(_orderAccess);
+
+        _shipmentAccess = new(_dbContext);
+        _serviceShipment = new(_shipmentAccess);
+
+        _transferAccess = new(_dbContext);
+        _serviceTransfer = new(_transferAccess);
 
         _warehouseAccess = new(_dbContext);
         _serviceWarehouse = new(_warehouseAccess);
@@ -213,10 +205,8 @@ public class IntegrationTests
         Assert.Empty(await _serviceItems.GetItems());
         Assert.Null(await _serviceItems.GetItem(1));
 
-        Order? resultingOrder = await _serviceOrder.GetOrder(1);
-        Assert.NotNull(resultingOrder);
-        Assert.Empty(resultingOrder!.Items!);
-        Assert.Empty(await _serviceOrder.GetItemsInOrder(1));
+        Assert.Empty(testOrder.Items!);
+        Assert.Null(await _serviceOrder.GetItemsInOrder(1));
 
         bool IsOrderRemoved = await _serviceOrder.RemoveOrder(1);
 
@@ -230,7 +220,7 @@ public class IntegrationTests
         ShipmentItemMovement testShipmentItemMovement = new(1, 1);
         Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, [testShipmentItemMovement]);
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
-        
+
         bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
 
         Assert.True(IsShipmentAdded);
@@ -326,7 +316,7 @@ public class IntegrationTests
     {
         Warehouse testWarehouse = new(1, "YQZZNL56", "Heemskerk cargo hub", "Karlijndreef 281", "4002 AS", "Heemskerk", "Friesland", "NL", "Fem Keijzer", "(078) 0013363", "blamore@example.net");
         Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 1, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, []);
-        
+
         bool IsWarehouseAdded = await _serviceWarehouse.AddWarehouse(testWarehouse);
 
         Assert.True(IsWarehouseAdded);
@@ -418,7 +408,7 @@ public class IntegrationTests
         Location testLocation = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
 
         bool IsLocationAdded = await _serviceLocation.AddLocation(testLocation);
-        
+
         Assert.False(IsLocationAdded);
         Assert.Empty(await _serviceLocation.GetLocations());
         Assert.Null(await _serviceLocation.GetLocation(1));
