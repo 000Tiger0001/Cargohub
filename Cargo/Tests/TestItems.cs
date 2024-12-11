@@ -6,6 +6,9 @@ public class ItemTests
     private readonly ApplicationDbContext _dbContext;
     private readonly ItemAccess _itemAccess;
     private readonly ItemServices _service;
+    private readonly OrderItemMovementAccess _orderAccess;
+    private readonly TransferItemMovementAccess _transferAccess;
+    private readonly ShipmentItemMovementAccess _shipmentAccess;
 
     public ItemTests()
     {
@@ -14,7 +17,10 @@ public class ItemTests
                         .Options;
         _dbContext = new ApplicationDbContext(options);
         _itemAccess = new ItemAccess(_dbContext);
-        _service = new(_itemAccess);
+        _orderAccess = new(_dbContext);
+        _transferAccess = new(_dbContext);
+        _shipmentAccess = new(_dbContext);
+        _service = new(_itemAccess, _orderAccess, _transferAccess, _shipmentAccess);
     }
 
     [Fact]

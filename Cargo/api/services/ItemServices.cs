@@ -1,10 +1,18 @@
+using SQLitePCL;
+
 public class ItemServices
 {
     private readonly ItemAccess _itemAccess;
+    private readonly OrderItemMovementAccess _orderItemMovementAccess;
+    private readonly TransferItemMovementAccess _transferItemMovementAccess;
+    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
 
-    public ItemServices(ItemAccess itemAccess)
+    public ItemServices(ItemAccess itemAccess, OrderItemMovementAccess orderItemMovementAccess, TransferItemMovementAccess transferItemMovementAccess, ShipmentItemMovementAccess shipmentItemMovementAccess)
     {
         _itemAccess = itemAccess;
+        _orderItemMovementAccess = orderItemMovementAccess;
+        _transferItemMovementAccess = transferItemMovementAccess;
+        _shipmentItemMovementAccess = shipmentItemMovementAccess;
     }
 
     public async Task<List<Item>> GetItems() => await _itemAccess.GetAll();
@@ -51,5 +59,11 @@ public class ItemServices
         return await _itemAccess.Update(item);
     }
 
-    public async Task<bool> RemoveItem(int itemId) => await _itemAccess.Remove(itemId);
+    public async Task<bool> RemoveItem(int itemId)
+    {
+        await _shipmentItemMovementAccess.Remove(itemId);
+        await _orderItemMovementAccess.Remove(itemId);
+        await _transferItemMovementAccess.Remove(itemId);
+        return await _itemAccess.Remove(itemId);
+    }
 }

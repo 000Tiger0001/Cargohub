@@ -54,7 +54,7 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
             if (existingEntity == null) continue;
 
-            DB.Update(entity);
+            await Update(entity);
         }
 
         int changes = await _context.SaveChangesAsync();

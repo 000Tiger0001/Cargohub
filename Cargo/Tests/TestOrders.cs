@@ -10,6 +10,9 @@ public class OrderTests
     private readonly ItemServices _serviceItems;
     private readonly ClientAccess _clientAccess;
     private readonly ClientServices _serviceClients;
+    private readonly OrderItemMovementAccess _orderItemMovementAccess;
+    private readonly TransferItemMovementAccess _transferItemMovementAccess;
+    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
 
     public OrderTests()
     {
@@ -20,7 +23,10 @@ public class OrderTests
         _orderAccess = new OrderAccess(_dbContext);
         _service = new(_orderAccess);
         _itemAccess = new(_dbContext);
-        _serviceItems = new(_itemAccess);
+        _orderItemMovementAccess = new(_dbContext);
+        _transferItemMovementAccess = new(_dbContext);
+        _shipmentItemMovementAccess = new(_dbContext);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
         _clientAccess = new(_dbContext);
         _serviceClients = new(_clientAccess);
     }

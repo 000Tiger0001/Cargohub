@@ -5,6 +5,10 @@ public class IntegrationTests
 {
     private readonly ApplicationDbContext _dbContext;
 
+    private readonly OrderItemMovementAccess _orderItemMovementAccess;
+    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private readonly TransferItemMovementAccess _transferItemMovementAccess;
+
     private readonly ItemGroupAccess _itemGroupAccess;
     private readonly ItemGroupServices _serviceItemGroup;
 
@@ -53,17 +57,6 @@ public class IntegrationTests
         _itemAccess = new ItemAccess(_dbContext);
 
         // Create new instance of locationService
-        _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
-        _serviceItems = new(_itemAccess);
-
-        // Initialize the controller with LocationAccess
-
-        _itemLineAccess = new(_dbContext);
-        _serviceItemLine = new(_itemLineAccess, _itemAccess);
-
-        _itemTypeAccess = new(_dbContext);
-        _serviceItemType = new(_itemTypeAccess, _itemAccess);
-
         _orderAccess = new(_dbContext);
         _serviceOrder = new(_orderAccess);
 
@@ -72,6 +65,21 @@ public class IntegrationTests
 
         _transferAccess = new(_dbContext);
         _serviceTransfer = new(_transferAccess);
+
+        _orderItemMovementAccess = new(_dbContext);
+        _transferItemMovementAccess = new(_dbContext);
+        _shipmentItemMovementAccess = new(_dbContext);
+
+        _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
+
+        // Initialize the controller with LocationAccess
+
+        _itemLineAccess = new(_dbContext);
+        _serviceItemLine = new(_itemLineAccess, _itemAccess);
+
+        _itemTypeAccess = new(_dbContext);
+        _serviceItemType = new(_itemTypeAccess, _itemAccess);
 
         _warehouseAccess = new(_dbContext);
         _serviceWarehouse = new(_warehouseAccess);
@@ -205,8 +213,10 @@ public class IntegrationTests
         Assert.Empty(await _serviceItems.GetItems());
         Assert.Null(await _serviceItems.GetItem(1));
 
-        Assert.Empty(testOrder.Items!);
-        Assert.Null(await _serviceOrder.GetItemsInOrder(1));
+        Order? resultingOrder = await _serviceOrder.GetOrder(1);
+        Assert.NotNull(resultingOrder);
+        Assert.Empty(resultingOrder!.Items!);
+        Assert.Empty(await _serviceOrder.GetItemsInOrder(1));
 
         bool IsOrderRemoved = await _serviceOrder.RemoveOrder(1);
 
