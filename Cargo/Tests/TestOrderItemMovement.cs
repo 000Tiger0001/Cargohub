@@ -5,6 +5,8 @@ public class OrderItemMovementTests
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly OrderItemMovementAccess _OrderItemMovementAccess;
+    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private readonly TransferItemMovementAccess _TransferItemMovementAccess;
     private readonly OrderItemMovementServices _service;
     private readonly ItemAccess _itemAccess;
     private readonly ItemServices _serviceItems;
@@ -15,15 +17,17 @@ public class OrderItemMovementTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
         _dbContext = new ApplicationDbContext(options);
-        _OrderItemMovementAccess = new OrderItemMovementAccess(_dbContext);
+        _OrderItemMovementAccess = new(_dbContext);
+        _shipmentItemMovementAccess = new(_dbContext);
+        _TransferItemMovementAccess = new(_dbContext);
         _service = new(_OrderItemMovementAccess);
         _itemAccess = new(_dbContext);
-        _serviceItems = new(_itemAccess);
+        _serviceItems = new(_itemAccess, _OrderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess);
     }
     [Fact]
     public async Task GetOrderItemMovements()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 
@@ -44,7 +48,7 @@ public class OrderItemMovementTests
     [Fact]
     public async Task GetOrderItemMovement()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 
@@ -63,7 +67,7 @@ public class OrderItemMovementTests
     [Fact]
     public async Task AddOrderItemMovement()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 
@@ -81,7 +85,7 @@ public class OrderItemMovementTests
     [Fact]
     public async Task AddDuplicateId()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 
@@ -106,7 +110,7 @@ public class OrderItemMovementTests
     [Fact]
     public async Task RemoveOrderItemMovement()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 
@@ -137,7 +141,7 @@ public class OrderItemMovementTests
     [Fact]
     public async Task UpdateOrderItemMovement()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
         await _serviceItems.AddItem(item);
         Assert.Equal(await _serviceItems.GetItem(1), item);
 

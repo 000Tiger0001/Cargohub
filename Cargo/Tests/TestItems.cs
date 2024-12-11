@@ -6,6 +6,9 @@ public class ItemTests
     private readonly ApplicationDbContext _dbContext;
     private readonly ItemAccess _itemAccess;
     private readonly ItemServices _service;
+    private readonly OrderItemMovementAccess _orderItemMovementAccess;
+    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private readonly TransferItemMovementAccess _TransferItemMovementAccess;
 
     public ItemTests()
     {
@@ -13,8 +16,11 @@ public class ItemTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
         _dbContext = new ApplicationDbContext(options);
+        _orderItemMovementAccess = new(_dbContext);
+        _shipmentItemMovementAccess = new(_dbContext);
+        _TransferItemMovementAccess = new(_dbContext);
         _itemAccess = new ItemAccess(_dbContext);
-        _service = new(_itemAccess);
+        _service = new(_itemAccess, _orderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess);
     }
 
     [Fact]
