@@ -29,8 +29,8 @@ public class ShipmentItemMovementTests
 
         Assert.Equal(await _service.GetShipmentItemMovements(), []);
 
-        ShipmentItemMovement sIM1 = new() { Id = 1, ItemId = 1, Amount = 1 };
-        ShipmentItemMovement sIM2 = new() { Id = 2, ItemId = 1, Amount = 3 };
+        ShipmentItemMovement sIM1 = new(1, 2) { Id = 1 };
+        ShipmentItemMovement sIM2 = new(1, 3) { Id = 2 };
 
         await _service.AddShipmentItemMovement(sIM1);
         await _service.AddShipmentItemMovement(sIM2);
@@ -50,7 +50,7 @@ public class ShipmentItemMovementTests
 
         Assert.Equal(await _service.GetShipmentItemMovements(), []);
 
-        ShipmentItemMovement sIM1 = new() { Id = 1, ItemId = 1, Amount = 1 };
+        ShipmentItemMovement sIM1 = new(1, 2) { Id = 1 };
 
         await _service.AddShipmentItemMovement(sIM1);
 
@@ -69,7 +69,7 @@ public class ShipmentItemMovementTests
 
         Assert.Equal(await _service.GetShipmentItemMovements(), []);
 
-        ShipmentItemMovement sIM1 = new() { Id = 1, ItemId = 1, Amount = 1 };
+        ShipmentItemMovement sIM1 = new(1, 3) { Id = 1 };
         bool success = await _service.AddShipmentItemMovement(sIM1);
 
         Assert.True(success);
@@ -87,13 +87,13 @@ public class ShipmentItemMovementTests
 
         Assert.Equal(await _service.GetShipmentItemMovements(), []);
 
-        ShipmentItemMovement sIM1 = new() { Id = 1, ItemId = 1, Amount = 1 };
+        ShipmentItemMovement sIM1 = new(1, 3) { Id = 1 };
 
         await _service.AddShipmentItemMovement(sIM1);
 
         Assert.Equal([sIM1], await _service.GetShipmentItemMovements());
 
-        ShipmentItemMovement sIM2 = new() { Id = 1, ItemId = 1, Amount = 2 };
+        ShipmentItemMovement sIM2 = new(1, 2) { Id = 1 };
 
         bool success = await _service.AddShipmentItemMovement(sIM2);
 
@@ -112,8 +112,8 @@ public class ShipmentItemMovementTests
 
         Assert.Equal(await _service.GetShipmentItemMovements(), []);
 
-        ShipmentItemMovement sIM1 = new() { Id = 1, ItemId = 1, Amount = 1 };
-        ShipmentItemMovement sIM2 = new() { Id = 1, ItemId = 1, Amount = 2 };
+        ShipmentItemMovement sIM1 = new(1, 3) { Id = 1 };
+        ShipmentItemMovement sIM2 = new(1, 2) { Id = 1 };
 
         await _service.AddShipmentItemMovement(sIM1);
         await _service.AddShipmentItemMovement(sIM2);
@@ -143,13 +143,13 @@ public class ShipmentItemMovementTests
 
         Assert.Equal(await _service.GetShipmentItemMovements(), []);
 
-        ShipmentItemMovement sIM1 = new() { Id = 1, ItemId = 1, Amount = 1 };
+        ShipmentItemMovement sIM1 = new(1, 2) { Id = 1 };
 
         await _service.AddShipmentItemMovement(sIM1);
 
         Assert.Equal([sIM1], await _service.GetShipmentItemMovements());
 
-        ShipmentItemMovement sIM2 = new() { Id = 1, ItemId = 1, Amount = 2 };
+        ShipmentItemMovement sIM2 = new(1, 3) { Id = 1 };
 
         bool success = await _service.UpdateShipmentItemMovement(sIM2);
 

@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class TransferItemMovement : ItemMovement
 {
-    public TransferItemMovement() { }
     public int TransferId { get; set; }
 
     [ForeignKey("TransferId")]

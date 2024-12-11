@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class OrderItemMovement : ItemMovement
 {
-    public OrderItemMovement() { }
     public int OrderId { get; set; }
 
     [ForeignKey("OrderId")]
