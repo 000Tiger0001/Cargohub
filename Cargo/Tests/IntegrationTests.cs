@@ -421,14 +421,29 @@ public class IntegrationTests
     [Fact]
     public async Task RemoveSupplier()
     {
-        var testSupplier = new Supplier { Id = 1, Code = "W" };
-        var testItem = new Item { Id = 1, SupplierId = 1, SupplierCode = "W" };
-        await _serviceSupplier.AddSupplier(testSupplier);
-        await _serviceItems.AddItem(testItem);
-        await _serviceSupplier.RemoveSupplier(1);
+        Supplier testSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 1, 47, 13, 11, 1, "SUP0001", "E-86805-uTM");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(testSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([testSupplier], await _serviceSupplier.GetSuppliers());
+
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([testItem], await _serviceItems.GetItems());
+
+        bool IsSupplierRemoved = await _serviceSupplier.RemoveSupplier(1);
+
+        Assert.True(IsSupplierRemoved);
+        Assert.Empty(await _serviceSupplier.GetSuppliers());
+
         Item? result = await _serviceItems.GetItem(1);
-        Assert.Null(result!.Code);
+        Supplier? supplierResult = await _serviceSupplier.GetSupplier(result!.SupplierId);
         Assert.Equal(0, result.SupplierId);
+        Assert.NotEqual(testSupplier, supplierResult);
+        Assert.Null(supplierResult);
     }
 
     [Fact]
