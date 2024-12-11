@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 public class WarehouseTests
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly LocationAccess _locationAccess;
     private readonly WarehouseAccess _warehouseAccess;
     private readonly WarehouseServices _service;
 
@@ -14,13 +15,14 @@ public class WarehouseTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
 
-        _dbContext = new ApplicationDbContext(options);
+        _dbContext = new(options);
 
         // Create a new instance of Access with the in-memory DbContext
-        _warehouseAccess = new WarehouseAccess(_dbContext);
+        _warehouseAccess = new(_dbContext);
+        _locationAccess = new(_dbContext);
 
         // Create new instance of Service
-        _service = new(_warehouseAccess);
+        _service = new(_warehouseAccess, _locationAccess);
     }
 
     [Fact]

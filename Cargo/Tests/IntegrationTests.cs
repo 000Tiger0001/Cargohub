@@ -81,11 +81,11 @@ public class IntegrationTests
         _itemTypeAccess = new(_dbContext);
         _serviceItemType = new(_itemTypeAccess, _itemAccess);
 
-        _warehouseAccess = new(_dbContext);
-        _serviceWarehouse = new(_warehouseAccess);
-
         _locationAccess = new(_dbContext);
         _serviceLocation = new(_locationAccess);
+
+        _warehouseAccess = new(_dbContext);
+        _serviceWarehouse = new(_warehouseAccess, _locationAccess);
 
         _supplierAccess = new(_dbContext);
         _serviceSupplier = new(_supplierAccess);
