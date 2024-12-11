@@ -449,15 +449,19 @@ public class IntegrationTests
     [Fact]
     public async Task AddItemWithoutSupplier()
     {
-        var testItem = new Item { Id = 1, SupplierId = 1 };
-        await _serviceItems.AddItem(testItem);
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
+
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
+        Assert.False(IsItemAdded);
+        Assert.Empty(await _serviceItems.GetItems());
         Assert.Null(await _serviceItems.GetItem(1));
     }
 
     [Fact]
     public async Task AddShipmentWithoutItem()
     {
-        ShipmentItemMovement testShipmentItemMovement = new ShipmentItemMovement(1, 3);
+        ShipmentItemMovement testShipmentItemMovement = new(1, 3);
         Shipment testShipment = new Shipment { Id = 1, Items = [testShipmentItemMovement] };
         await _serviceShipment.AddShipment(testShipment);
         Assert.Null(await _serviceShipment.GetShipment(1));
@@ -466,7 +470,7 @@ public class IntegrationTests
     [Fact]
     public async Task AddOrderWithoutItem()
     {
-        OrderItemMovement testOrderItemMovement = new OrderItemMovement(1, 3);
+        OrderItemMovement testOrderItemMovement = new(1, 3);
         Order testOrder = new Order { Id = 1, Items = [testOrderItemMovement] };
         await _serviceOrder.AddOrder(testOrder);
         Assert.Null(await _serviceOrder.GetOrder(1));
@@ -475,7 +479,7 @@ public class IntegrationTests
     [Fact]
     public async Task AddTransferWithoutItem()
     {
-        TransferItemMovement testTransferItemMovement = new TransferItemMovement(1, 3);
+        TransferItemMovement testTransferItemMovement = new(1, 3);
         Transfer testTransfer = new Transfer { Id = 1, Items = [testTransferItemMovement] };
         await _serviceTransfer.AddTransfer(testTransfer);
         Assert.Null(await _serviceTransfer.GetTransfer(1));
