@@ -113,6 +113,11 @@ public class IntegrationTests
 
         Assert.Equal(0, id);
         Assert.NotEqual(testItem, result);
+
+        bool IsItemRemoved = await _serviceItems.RemoveItem(1);
+
+        Assert.True(IsItemRemoved);
+        Assert.Empty(await _serviceItems.GetItems());
     }
 
     [Fact]
@@ -141,6 +146,11 @@ public class IntegrationTests
 
         Assert.Equal(0, id);
         Assert.NotEqual(testItem, result);
+
+        bool IsItemRemoved = await _serviceItems.RemoveItem(1);
+
+        Assert.True(IsItemRemoved);
+        Assert.Empty(await _serviceItems.GetItems());
     }
 
     [Fact]
@@ -169,6 +179,11 @@ public class IntegrationTests
 
         Assert.Equal(0, id);
         Assert.NotEqual(testItem, result);
+
+        bool IsItemRemoved = await _serviceItems.RemoveItem(1);
+
+        Assert.True(IsItemRemoved);
+        Assert.Empty(await _serviceItems.GetItems());
     }
 
     [Fact]
@@ -196,6 +211,11 @@ public class IntegrationTests
 
         Assert.Empty(testOrder.Items!);
         Assert.Null(await _serviceOrder.GetItemsInOrder(1));
+
+        bool IsOrderRemoved = await _serviceOrder.RemoveOrder(1);
+
+        Assert.True(IsOrderRemoved);
+        Assert.Empty(await _serviceOrder.GetOrders());
     }
 
     [Fact]
@@ -225,6 +245,11 @@ public class IntegrationTests
 
         Assert.Null(await _serviceItems.GetItem(1));
         Assert.Empty(dbShipment!.Items!);
+
+        bool IsShipmentRemoved = await _serviceShipment.RemoveShipment(1);
+
+        Assert.True(IsShipmentRemoved);
+        Assert.Empty(await _serviceShipment.GetShipments());
     }
 
     [Fact]
@@ -251,6 +276,11 @@ public class IntegrationTests
         Assert.Null(await _serviceItems.GetItem(1));
         Transfer? transfer = await _serviceTransfer.GetTransfer(1)!;
         Assert.Empty(transfer!.Items!);
+
+        bool IsTransferRemoved = await _serviceTransfer.RemoveTransfer(1);
+
+        Assert.True(IsTransferRemoved);
+        Assert.Empty(await _serviceTransfer.GetTransfers());
     }
 
     [Fact]
@@ -278,6 +308,11 @@ public class IntegrationTests
         Location? location = await _serviceLocation.GetLocation(1);
         Assert.Equal(0, location!.WarehouseId);
         Assert.NotEqual(testLocation, location);
+
+        bool IsLocationRemoved = await _serviceLocation.RemoveLocation(1);
+
+        Assert.True(IsLocationRemoved);
+        Assert.Empty(await _serviceLocation.GetLocations());
     }
 
     [Fact]
@@ -304,6 +339,11 @@ public class IntegrationTests
         Order? order = await _serviceOrder.GetOrder(1);
         Assert.Equal(0, order!.WarehouseId);
         Assert.NotEqual(testOrder, order);
+
+        bool IsOrderRemoved = await _serviceOrder.RemoveOrder(1);
+
+        Assert.True(IsOrderRemoved);
+        Assert.Empty(await _serviceOrder.GetOrders());
     }
 
     [Fact]
