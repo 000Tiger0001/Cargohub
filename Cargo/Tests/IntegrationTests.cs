@@ -230,13 +230,27 @@ public class IntegrationTests
     [Fact]
     public async Task ItemDeleteTransfer()
     {
-        var testTransferItemMovement = new TransferItemMovement(1, 1);
-        var testTransfer = new Transfer { Id = 1 };
-        var testItem = new Item { Id = 1 };
-        await _serviceTransfer.AddTransfer(testTransfer);
-        await _serviceItems.AddItem(testItem);
-        await _serviceItems.RemoveItem(1);
-        Assert.NotNull(_serviceItems.GetItem(1));
+        TransferItemMovement testTransferItemMovement = new(1, 23);
+        Transfer testTransfer = new(1, "TR00001", 0, 9229, "Completed", [testTransferItemMovement]);
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
+
+        bool IsTransferAdded = await _serviceTransfer.AddTransfer(testTransfer);
+
+        Assert.True(IsTransferAdded);
+        Assert.Equal([testTransfer], await _serviceTransfer.GetTransfers());
+
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([testItem], await _serviceItems.GetItems());
+
+        bool IsItemRemoved = await _serviceItems.RemoveItem(1);
+
+        Assert.True(IsItemRemoved);
+        Assert.Empty(await _serviceItems.GetItems());
+        Assert.Null(await _serviceItems.GetItem(1));
+        Transfer? transfer = await _serviceTransfer.GetTransfer(1)!;
+        Assert.Empty(transfer!.Items!);
     }
 
     [Fact]
