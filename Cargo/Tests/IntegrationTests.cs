@@ -488,8 +488,12 @@ public class IntegrationTests
     public async Task AddTransferWithoutItem()
     {
         TransferItemMovement testTransferItemMovement = new(1, 3);
-        Transfer testTransfer = new Transfer { Id = 1, Items = [testTransferItemMovement] };
-        await _serviceTransfer.AddTransfer(testTransfer);
+        Transfer testTransfer = new(1, "TR00001", 0, 9229, "Completed", [testTransferItemMovement]);
+
+        bool IsTransferAdded = await _serviceTransfer.AddTransfer(testTransfer);
+
+        Assert.False(IsTransferAdded);
+        Assert.Empty(await _serviceTransfer.GetTransfers());
         Assert.Null(await _serviceTransfer.GetTransfer(1));
     }
 }
