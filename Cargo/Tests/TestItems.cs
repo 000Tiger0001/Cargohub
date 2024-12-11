@@ -6,9 +6,6 @@ public class ItemTests
     private readonly ApplicationDbContext _dbContext;
     private readonly ItemAccess _itemAccess;
     private readonly ItemServices _service;
-    private readonly OrderItemMovementAccess _orderAccess;
-    private readonly TransferItemMovementAccess _transferAccess;
-    private readonly ShipmentItemMovementAccess _shipmentAccess;
 
     public ItemTests()
     {
@@ -17,10 +14,7 @@ public class ItemTests
                         .Options;
         _dbContext = new ApplicationDbContext(options);
         _itemAccess = new ItemAccess(_dbContext);
-        _orderAccess = new(_dbContext);
-        _transferAccess = new(_dbContext);
-        _shipmentAccess = new(_dbContext);
-        _service = new(_itemAccess, _orderAccess, _transferAccess, _shipmentAccess);
+        _service = new(_itemAccess);
     }
 
     [Fact]
@@ -93,7 +87,7 @@ public class ItemTests
         Item mockItem2 = new(2, "nyg48736S", "Focused transitional alliance", "may", "9733132830047", "ck-109684-VFb", "y-20588-owy", 11, 11, 39, 10, 15, 23, 57, "SUP312", "j-10730-ESk");
         Item mockItem3 = new(3, "QVm03739H", "Cloned actuating artificial intelligence", "we", "3722576017240", "aHx-68Q4", "t-541-F0g", 12, 12, 42, 30, 17, 11, 2, "SUP237", "r-920-z2C");
         Item mockItem4 = new(4, "zdN19039A", "Pre-emptive asynchronous throughput", "take", "9668154959486", "pZ-7816", "IFq-47R1", 12, 12, 40, 21, 20, 20, 34, "SUP140", "T-210-I4M");
-    
+
         await _service.AddItem(mockItem1);
         await _service.AddItem(mockItem2);
 
