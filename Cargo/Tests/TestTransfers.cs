@@ -6,6 +6,8 @@ public class TransferTests
     private readonly ApplicationDbContext _dbContext;
     private readonly TransferAccess _transferAccess;
     private readonly TransferServices _service;
+    private readonly ItemAccess _itemAccess;
+    private readonly ItemServices _serviceItems;
 
     public TransferTests()
     {
@@ -21,12 +23,14 @@ public class TransferTests
 
         // Create new instance of Service
         _service = new(_transferAccess);
+        _itemAccess = new(_dbContext);
+        _serviceItems = new(_itemAccess);
     }
 
     [Fact]
     public async Task GetAllTransfers()
     {
-        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", []);
 
         Assert.Empty(await _service.GetTransfers());
 
@@ -42,7 +46,7 @@ public class TransferTests
     [Fact]
     public async Task GetTransfer()
     {
-        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", []);
 
         bool IsAdded = await _service.AddTransfer(mockTransfer);
         Assert.True(IsAdded);
@@ -58,9 +62,18 @@ public class TransferTests
     [Fact]
     public async Task GetItemsInTransfer()
     {
-        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
-        List<TransferItemMovement> items = [new(7435, 23)];
+        TransferItemMovement mockItem1 = new(7435, 23);
 
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
+
+        bool IsItemAdded1 = await _serviceItems.AddItem(item1);
+
+        Assert.True(IsItemAdded1);
+        Assert.Equal([item1], await _serviceItems.GetItems());
+
+        List<TransferItemMovement> items = [mockItem1];
+        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Completed", items);
+        
         await _service.AddTransfer(mockTransfer);
 
         List<TransferItemMovement>? transferItems = await _service.GetItemsInTransfer(2);
@@ -72,12 +85,17 @@ public class TransferTests
         await _service.RemoveTransfer(2);
 
         Assert.Empty(await _service.GetTransfers());
+
+        bool IsItemRemoved1 = await _serviceItems.RemoveItem(7435);
+
+        Assert.True(IsItemRemoved1);
+        Assert.Empty(await _serviceItems.GetItems());
     }
 
     [Fact]
     public async Task AddTransfer()
     {
-        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", []);
 
         Assert.Empty(await _service.GetTransfers());
 
@@ -95,7 +113,7 @@ public class TransferTests
     [Fact]
     public async Task AddDuplicateTransfer()
     {
-        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Completed", []);
 
         bool IsAdded1 = await _service.AddTransfer(mockTransfer);
 
@@ -116,8 +134,8 @@ public class TransferTests
     [Fact]
     public async Task AddTransferWithDuplicateId()
     {
-        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
-        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Completed", [new(7435, 23)]);
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", []);
+        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Completed", []);
 
         bool IsAdded1 = await _service.AddTransfer(mockTransfer1);
 
@@ -138,8 +156,8 @@ public class TransferTests
     [Fact]
     public async Task UpdateTransfer()
     {
-        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
-        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Completed", [new(7435, 23)]);
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", []);
+        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Completed", []);
 
         bool IsAdded = await _service.AddTransfer(mockTransfer1);
 
@@ -158,7 +176,7 @@ public class TransferTests
     [Fact]
     public async Task RemoveTransfer()
     {
-        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", [new(7435, 23)]);
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", []);
 
         bool IsAdded = await _service.AddTransfer(mockTransfer1);
 

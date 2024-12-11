@@ -91,7 +91,9 @@ public class ShipmentTests
         Assert.Empty(await _service.GetItemsInShipment(0));
         Assert.Empty(await _service.GetItemsInShipment(-1));
         
-        await _service.RemoveShipment(1); bool IsItemRemoved1 = await _serviceItems.RemoveItem(7435);
+        await _service.RemoveShipment(1); 
+        
+        bool IsItemRemoved1 = await _serviceItems.RemoveItem(7435);
 
         Assert.True(IsItemRemoved1);
         Assert.Equal([item2, item3], await _serviceItems.GetItems());
