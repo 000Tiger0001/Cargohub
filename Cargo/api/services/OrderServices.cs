@@ -108,19 +108,15 @@ public class OrderServices
                     //item is getting updated
                     await _orderItemMovementAccess.Update(changeInItem);
 
-                    //update inventory based on order
-                    _updateItemsinInventory(order, inventory, orderItemMovement.Amount, changeInItem);
 
                 }
-
                 //remove item completely
                 else
                 {
                     await _orderItemMovementAccess.Remove(orderItemMovement.Id);
-
-                    //update inventory based on order
-                    _updateItemsinInventory(order, inventory, orderItemMovement.Amount, changeInItem);
                 }
+
+                _updateItemsinInventory(order, inventory, orderItemMovement.Amount, changeInItem);
             }
 
             //check for new Items that were not in old

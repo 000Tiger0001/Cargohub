@@ -39,6 +39,21 @@ public class ShipmentServices
         return await _shipmentAccess.Update(shipment); ;
     }
 
+    private bool _updateItemsinInventory(Shipment shipment, Inventory inventory, int oldAmount, ShipmentItemMovement newItemMovement)
+    {
+        if (shipment!.ShipmentType == 'O')
+        {
+            if (shipment!.ShipmentStatus == "pending")
+            {
+                int changeamount = newItemMovement.Amount - oldAmount;
+                inventory.TotalAllocated -= changeamount;
+                _inventoryAccess.Update(inventory);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public async Task<bool> UpdateItemsinShipment(int shipmentId, List<ShipmentItemMovement> items)
     {
         try
@@ -47,12 +62,12 @@ public class ShipmentServices
             Shipment shipment = await _shipmentAccess.GetById(shipmentId);
             foreach (ShipmentItemMovement shipmentItemMovement in shipmentItemMovements)
             {
-                ShipmentItemMovement changeInItems = items.First(item => item.Id == shipmentItemMovement!.ItemId);
+                ShipmentItemMovement changeInItem = items.First(item => item.Id == shipmentItemMovement!.ItemId);
 
                 if (items.Select(item => item.ItemId).Contains(shipmentItemMovement!.ItemId))
                 {
-                    changeInItems.Id = shipmentItemMovement.Id;
-                    await _shipmentItemMovementAccess.Update(changeInItems);
+                    changeInItem.Id = shipmentItemMovement.Id;
+                    await _shipmentItemMovementAccess.Update(changeInItem);
                 }
                 else
                 {
@@ -62,23 +77,18 @@ public class ShipmentServices
 
                 //update inventory based on order
                 Inventory inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovement.ItemId);
-                if (shipment!.ShipmentType == 'O')
-                {
-                    if (shipment!.ShipmentStatus == "pending")
-                    {
-                        int changeamount = changeInItems.Amount - shipmentItemMovement.Amount;
-                        inventory.TotalAllocated -= changeamount;
-                        await _inventoryAccess.Update(inventory);
-                    }
-                }
+                _updateItemsinInventory(shipment, inventory, shipmentItemMovement.Amount, changeInItem);
             }
 
             //check for new Items that were not in old
             foreach (ShipmentItemMovement shipmentItemMovementNew in items)
             {
+                Inventory inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovementNew.ItemId);
                 if (!shipmentItemMovements.Contains(shipmentItemMovementNew))
                 {
                     await _shipmentItemMovementAccess.Add(shipmentItemMovementNew);
+
+                    _updateItemsinInventory(shipment, inventory, 0, shipmentItemMovementNew);
                 }
             }
             return true;
