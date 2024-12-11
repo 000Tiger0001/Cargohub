@@ -256,13 +256,28 @@ public class IntegrationTests
     [Fact]
     public async Task WarehouseDeleteLocation()
     {
-        var testWarehouse = new Warehouse { Id = 1 };
-        var testLocation = new Location { WarehouseId = 1 };
-        await _serviceWarehouse.AddWarehouse(testWarehouse);
-        await _serviceLocation.AddLocation(testLocation);
-        await _serviceWarehouse.RemoveWarehouse(1);
+        Warehouse testWarehouse = new(1, "YQZZNL56", "Heemskerk cargo hub", "Karlijndreef 281", "4002 AS", "Heemskerk", "Friesland", "NL", "Fem Keijzer", "(078) 0013363", "blamore@example.net");
+        Location testLocation = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
+
+        bool IsWarehouseAdded = await _serviceWarehouse.AddWarehouse(testWarehouse);
+
+        Assert.True(IsWarehouseAdded);
+        Assert.Equal([testWarehouse], await _serviceWarehouse.GetWarehouses());
+
+        bool IsLocationAdded = await _serviceLocation.AddLocation(testLocation);
+
+        Assert.True(IsLocationAdded);
+        Assert.Equal([testLocation], await _serviceLocation.GetLocations());
+
+        bool IsWarehouseRemoved = await _serviceWarehouse.RemoveWarehouse(1);
+
+        Assert.True(IsWarehouseRemoved);
+        Assert.Empty(await _serviceWarehouse.GetWarehouses());
+        Assert.Null(await _serviceWarehouse.GetWarehouse(1));
+
         Location? location = await _serviceLocation.GetLocation(1);
         Assert.Equal(0, location!.WarehouseId);
+        Assert.NotEqual(testLocation, location);
     }
 
     [Fact]
