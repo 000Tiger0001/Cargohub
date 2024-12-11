@@ -204,13 +204,25 @@ public class IntegrationTests
         ShipmentItemMovement testShipmentItemMovement = new(1, 1);
         Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, [testShipmentItemMovement]);
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
+        
         bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
-        bool IsItemAdded = await _serviceItems.AddItem(testItem);
-        bool IsItemRemoved = await _serviceItems.RemoveItem(1);
-        Shipment? dbShipment = await _serviceShipment.GetShipment(1)!;
+
         Assert.True(IsShipmentAdded);
+        Assert.Equal([testShipment], await _serviceShipment.GetShipments());
+
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
         Assert.True(IsItemAdded);
+        Assert.Equal([testItem], await _serviceItems.GetItems());
+
+        bool IsItemRemoved = await _serviceItems.RemoveItem(1);
+
         Assert.True(IsItemRemoved);
+        Assert.Empty(await _serviceItems.GetItems());
+        Assert.Null(await _serviceItems.GetItem(1));
+
+        Shipment? dbShipment = await _serviceShipment.GetShipment(1)!;
+
         Assert.Null(await _serviceItems.GetItem(1));
         Assert.Empty(dbShipment!.Items!);
     }
