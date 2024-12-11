@@ -33,7 +33,7 @@ public class ShipmentItemMovementTests
 
         Assert.Equal(await _service.GetShipmentItemMovements(), []);
 
-        ShipmentItemMovement sIM1 = new(1, 2) { Id = 1 };
+        ShipmentItemMovement sIM1 = new(1, 2);
         ShipmentItemMovement sIM2 = new(1, 3) { Id = 2 };
 
         await _service.AddShipmentItemMovement(sIM1);

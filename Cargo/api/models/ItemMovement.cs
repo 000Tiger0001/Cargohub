@@ -39,6 +39,12 @@ public abstract class ItemMovement : IHasId
         ItemId = itemId;
         Amount = amount;
     }
+    public ItemMovement(int id, int itemId, int amount)
+    {
+        Id = id;
+        ItemId = itemId;
+        Amount = amount;
+    }
 
     public override bool Equals(object? obj)
     {

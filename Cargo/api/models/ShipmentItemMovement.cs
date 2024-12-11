@@ -8,6 +8,7 @@ public class ShipmentItemMovement : ItemMovement
     public virtual Shipment? Shipment { get; set; }
 
     public ShipmentItemMovement(int itemId, int amount) : base(itemId, amount) { }
+    public ShipmentItemMovement(int id, int itemId, int amount) : base(id, itemId, amount) { }
 
     public override bool Equals(object? obj)
     {
