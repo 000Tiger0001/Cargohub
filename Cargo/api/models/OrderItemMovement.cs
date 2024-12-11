@@ -8,6 +8,7 @@ public class OrderItemMovement : ItemMovement
     public virtual Order? Order { get; set; }
 
     public OrderItemMovement(int itemId, int amount) : base(itemId, amount) { }
+    public OrderItemMovement(int id, int itemId, int amount) : base(id, itemId, amount) { }
 
     public override bool Equals(object? obj)
     {

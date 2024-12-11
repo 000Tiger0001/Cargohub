@@ -9,6 +9,7 @@ public class TransferItemMovement : ItemMovement
     public virtual Transfer? Transfer { get; set; }
 
     public TransferItemMovement(int itemId, int amount) : base(itemId, amount) { }
+    public TransferItemMovement(int id, int itemId, int amount) : base(id, itemId, amount) { }
 
     public override bool Equals(object? obj)
     {
