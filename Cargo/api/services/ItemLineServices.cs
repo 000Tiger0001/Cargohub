@@ -28,5 +28,11 @@ public class ItemLineServices
         return await _itemLineAccess.Update(itemLine);
     }
 
-    public async Task<bool> RemoveItemLine(int itemLineId) => await _itemLineAccess.Remove(itemLineId);
+    public async Task<bool> RemoveItemLine(int itemLineId)
+    {
+        List<Item> items = await _itemAccess.GetAll();
+        items.ForEach(i => { if (itemLineId == i.ItemLineId) i.ItemLineId = 0; });
+        await _itemAccess.UpdateMany(items);
+        return await _itemLineAccess.Remove(itemLineId);
+    } 
 }

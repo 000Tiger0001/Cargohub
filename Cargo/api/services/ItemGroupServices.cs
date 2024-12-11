@@ -34,7 +34,6 @@ public class ItemGroupServices
         List<Item> items = await _itemAccess.GetAll();
         items.ForEach(i => { if (itemGroupId == i.ItemGroupId) i.ItemGroupId = 0; });
         await _itemAccess.UpdateMany(items);
-        bool IsRemoved = await _itemGroupAccess.Remove(itemGroupId);
-        return IsRemoved;
+        return await _itemGroupAccess.Remove(itemGroupId);
     }
 }

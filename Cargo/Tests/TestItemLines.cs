@@ -1,10 +1,10 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 public class ItemLineTests
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly ItemAccess _itemAccess;
     private readonly ItemLineAccess _itemLineAccess;
     private readonly ItemLineServices _service;
 
@@ -13,9 +13,10 @@ public class ItemLineTests
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
-        _dbContext = new ApplicationDbContext(options);
-        _itemLineAccess = new ItemLineAccess(_dbContext);
-        _service = new(_itemLineAccess);
+        _dbContext = new(options);
+        _itemAccess = new(_dbContext);
+        _itemLineAccess = new(_dbContext);
+        _service = new(_itemLineAccess, _itemAccess);
     }
 
     [Fact]

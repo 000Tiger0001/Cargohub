@@ -59,7 +59,7 @@ public class IntegrationTests
         // Initialize the controller with LocationAccess
 
         _itemLineAccess = new(_dbContext);
-        _serviceItemLine = new(_itemLineAccess);
+        _serviceItemLine = new(_itemLineAccess, _itemAccess);
 
         _itemTypeAccess = new(_dbContext);
         _serviceItemType = new(_itemTypeAccess);
