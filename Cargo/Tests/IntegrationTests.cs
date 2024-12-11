@@ -409,8 +409,12 @@ public class IntegrationTests
     [Fact]
     public async Task AddLocationWithoutWarehouse()
     {
-        var testLocation = new Location { Id = 1, WarehouseId = 1 };
-        await _serviceLocation.AddLocation(testLocation);
+        Location testLocation = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
+
+        bool IsLocationAdded = await _serviceLocation.AddLocation(testLocation);
+        
+        Assert.False(IsLocationAdded);
+        Assert.Empty(await _serviceLocation.GetLocations());
         Assert.Null(await _serviceLocation.GetLocation(1));
     }
 
