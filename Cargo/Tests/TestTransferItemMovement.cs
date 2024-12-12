@@ -13,6 +13,9 @@ public class TransferItemMovementTests
     private readonly ItemGroupAccess _itemGroupAccess;
     private readonly ItemLineAccess _itemLineAccess;
     private readonly ItemTypeAccess _itemTypeAccess;
+    private readonly ItemGroupServices _serviceItemGroup;
+    private readonly ItemLineServices _serviceItemLine;
+    private readonly ItemTypeServices _serviceItemType;
 
     public TransferItemMovementTests()
     {
@@ -28,15 +31,37 @@ public class TransferItemMovementTests
         _itemGroupAccess = new(_dbContext);
         _itemLineAccess = new(_dbContext);
         _itemTypeAccess = new(_dbContext);
+        _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
+        _serviceItemLine = new(_itemLineAccess, _itemAccess);
+        _serviceItemType = new(_itemTypeAccess, _itemAccess);
         _serviceItems = new(_itemAccess, _orderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
     }
     [Fact]
     public async Task GetTransferItemMovements()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
-        await _serviceItems.AddItem(item);
-        Assert.Equal(await _serviceItems.GetItem(1), item);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
 
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        await _serviceItems.AddItem(item);
+
+        Assert.Equal(await _serviceItems.GetItem(1), item);
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
         TransferItemMovement sIM1 = new(1, 1, 2);
@@ -49,15 +74,49 @@ public class TransferItemMovementTests
 
         await _service.RemoveTransferItemMovement(1);
         await _service.RemoveTransferItemMovement(2);
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
     [Fact]
     public async Task GetTransferItemMovement()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
-        await _serviceItems.AddItem(item);
-        Assert.Equal(await _serviceItems.GetItem(1), item);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
 
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        await _serviceItems.AddItem(item);
+
+        Assert.Equal(await _serviceItems.GetItem(1), item);
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
         TransferItemMovement sIM1 = new(1, 1, 2);
@@ -67,16 +126,51 @@ public class TransferItemMovementTests
         Assert.Equal(sIM1, await _service.GetTransferItemMovement(1));
         Assert.Null(await _service.GetTransferItemMovement(-1));
         Assert.Null(await _service.GetTransferItemMovement(2));
+
         await _service.RemoveTransferItemMovement(1);
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
     [Fact]
     public async Task AddTransferItemMovement()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
-        await _serviceItems.AddItem(item);
-        Assert.Equal(await _serviceItems.GetItem(1), item);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
 
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        await _serviceItems.AddItem(item);
+
+        Assert.Equal(await _serviceItems.GetItem(1), item);
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
         TransferItemMovement sIM1 = new(1, 1, 3);
@@ -86,15 +180,49 @@ public class TransferItemMovementTests
         Assert.Equal([sIM1], await _service.GetTransferItemMovements());
 
         await _service.RemoveTransferItemMovement(1);
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
     [Fact]
     public async Task AddDuplicateId()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
-        await _serviceItems.AddItem(item);
-        Assert.Equal(await _serviceItems.GetItem(1), item);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
 
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        await _serviceItems.AddItem(item);
+
+        Assert.Equal(await _serviceItems.GetItem(1), item);
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
         TransferItemMovement sIM1 = new(1, 1, 3);
@@ -111,15 +239,49 @@ public class TransferItemMovementTests
         Assert.Equal([sIM1], await _service.GetTransferItemMovements());
 
         await _service.RemoveTransferItemMovement(1);
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
     [Fact]
     public async Task RemoveTransferItemMovement()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
-        await _serviceItems.AddItem(item);
-        Assert.Equal(await _serviceItems.GetItem(1), item);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
 
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        await _serviceItems.AddItem(item);
+
+        Assert.Equal(await _serviceItems.GetItem(1), item);
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
         TransferItemMovement sIM1 = new(1, 1, 3);
@@ -141,16 +303,50 @@ public class TransferItemMovementTests
         Assert.Equal([sIM2], await _service.GetTransferItemMovements());
 
         await _service.RemoveTransferItemMovement(2);
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
 
     [Fact]
     public async Task UpdateTransferItemMovement()
     {
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 0, 0, 0, 0, 0, 0, 0, null!, "E-86805-uTM");
-        await _serviceItems.AddItem(item);
-        Assert.Equal(await _serviceItems.GetItem(1), item);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
 
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        await _serviceItems.AddItem(item);
+
+        Assert.Equal(await _serviceItems.GetItem(1), item);
         Assert.Equal(await _service.GetTransferItemMovements(), []);
 
         TransferItemMovement sIM1 = new(1, 1, 2);
@@ -167,6 +363,21 @@ public class TransferItemMovementTests
         Assert.Equal([sIM2], await _service.GetTransferItemMovements());
 
         await _service.RemoveTransferItemMovement(2);
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
 }
