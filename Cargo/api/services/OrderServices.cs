@@ -1,10 +1,12 @@
 public class OrderServices
 {
     private readonly OrderAccess _orderAccess;
+    private readonly ItemAccess _itemAccess;
 
-    public OrderServices(OrderAccess orderAccess)
+    public OrderServices(OrderAccess orderAccess, ItemAccess itemAccess)
     {
         _orderAccess = orderAccess;
+        _itemAccess = itemAccess;
     }
     public async Task<List<Order>> GetOrders() => await _orderAccess.GetAll();
 
@@ -34,6 +36,7 @@ public class OrderServices
         if (order is null || order.SourceId == 0 || order.OrderDate == default || order.RequestDate == default || order.Reference == "" || order.ExtraReference == "" || order.Items == null || order.Notes == "" || order.OrderDate == default || order.OrderStatus == "" || order.PickingNotes == "" || order.ShipmentId == 0 || order.ShippingNotes == "" || order.TotalAmount == 0.0 || order.Totaldiscount == 0.0 || order.TotalSurcharge == 0.0 || order.TotalTax == 0.0 || order.WarehouseId == 0) return false;
         List<Order> orders = await GetOrders();
         Order doubleOrder = orders.FirstOrDefault(o => o.SourceId == order.SourceId && o.BillTo == order.BillTo && o.ExtraReference == order.ExtraReference && o.Items == order.Items && o.Notes == order.Notes && o.OrderDate == order.OrderDate && o.OrderStatus == order.OrderStatus && o.PickingNotes == order.PickingNotes && o.Reference == order.Reference && o.RequestDate == order.RequestDate && o.ShipmentId == order.ShipmentId && o.ShippingNotes == o.ShippingNotes && o.ShipTo == order.ShipTo && o.TotalAmount == order.TotalAmount && o.Totaldiscount == order.Totaldiscount)!;
+        foreach (OrderItemMovement orderItemMovement in order.Items) if (await _itemAccess.GetById(orderItemMovement.ItemId) is null) return false;
         if (doubleOrder is not null) return false;
         return await _orderAccess.Add(order);
     }

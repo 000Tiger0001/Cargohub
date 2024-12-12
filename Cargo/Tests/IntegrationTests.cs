@@ -74,7 +74,7 @@ public class IntegrationTests
         _shipmentAccess = new(_dbContext);
 
         _orderAccess = new(_dbContext);
-        _serviceOrder = new(_orderAccess);
+        _serviceOrder = new(_orderAccess, _itemAccess);
 
         _serviceShipment = new(_shipmentAccess, _itemAccess, _orderAccess);
 
@@ -304,15 +304,15 @@ public class IntegrationTests
         Assert.True(IsItemTypeAdded);
         Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
 
-        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
-
-        Assert.True(IsOrderAdded);
-        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
-
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
 
         Assert.True(IsItemAdded);
         Assert.Equal([testItem], await _serviceItems.GetItems());
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
 
         bool IsItemRemoved = await _serviceItems.RemoveItem(1);
 
@@ -363,11 +363,6 @@ public class IntegrationTests
         Assert.True(IsSupplierAdded);
         Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
 
-        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
-
-        Assert.True(IsOrderAdded);
-        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
-
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
         Assert.True(IsItemGroupAdded);
@@ -387,6 +382,11 @@ public class IntegrationTests
 
         Assert.True(IsItemAdded);
         Assert.Equal([testItem], await _serviceItems.GetItems());
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
 
         bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
 
@@ -433,7 +433,7 @@ public class IntegrationTests
         ItemType testItemType = new(1, "Desktop", "");
         TransferItemMovement testTransferItemMovement = new(1, 23);
         Transfer testTransfer = new(1, "TR00001", 0, 9229, "Completed", [testTransferItemMovement]);
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM"); ;
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
         bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
@@ -693,8 +693,44 @@ public class IntegrationTests
     [Fact]
     public async Task AddShipmentWithoutItem()
     {
-        ShipmentItemMovement testShipmentItemMovement = new(1, 3);
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+        ItemGroup testItemGroup = new(1, "Furniture", "");
+        ItemLine testItemLine = new(11, "Home Appliances", "");
+        ItemType testItemType = new(1, "Desktop", "");
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
+        Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 1, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, []);
+        ShipmentItemMovement testShipmentItemMovement = new(2, 3);
         Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, [testShipmentItemMovement]);
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([testItem], await _serviceItems.GetItems());
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
 
         bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
 
