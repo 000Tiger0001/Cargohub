@@ -36,8 +36,8 @@ public class TransferTests
         _shipmentItemMovementAccess = new(_dbContext);
 
         // Create new instance of Service
-        _service = new(_transferAccess);
         _itemAccess = new(_dbContext);
+        _service = new(_transferAccess, _itemAccess);
         _supplierAccess = new(_dbContext);
         _serviceSupplier = new(_supplierAccess, _itemAccess);
         _itemGroupAccess = new(_dbContext);

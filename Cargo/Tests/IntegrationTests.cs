@@ -79,7 +79,7 @@ public class IntegrationTests
         _serviceShipment = new(_shipmentAccess, _itemAccess, _orderAccess);
 
         _transferAccess = new(_dbContext);
-        _serviceTransfer = new(_transferAccess);
+        _serviceTransfer = new(_transferAccess, _itemAccess);
 
         _warehouseAccess = new(_dbContext);
         _locationAccess = new(_dbContext);
@@ -456,15 +456,15 @@ public class IntegrationTests
         Assert.True(IsItemTypeAdded);
         Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
 
-        bool IsTransferAdded = await _serviceTransfer.AddTransfer(testTransfer);
-
-        Assert.True(IsTransferAdded);
-        Assert.Equal([testTransfer], await _serviceTransfer.GetTransfers());
-
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
 
         Assert.True(IsItemAdded);
         Assert.Equal([testItem], await _serviceItems.GetItems());
+
+        bool IsTransferAdded = await _serviceTransfer.AddTransfer(testTransfer);
+
+        Assert.True(IsTransferAdded);
+        Assert.Equal([testTransfer], await _serviceTransfer.GetTransfers());
 
         bool IsItemRemoved = await _serviceItems.RemoveItem(1);
 
