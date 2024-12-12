@@ -17,6 +17,8 @@ public class ShipmentTests
     private readonly ItemGroupServices _serviceItemGroup;
     private readonly ItemLineServices _serviceItemLine;
     private readonly ItemTypeServices _serviceItemType;
+    private readonly OrderAccess _orderAccess;
+    private readonly OrderServices _serviceOrder;
 
     public ShipmentTests()
     {
@@ -28,8 +30,10 @@ public class ShipmentTests
         _orderItemMovementAccess = new(_dbContext);
         _transferItemMovementAccess = new(_dbContext);
         _shipmentItemMovementAccess = new(_dbContext);
-        _service = new(_shipmentAccess);
+        _orderAccess = new(_dbContext);
+        _serviceOrder = new(_orderAccess);
         _itemAccess = new(_dbContext);
+        _service = new(_shipmentAccess, _itemAccess, _orderAccess);
         _itemGroupAccess = new(_dbContext);
         _itemLineAccess = new(_dbContext);
         _itemTypeAccess = new(_dbContext);
@@ -42,8 +46,38 @@ public class ShipmentTests
     [Fact]
     public async Task GetAllShipments()
     {
+        OrderItemMovement orderItemMovement = new(7435, 1);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
         Shipment mockShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 18, 594.42, []);
 
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        bool IsItemAdded = await _serviceItems.AddItem(item1);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([item1], await _serviceItems.GetItems());
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
         Assert.Empty(await _service.GetShipments());
 
         await _service.AddShipment(mockShipment);
@@ -58,7 +92,38 @@ public class ShipmentTests
     [Fact]
     public async Task GetOrder()
     {
+        OrderItemMovement orderItemMovement = new(7435, 1);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
         Shipment mockShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 18, 594.42, []);
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        bool IsItemAdded = await _serviceItems.AddItem(item1);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([item1], await _serviceItems.GetItems());
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
 
         await _service.AddShipment(mockShipment);
 
@@ -116,8 +181,15 @@ public class ShipmentTests
         Assert.Equal([item1, item2, item3], await _serviceItems.GetItems());
 
         List<ShipmentItemMovement> items = [mockItem1, mockItem2, mockItem3];
+        OrderItemMovement orderItemMovement = new(7435, 1);
+        Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
         Shipment mockShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 18, 594.42, [new(7435, 23), new(9557, 1), new(9553, 50)]);
         List<ShipmentItemMovement> wrongItems = [new(4533, 75), new(7546, 43), new(8633, 37)];
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
 
         await _service.AddShipment(mockShipment);
 
@@ -164,7 +236,38 @@ public class ShipmentTests
     [Fact]
     public async Task AddShipmentGood()
     {
+        OrderItemMovement orderItemMovement = new(7435, 1);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
         Shipment mockShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 18, 594.42, []);
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        bool IsItemAdded = await _serviceItems.AddItem(item1);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([item1], await _serviceItems.GetItems());
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
 
         bool IsAdded = await _service.AddShipment(mockShipment);
 
@@ -197,7 +300,38 @@ public class ShipmentTests
     [Fact]
     public async Task AddDuplicateShipment()
     {
+        OrderItemMovement orderItemMovement = new(7435, 1);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
         Shipment mockShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 18, 594.42, []);
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        bool IsItemAdded = await _serviceItems.AddItem(item1);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([item1], await _serviceItems.GetItems());
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
 
         bool IsAdded = await _service.AddShipment(mockShipment);
 
@@ -218,8 +352,53 @@ public class ShipmentTests
     [Fact]
     public async Task AddShipmentWithDuplicateId()
     {
+        OrderItemMovement orderItemMovement = new(7435, 1);
+        OrderItemMovement mockItem2 = new(9557, 1);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item2 = new(9557, "hdaffhhds2", "random2", "r2", "5555 EE2", "hoie2", "jooh2", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Order testOrder1 = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
+        Order testOrder2 = new(2, 1, DateTime.Now, DateTime.Now, "456", "4", "P", "To deliver", "Don't be carefull", "Trow", 1, 1, 1, 1, 12, 12, 12, 12, [mockItem2]);
         Shipment mockShipment1 = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 18, 594.42, []);
         Shipment mockShipment2 = new(1, 2, 9, DateTime.Parse("1983-11-28"), DateTime.Parse("1983-11-30"), DateTime.Parse("1983-12-02"), 'I', "Transit", "Wit duur fijn vlieg.", "PostNL", "Royal Dutch Post and Parcel Service", "TwoDay", "Automatic", "Ground", 56, 42.25, []);
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        bool IsItemAdded1 = await _serviceItems.AddItem(item1);
+
+        Assert.True(IsItemAdded1);
+        Assert.Equal([item1], await _serviceItems.GetItems());
+
+        bool IsItemAdded2 = await _serviceItems.AddItem(item2);
+
+        Assert.True(IsItemAdded2);
+        Assert.Equal([item1, item2], await _serviceItems.GetItems());
+
+        bool IsOrderAdded1 = await _serviceOrder.AddOrder(testOrder1);
+
+        Assert.True(IsOrderAdded1);
+        Assert.Equal([testOrder1], await _serviceOrder.GetOrders());
+
+        bool IsOrderAdded2 = await _serviceOrder.AddOrder(testOrder2);
+
+        Assert.True(IsOrderAdded2);
+        Assert.Equal([testOrder1, testOrder2], await _serviceOrder.GetOrders());
+
         bool IsAdded1 = await _service.AddShipment(mockShipment1);
 
         Assert.True(IsAdded1);
@@ -239,8 +418,52 @@ public class ShipmentTests
     [Fact]
     public async Task UpdateShipment()
     {
+        OrderItemMovement orderItemMovement = new(7435, 1);
+        OrderItemMovement mockItem2 = new(9557, 1);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item2 = new(9557, "hdaffhhds2", "random2", "r2", "5555 EE2", "hoie2", "jooh2", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Order testOrder1 = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
+        Order testOrder2 = new(2, 1, DateTime.Now, DateTime.Now, "456", "4", "P", "To deliver", "Don't be carefull", "Trow", 1, 1, 1, 1, 12, 12, 12, 12, [mockItem2]);
         Shipment mockShipment1 = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 18, 594.42, []);
         Shipment mockShipment2 = new(1, 2, 9, DateTime.Parse("1983-11-28"), DateTime.Parse("1983-11-30"), DateTime.Parse("1983-12-02"), 'I', "Transit", "Wit duur fijn vlieg.", "PostNL", "Royal Dutch Post and Parcel Service", "TwoDay", "Automatic", "Ground", 56, 42.25, []);
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        bool IsItemAdded1 = await _serviceItems.AddItem(item1);
+
+        Assert.True(IsItemAdded1);
+        Assert.Equal([item1], await _serviceItems.GetItems());
+
+        bool IsItemAdded2 = await _serviceItems.AddItem(item2);
+
+        Assert.True(IsItemAdded2);
+        Assert.Equal([item1, item2], await _serviceItems.GetItems());
+
+        bool IsOrderAdded1 = await _serviceOrder.AddOrder(testOrder1);
+
+        Assert.True(IsOrderAdded1);
+        Assert.Equal([testOrder1], await _serviceOrder.GetOrders());
+
+        bool IsOrderAdded2 = await _serviceOrder.AddOrder(testOrder2);
+
+        Assert.True(IsOrderAdded2);
+        Assert.Equal([testOrder1, testOrder2], await _serviceOrder.GetOrders());
 
         bool IsAdded = await _service.AddShipment(mockShipment1);
 
@@ -259,7 +482,38 @@ public class ShipmentTests
     [Fact]
     public async Task RemoveShipment()
     {
+        OrderItemMovement orderItemMovement = new(7435, 1);
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
         Shipment mockShipment1 = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 18, 594.42, []);
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        bool IsItemAdded = await _serviceItems.AddItem(item1);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([item1], await _serviceItems.GetItems());
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
 
         bool IsAdded = await _service.AddShipment(mockShipment1);
 

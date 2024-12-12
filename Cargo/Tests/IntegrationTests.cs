@@ -74,7 +74,7 @@ public class IntegrationTests
         _serviceOrder = new(_orderAccess);
 
         _shipmentAccess = new(_dbContext);
-        _serviceShipment = new(_shipmentAccess);
+        _serviceShipment = new(_shipmentAccess, _itemAccess, _orderAccess);
 
         _transferAccess = new(_dbContext);
         _serviceTransfer = new(_transferAccess);
@@ -328,8 +328,15 @@ public class IntegrationTests
         ItemLine testItemLine = new(11, "Home Appliances", "");
         ItemType testItemType = new(1, "Desktop", "");
         ShipmentItemMovement testShipmentItemMovement = new(1, 1);
+        OrderItemMovement orderItemMovement = new(1, 1);
         Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, [testShipmentItemMovement]);
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
+        Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
+
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+
+        Assert.True(IsOrderAdded);
+        Assert.Equal([testOrder], await _serviceOrder.GetOrders());
 
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
@@ -346,15 +353,15 @@ public class IntegrationTests
         Assert.True(IsItemTypeAdded);
         Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
 
-        bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
-
-        Assert.True(IsShipmentAdded);
-        Assert.Equal([testShipment], await _serviceShipment.GetShipments());
-
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
 
         Assert.True(IsItemAdded);
         Assert.Equal([testItem], await _serviceItems.GetItems());
+
+        bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
+
+        Assert.True(IsShipmentAdded);
+        Assert.Equal([testShipment], await _serviceShipment.GetShipments());
 
         bool IsItemRemoved = await _serviceItems.RemoveItem(1);
 
@@ -555,7 +562,8 @@ public class IntegrationTests
     [Fact]
     public async Task AddShipmentWithoutOrder()
     {
-        Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, []);
+        ShipmentItemMovement testShipmentItemMovement = new(1, 3);
+        Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, [testShipmentItemMovement]);
 
         bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
 
@@ -567,7 +575,8 @@ public class IntegrationTests
     [Fact]
     public async Task AddOrderWithoutShipment()
     {
-        Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 1, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, []);
+        OrderItemMovement testOrderItemMovement = new(1, 3);
+        Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 1, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [testOrderItemMovement]);
 
         bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
 
