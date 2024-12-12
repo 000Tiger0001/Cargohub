@@ -14,6 +14,9 @@ public class ShipmentTests
     private readonly ItemGroupAccess _itemGroupAccess;
     private readonly ItemLineAccess _itemLineAccess;
     private readonly ItemTypeAccess _itemTypeAccess;
+    private readonly ItemGroupServices _serviceItemGroup;
+    private readonly ItemLineServices _serviceItemLine;
+    private readonly ItemTypeServices _serviceItemType;
 
     public ShipmentTests()
     {
@@ -30,6 +33,9 @@ public class ShipmentTests
         _itemGroupAccess = new(_dbContext);
         _itemLineAccess = new(_dbContext);
         _itemTypeAccess = new(_dbContext);
+        _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
+        _serviceItemLine = new(_itemLineAccess, _itemAccess);
+        _serviceItemType = new(_itemTypeAccess, _itemAccess);
         _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
     }
 
@@ -67,13 +73,32 @@ public class ShipmentTests
     [Fact]
     public async Task GetItemsInShipment()
     {
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+
         ShipmentItemMovement mockItem1 = new(7435, 23);
         ShipmentItemMovement mockItem2 = new(9557, 1);
         ShipmentItemMovement mockItem3 = new(9553, 50);
 
-        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
-        Item item2 = new(9557, "hdaffhhds2", "random2", "r2", "5555 EE2", "hoie2", "jooh2", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
-        Item item3 = new(9553, "hdaffhhds3", "random3", "r3", "5555 EE3", "hoie3", "jooh3", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item2 = new(9557, "hdaffhhds2", "random2", "r2", "5555 EE2", "hoie2", "jooh2", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item3 = new(9553, "hdaffhhds3", "random3", "r3", "5555 EE3", "hoie3", "jooh3", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
 
         bool IsItemAdded1 = await _serviceItems.AddItem(item1);
 
@@ -119,6 +144,21 @@ public class ShipmentTests
 
         Assert.True(IsItemRemoved3);
         Assert.Empty(await _serviceItems.GetItems());
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
     [Fact]
