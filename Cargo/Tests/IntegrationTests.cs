@@ -53,8 +53,13 @@ public class IntegrationTests
 
         // Create a new instance of LocationAccess with the in-memory DbContext
         _itemGroupAccess = new ItemGroupAccess(_dbContext);
-
         _itemAccess = new ItemAccess(_dbContext);
+
+        _itemLineAccess = new(_dbContext);
+        _serviceItemLine = new(_itemLineAccess, _itemAccess);
+
+        _itemTypeAccess = new(_dbContext);
+        _serviceItemType = new(_itemTypeAccess, _itemAccess);
 
         _orderItemMovementAccess = new(_dbContext);
         _shipmentItemMovementAccess = new(_dbContext);
@@ -62,15 +67,9 @@ public class IntegrationTests
 
         // Create new instance of locationService
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
 
         // Initialize the controller with LocationAccess
-        _itemLineAccess = new(_dbContext);
-        _serviceItemLine = new(_itemLineAccess, _itemAccess);
-
-        _itemTypeAccess = new(_dbContext);
-        _serviceItemType = new(_itemTypeAccess, _itemAccess);
-
         _orderAccess = new(_dbContext);
         _serviceOrder = new(_orderAccess);
 
@@ -94,12 +93,24 @@ public class IntegrationTests
     public async Task ItemGroupDelete()
     {
         ItemGroup testItemGroup = new(1, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
         //Add the mock locations to the in-memory database
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
         Assert.True(IsItemGroupAdded);
         Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
 
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
 
@@ -121,18 +132,40 @@ public class IntegrationTests
 
         Assert.True(IsItemRemoved);
         Assert.Empty(await _serviceItems.GetItems());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
     [Fact]
     public async Task ItemLineDelete()
     {
+        ItemGroup testItemGroup = new(1, "Furniture", "");
         ItemLine testItemLine = new(1, "Home Appliances", "");
+        ItemType testItemType = new(14, "blablablabla", "");
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
         //Add the mock locations to the in-memory database
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
         bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
 
         Assert.True(IsItemLineAdded);
         Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
 
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
 
@@ -154,14 +187,37 @@ public class IntegrationTests
 
         Assert.True(IsItemRemoved);
         Assert.Empty(await _serviceItems.GetItems());
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(1);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
+
     }
 
     [Fact]
     public async Task ItemTypeDelete()
     {
+        ItemGroup testItemGroup = new(1, "Furniture", "");
+        ItemLine testItemLine = new(11, "Home Appliances", "");
         ItemType testItemType = new(1, "Desktop", "");
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
         //Add the mock locations to the in-memory database
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
         bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
 
         Assert.True(IsItemTypeAdded);
@@ -187,15 +243,43 @@ public class IntegrationTests
 
         Assert.True(IsItemRemoved);
         Assert.Empty(await _serviceItems.GetItems());
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(1);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
     }
 
     [Fact]
     public async Task ItemDeleteOrder()
     {
+        ItemGroup testItemGroup = new(1, "Furniture", "");
+        ItemLine testItemLine = new(11, "Home Appliances", "");
+        ItemType testItemType = new(1, "Desktop", "");
         OrderItemMovement testOrderItemMovement = new(1, 1);
         Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [testOrderItemMovement]);
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
         //Add the mock locations to the in-memory database
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
         bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
 
         Assert.True(IsOrderAdded);
@@ -214,20 +298,53 @@ public class IntegrationTests
 
         Order? order = await _serviceOrder.GetOrder(1);
         Assert.Empty(order!.Items!);
-        Assert.Null(await _serviceOrder.GetItemsInOrder(1));
+        Assert.Empty(await _serviceOrder.GetItemsInOrder(1));
 
         bool IsOrderRemoved = await _serviceOrder.RemoveOrder(1);
 
         Assert.True(IsOrderRemoved);
         Assert.Empty(await _serviceOrder.GetOrders());
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(1);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(1);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
     [Fact]
     public async Task ItemDeleteShipment()
     {
+        ItemGroup testItemGroup = new(1, "Furniture", "");
+        ItemLine testItemLine = new(11, "Home Appliances", "");
+        ItemType testItemType = new(1, "Desktop", "");
         ShipmentItemMovement testShipmentItemMovement = new(1, 1);
         Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, [testShipmentItemMovement]);
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
 
         bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
 
@@ -254,14 +371,48 @@ public class IntegrationTests
 
         Assert.True(IsShipmentRemoved);
         Assert.Empty(await _serviceShipment.GetShipments());
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(1);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(1);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
     [Fact]
     public async Task ItemDeleteTransfer()
     {
+
+        ItemGroup testItemGroup = new(1, "Furniture", "");
+        ItemLine testItemLine = new(11, "Home Appliances", "");
+        ItemType testItemType = new(1, "Desktop", "");
         TransferItemMovement testTransferItemMovement = new(1, 23);
         Transfer testTransfer = new(1, "TR00001", 0, 9229, "Completed", [testTransferItemMovement]);
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
 
         bool IsTransferAdded = await _serviceTransfer.AddTransfer(testTransfer);
 
@@ -285,6 +436,21 @@ public class IntegrationTests
 
         Assert.True(IsTransferRemoved);
         Assert.Empty(await _serviceTransfer.GetTransfers());
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(1);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(1);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
     [Fact]

@@ -13,6 +13,9 @@ public class OrderTests
     private readonly OrderItemMovementAccess _orderItemMovementAccess;
     private readonly TransferItemMovementAccess _transferItemMovementAccess;
     private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private readonly ItemGroupAccess _itemGroupAccess;
+    private readonly ItemLineAccess _itemLineAccess;
+    private readonly ItemTypeAccess _itemTypeAccess;
 
     public OrderTests()
     {
@@ -26,7 +29,10 @@ public class OrderTests
         _orderItemMovementAccess = new(_dbContext);
         _transferItemMovementAccess = new(_dbContext);
         _shipmentItemMovementAccess = new(_dbContext);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
+        _itemGroupAccess = new(_dbContext);
+        _itemLineAccess = new(_dbContext);
+        _itemTypeAccess = new(_dbContext);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
         _clientAccess = new(_dbContext);
         _serviceClients = new(_clientAccess);
     }
@@ -90,7 +96,7 @@ public class OrderTests
         Item item7 = new(7369, "hdaffhhds7", "random7", "r7", "5555 EE7", "hoie7", "jooh7", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
         Item item8 = new(7311, "hdaffhhds8", "random8", "r8", "5555 EE8", "hoie8", "jooh8", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
         Item item9 = new(10669, "hdaffhhds9", "random9", "r9", "5555 EE9", "hoie9", "jooh9", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
-        
+
         bool IsItemAdded1 = await _serviceItems.AddItem(item1);
 
         Assert.True(IsItemAdded1);

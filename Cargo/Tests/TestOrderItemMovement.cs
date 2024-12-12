@@ -10,6 +10,9 @@ public class OrderItemMovementTests
     private readonly OrderItemMovementServices _service;
     private readonly ItemAccess _itemAccess;
     private readonly ItemServices _serviceItems;
+    private readonly ItemGroupAccess _itemGroupAccess;
+    private readonly ItemLineAccess _itemLineAccess;
+    private readonly ItemTypeAccess _itemTypeAccess;
 
     public OrderItemMovementTests()
     {
@@ -22,7 +25,10 @@ public class OrderItemMovementTests
         _TransferItemMovementAccess = new(_dbContext);
         _service = new(_OrderItemMovementAccess);
         _itemAccess = new(_dbContext);
-        _serviceItems = new(_itemAccess, _OrderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess);
+        _itemGroupAccess = new(_dbContext);
+        _itemLineAccess = new(_dbContext);
+        _itemTypeAccess = new(_dbContext);
+        _serviceItems = new(_itemAccess, _OrderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
     }
     [Fact]
     public async Task GetOrderItemMovements()

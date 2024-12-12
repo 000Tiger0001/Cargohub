@@ -9,6 +9,9 @@ public class ItemTests
     private readonly OrderItemMovementAccess _orderItemMovementAccess;
     private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
     private readonly TransferItemMovementAccess _TransferItemMovementAccess;
+    private readonly ItemGroupAccess _itemGroupAccess;
+    private readonly ItemLineAccess _itemLineAccess;
+    private readonly ItemTypeAccess _itemTypeAccess;
 
     public ItemTests()
     {
@@ -20,7 +23,10 @@ public class ItemTests
         _shipmentItemMovementAccess = new(_dbContext);
         _TransferItemMovementAccess = new(_dbContext);
         _itemAccess = new ItemAccess(_dbContext);
-        _service = new(_itemAccess, _orderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess);
+        _itemGroupAccess = new(_dbContext);
+        _itemLineAccess = new(_dbContext);
+        _itemTypeAccess = new(_dbContext);
+        _service = new(_itemAccess, _orderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
     }
 
     [Fact]

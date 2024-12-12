@@ -6,13 +6,19 @@ public class ItemServices
     private readonly OrderItemMovementAccess _orderItemMovementAccess;
     private readonly TransferItemMovementAccess _transferItemMovementAccess;
     private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private readonly ItemGroupAccess _itemGroupAccess;
+    private readonly ItemLineAccess _itemLineAccess;
+    private readonly ItemTypeAccess _itemTypeAccess;
 
-    public ItemServices(ItemAccess itemAccess, OrderItemMovementAccess orderItemMovementAccess, TransferItemMovementAccess transferItemMovementAccess, ShipmentItemMovementAccess shipmentItemMovementAccess)
+    public ItemServices(ItemAccess itemAccess, OrderItemMovementAccess orderItemMovementAccess, TransferItemMovementAccess transferItemMovementAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, ItemGroupAccess itemGroupAccess, ItemLineAccess itemLineAccess, ItemTypeAccess itemTypeAccess)
     {
         _itemAccess = itemAccess;
         _orderItemMovementAccess = orderItemMovementAccess;
         _transferItemMovementAccess = transferItemMovementAccess;
         _shipmentItemMovementAccess = shipmentItemMovementAccess;
+        _itemGroupAccess = itemGroupAccess;
+        _itemLineAccess = itemLineAccess;
+        _itemTypeAccess = itemTypeAccess;
     }
 
     public async Task<List<Item>> GetItems() => await _itemAccess.GetAll();
@@ -48,7 +54,10 @@ public class ItemServices
         if (item is null || item.Code == "" || item.CommodityCode == "" || item.Description == "" || item.ItemGroupId == default || item.ItemLineId == default || item.ItemTypeId == default || item.ModelNumber == "" || item.UpcCode == "" || item.ShortDescription == "") return false;
         List<Item> items = await GetItems();
         Item doubleItem = items.FirstOrDefault(i => i.Code == item.Code && i.CommodityCode == i.CommodityCode && i.Description == item.Description && i.ShortDescription == item.ShortDescription && i.ItemGroupId == item.ItemGroupId && i.ItemLineId == item.ItemLineId && i.ItemTypeId == item.ItemTypeId && i.ModelNumber == item.ModelNumber && i.UpcCode == item.UpcCode)!;
-        if (doubleItem is not null) return false;
+        ItemGroup? foundItemGroup = await _itemGroupAccess.GetById(int.Parse(item.ItemGroupId.ToString()!));
+        ItemLine? foundItemLine = await _itemLineAccess.GetById(int.Parse(item.ItemLineId.ToString()!));
+        ItemType? foundItemType = await _itemTypeAccess.GetById(int.Parse(item.ItemTypeId.ToString()!));
+        if (doubleItem is not null || foundItemGroup is null || foundItemLine is null || foundItemType is null) return false;
         return await _itemAccess.Add(item);
     }
 

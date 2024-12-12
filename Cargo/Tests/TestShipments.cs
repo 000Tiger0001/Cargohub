@@ -11,6 +11,9 @@ public class ShipmentTests
     private readonly TransferItemMovementAccess _transferItemMovementAccess;
     private readonly OrderItemMovementAccess _orderItemMovementAccess;
     private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private readonly ItemGroupAccess _itemGroupAccess;
+    private readonly ItemLineAccess _itemLineAccess;
+    private readonly ItemTypeAccess _itemTypeAccess;
 
     public ShipmentTests()
     {
@@ -24,14 +27,17 @@ public class ShipmentTests
         _shipmentItemMovementAccess = new(_dbContext);
         _service = new(_shipmentAccess);
         _itemAccess = new(_dbContext);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
+        _itemGroupAccess = new(_dbContext);
+        _itemLineAccess = new(_dbContext);
+        _itemTypeAccess = new(_dbContext);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
     }
 
     [Fact]
     public async Task GetAllShipments()
     {
         Shipment mockShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 18, 594.42, []);
-        
+
         Assert.Empty(await _service.GetShipments());
 
         await _service.AddShipment(mockShipment);
@@ -96,9 +102,9 @@ public class ShipmentTests
         Assert.Equal(items, await _service.GetItemsInShipment(1));
         Assert.Empty(await _service.GetItemsInShipment(0));
         Assert.Empty(await _service.GetItemsInShipment(-1));
-        
-        await _service.RemoveShipment(1); 
-        
+
+        await _service.RemoveShipment(1);
+
         bool IsItemRemoved1 = await _serviceItems.RemoveItem(7435);
 
         Assert.True(IsItemRemoved1);

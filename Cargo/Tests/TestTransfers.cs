@@ -11,6 +11,9 @@ public class TransferTests
     private readonly ItemServices _serviceItems;
     private readonly OrderItemMovementAccess _orderItemMovementAccess;
     private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private readonly ItemGroupAccess _itemGroupAccess;
+    private readonly ItemLineAccess _itemLineAccess;
+    private readonly ItemTypeAccess _itemTypeAccess;
 
     public TransferTests()
     {
@@ -30,7 +33,10 @@ public class TransferTests
         // Create new instance of Service
         _service = new(_transferAccess);
         _itemAccess = new(_dbContext);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess);
+        _itemGroupAccess = new(_dbContext);
+        _itemLineAccess = new(_dbContext);
+        _itemTypeAccess = new(_dbContext);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
     }
 
     [Fact]
@@ -79,7 +85,7 @@ public class TransferTests
 
         List<TransferItemMovement> items = [mockItem1];
         Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Completed", items);
-        
+
         await _service.AddTransfer(mockTransfer);
 
         List<TransferItemMovement>? transferItems = await _service.GetItemsInTransfer(2);
