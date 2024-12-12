@@ -9,8 +9,9 @@ public class ItemServices
     private readonly ItemGroupAccess _itemGroupAccess;
     private readonly ItemLineAccess _itemLineAccess;
     private readonly ItemTypeAccess _itemTypeAccess;
+    private readonly SupplierAccess _supplierAccess;
 
-    public ItemServices(ItemAccess itemAccess, OrderItemMovementAccess orderItemMovementAccess, TransferItemMovementAccess transferItemMovementAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, ItemGroupAccess itemGroupAccess, ItemLineAccess itemLineAccess, ItemTypeAccess itemTypeAccess)
+    public ItemServices(ItemAccess itemAccess, OrderItemMovementAccess orderItemMovementAccess, TransferItemMovementAccess transferItemMovementAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, ItemGroupAccess itemGroupAccess, ItemLineAccess itemLineAccess, ItemTypeAccess itemTypeAccess, SupplierAccess supplierAccess)
     {
         _itemAccess = itemAccess;
         _orderItemMovementAccess = orderItemMovementAccess;
@@ -19,6 +20,7 @@ public class ItemServices
         _itemGroupAccess = itemGroupAccess;
         _itemLineAccess = itemLineAccess;
         _itemTypeAccess = itemTypeAccess;
+        _supplierAccess = supplierAccess;
     }
 
     public async Task<List<Item>> GetItems() => await _itemAccess.GetAll();
@@ -57,7 +59,8 @@ public class ItemServices
         ItemGroup? foundItemGroup = await _itemGroupAccess.GetById(int.Parse(item.ItemGroupId.ToString()!));
         ItemLine? foundItemLine = await _itemLineAccess.GetById(int.Parse(item.ItemLineId.ToString()!));
         ItemType? foundItemType = await _itemTypeAccess.GetById(int.Parse(item.ItemTypeId.ToString()!));
-        if (doubleItem is not null || foundItemGroup is null || foundItemLine is null || foundItemType is null) return false;
+        Supplier? foundSupplier = await _supplierAccess.GetById(item.SupplierId);
+        if (doubleItem is not null || foundItemGroup is null || foundItemLine is null || foundItemType is null || foundSupplier is null) return false;
         return await _itemAccess.Add(item);
     }
 

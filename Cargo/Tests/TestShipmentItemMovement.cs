@@ -16,25 +16,29 @@ public class ShipmentItemMovementTests
     private readonly ItemGroupServices _serviceItemGroup;
     private readonly ItemLineServices _serviceItemLine;
     private readonly ItemTypeServices _serviceItemType;
+    private readonly SupplierAccess _supplierAccess;
+    private readonly SupplierServices _serviceSupplier;
 
     public ShipmentItemMovementTests()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
-        _dbContext = new ApplicationDbContext(options);
+        _dbContext = new(options);
         _orderItemMovementAccess = new(_dbContext);
         _shipmentItemMovementAccess = new(_dbContext);
         _TransferItemMovementAccess = new(_dbContext);
         _service = new(_shipmentItemMovementAccess);
         _itemAccess = new(_dbContext);
+        _supplierAccess = new(_dbContext);
+        _serviceSupplier = new(_supplierAccess);
         _itemGroupAccess = new(_dbContext);
         _itemLineAccess = new(_dbContext);
         _itemTypeAccess = new(_dbContext);
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
         _serviceItemType = new(_itemTypeAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
     }
 
     [Fact]
@@ -43,7 +47,13 @@ public class ShipmentItemMovementTests
         ItemGroup testItemGroup = new(73, "Furniture", "");
         ItemLine testItemLine = new(11, "blablabla", "");
         ItemType testItemType = new(14, "blablablabla", "");
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
 
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
@@ -98,7 +108,13 @@ public class ShipmentItemMovementTests
         ItemGroup testItemGroup = new(73, "Furniture", "");
         ItemLine testItemLine = new(11, "blablabla", "");
         ItemType testItemType = new(14, "blablablabla", "");
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
 
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
@@ -152,7 +168,13 @@ public class ShipmentItemMovementTests
         ItemGroup testItemGroup = new(73, "Furniture", "");
         ItemLine testItemLine = new(11, "blablabla", "");
         ItemType testItemType = new(14, "blablablabla", "");
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
 
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
@@ -204,7 +226,13 @@ public class ShipmentItemMovementTests
         ItemGroup testItemGroup = new(73, "Furniture", "");
         ItemLine testItemLine = new(11, "blablabla", "");
         ItemType testItemType = new(14, "blablablabla", "");
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
 
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
@@ -263,7 +291,13 @@ public class ShipmentItemMovementTests
         ItemGroup testItemGroup = new(73, "Furniture", "");
         ItemLine testItemLine = new(11, "blablabla", "");
         ItemType testItemType = new(14, "blablablabla", "");
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
 
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
@@ -328,7 +362,13 @@ public class ShipmentItemMovementTests
         ItemGroup testItemGroup = new(73, "Furniture", "");
         ItemLine testItemLine = new(11, "blablabla", "");
         ItemType testItemType = new(14, "blablablabla", "");
-        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 0, null!, "E-86805-uTM");
+        Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
 
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 

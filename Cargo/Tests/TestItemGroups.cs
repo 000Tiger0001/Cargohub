@@ -13,16 +13,16 @@ public class ItemGroupTests
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
-        _dbContext = new ApplicationDbContext(options);
-        _itemAccess = new ItemAccess(_dbContext);
-        _itemGroupAccess = new ItemGroupAccess(_dbContext);
-        _service = new ItemGroupServices(_itemGroupAccess, _itemAccess);
+        _dbContext = new(options);
+        _itemAccess = new(_dbContext);
+        _itemGroupAccess = new(_dbContext);
+        _service = new(_itemGroupAccess, _itemAccess);
     }
 
     [Fact]
     public async Task GetAllItemGroups()
     {
-        ItemGroup mockItemGroup = new (1, "Hardware", "");
+        ItemGroup mockItemGroup = new(1, "Hardware", "");
 
         Assert.Empty(await _service.GetItemGroups());
 
@@ -61,7 +61,7 @@ public class ItemGroupTests
 
         Assert.True(IsAdded);
         Assert.Equal([mockItemGroup], await _service.GetItemGroups());
-        
+
         await _service.RemoveItemGroup(1);
 
         Assert.Empty(await _service.GetItemGroups());

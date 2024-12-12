@@ -49,11 +49,11 @@ public class IntegrationTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) //In-memory database
                         .Options;
 
-        _dbContext = new ApplicationDbContext(options);
+        _dbContext = new(options);
 
         // Create a new instance of LocationAccess with the in-memory DbContext
-        _itemGroupAccess = new ItemGroupAccess(_dbContext);
-        _itemAccess = new ItemAccess(_dbContext);
+        _itemGroupAccess = new(_dbContext);
+        _itemAccess = new(_dbContext);
 
         _itemLineAccess = new(_dbContext);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
@@ -64,10 +64,11 @@ public class IntegrationTests
         _orderItemMovementAccess = new(_dbContext);
         _shipmentItemMovementAccess = new(_dbContext);
         _transferItemMovementAccess = new(_dbContext);
+        _supplierAccess = new(_dbContext);
 
         // Create new instance of locationService
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
 
         // Initialize the controller with LocationAccess
         _shipmentAccess = new(_dbContext);
@@ -85,7 +86,6 @@ public class IntegrationTests
         _serviceLocation = new(_locationAccess, _warehouseAccess);
         _serviceWarehouse = new(_warehouseAccess, _locationAccess, _orderAccess);
 
-        _supplierAccess = new(_dbContext);
         _serviceSupplier = new(_supplierAccess);
     }
 
@@ -95,8 +95,14 @@ public class IntegrationTests
         ItemGroup testItemGroup = new(1, "Furniture", "");
         ItemLine testItemLine = new(11, "blablabla", "");
         ItemType testItemType = new(14, "blablablabla", "");
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
-        //Add the mock locations to the in-memory database
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 14, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
+
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
         Assert.True(IsItemGroupAdded);
@@ -150,8 +156,14 @@ public class IntegrationTests
         ItemGroup testItemGroup = new(1, "Furniture", "");
         ItemLine testItemLine = new(1, "Home Appliances", "");
         ItemType testItemType = new(14, "blablablabla", "");
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 14, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
-        //Add the mock locations to the in-memory database
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 14, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
+
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
         Assert.True(IsItemGroupAdded);
@@ -206,8 +218,14 @@ public class IntegrationTests
         ItemGroup testItemGroup = new(1, "Furniture", "");
         ItemLine testItemLine = new(11, "Home Appliances", "");
         ItemType testItemType = new(1, "Desktop", "");
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
-        //Add the mock locations to the in-memory database
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
+
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
         Assert.True(IsItemGroupAdded);
@@ -263,8 +281,14 @@ public class IntegrationTests
         ItemType testItemType = new(1, "Desktop", "");
         OrderItemMovement testOrderItemMovement = new(1, 1);
         Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [testOrderItemMovement]);
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
-        //Add the mock locations to the in-memory database
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
+
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
         Assert.True(IsItemGroupAdded);
@@ -330,8 +354,14 @@ public class IntegrationTests
         ShipmentItemMovement testShipmentItemMovement = new(1, 1);
         OrderItemMovement orderItemMovement = new(1, 1);
         Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, [testShipmentItemMovement]);
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
         Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
 
         bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
 
@@ -398,13 +428,18 @@ public class IntegrationTests
     [Fact]
     public async Task ItemDeleteTransfer()
     {
-
         ItemGroup testItemGroup = new(1, "Furniture", "");
         ItemLine testItemLine = new(11, "Home Appliances", "");
         ItemType testItemType = new(1, "Desktop", "");
         TransferItemMovement testTransferItemMovement = new(1, 23);
         Transfer testTransfer = new(1, "TR00001", 0, 9229, "Completed", [testTransferItemMovement]);
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM"); ;
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
 
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 
@@ -628,7 +663,25 @@ public class IntegrationTests
     [Fact]
     public async Task AddItemWithoutSupplier()
     {
-        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM"); ;
+        ItemGroup testItemGroup = new(1, "Furniture", "");
+        ItemLine testItemLine = new(1, "Home Appliances", "");
+        ItemType testItemType = new(1, "Desktop", "");
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 1, 47, 13, 11, 34, "SUP423", "E-86805-uTM");
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
 
         bool IsItemAdded = await _serviceItems.AddItem(testItem);
 

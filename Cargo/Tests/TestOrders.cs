@@ -21,15 +21,19 @@ public class OrderTests
     private readonly ItemTypeServices _serviceItemType;
     private readonly ShipmentAccess _shipmentAccess;
     private readonly ShipmentServices _servicesShipment;
+    private readonly SupplierAccess _supplierAccess;
+    private readonly SupplierServices _serviceSupplier;
 
     public OrderTests()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
-        _dbContext = new ApplicationDbContext(options);
-        _orderAccess = new OrderAccess(_dbContext);
+        _dbContext = new(options);
+        _orderAccess = new(_dbContext);
         _itemAccess = new(_dbContext);
+        _supplierAccess = new(_dbContext);
+        _serviceSupplier = new(_supplierAccess);
         _orderItemMovementAccess = new(_dbContext);
         _transferItemMovementAccess = new(_dbContext);
         _shipmentItemMovementAccess = new(_dbContext);
@@ -38,7 +42,7 @@ public class OrderTests
         _itemTypeAccess = new(_dbContext);
         _shipmentAccess = new(_dbContext);
         _servicesShipment = new(_shipmentAccess, _itemAccess, _orderAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
         _service = new(_orderAccess);
         _clientAccess = new(_dbContext);
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
@@ -101,15 +105,21 @@ public class OrderTests
         OrderItemMovement mockItem8 = new(7311, 21);
         OrderItemMovement mockItem9 = new(10669, 16);
 
-        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
-        Item item2 = new(9557, "hdaffhhds2", "random2", "r2", "5555 EE2", "hoie2", "jooh2", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
-        Item item3 = new(9553, "hdaffhhds3", "random3", "r3", "5555 EE3", "hoie3", "jooh3", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
-        Item item4 = new(10015, "hdaffhhds4", "random4", "r4", "5555 EE4", "hoie4", "jooh4", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
-        Item item5 = new(2084, "hdaffhhds5", "random5", "r5", "5555 EE5", "hoie5", "jooh5", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
-        Item item6 = new(3790, "hdaffhhds6", "random6", "r6", "5555 EE6", "hoie6", "jooh6", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
-        Item item7 = new(7369, "hdaffhhds7", "random7", "r7", "5555 EE7", "hoie7", "jooh7", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
-        Item item8 = new(7311, "hdaffhhds8", "random8", "r8", "5555 EE8", "hoie8", "jooh8", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
-        Item item9 = new(10669, "hdaffhhds9", "random9", "r9", "5555 EE9", "hoie9", "jooh9", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
+        Item item2 = new(9557, "hdaffhhds2", "random2", "r2", "5555 EE2", "hoie2", "jooh2", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
+        Item item3 = new(9553, "hdaffhhds3", "random3", "r3", "5555 EE3", "hoie3", "jooh3", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
+        Item item4 = new(10015, "hdaffhhds4", "random4", "r4", "5555 EE4", "hoie4", "jooh4", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
+        Item item5 = new(2084, "hdaffhhds5", "random5", "r5", "5555 EE5", "hoie5", "jooh5", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
+        Item item6 = new(3790, "hdaffhhds6", "random6", "r6", "5555 EE6", "hoie6", "jooh6", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
+        Item item7 = new(7369, "hdaffhhds7", "random7", "r7", "5555 EE7", "hoie7", "jooh7", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
+        Item item8 = new(7311, "hdaffhhds8", "random8", "r8", "5555 EE8", "hoie8", "jooh8", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
+        Item item9 = new(10669, "hdaffhhds9", "random9", "r9", "5555 EE9", "hoie9", "jooh9", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
 
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 

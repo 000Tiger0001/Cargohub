@@ -17,6 +17,8 @@ public class TransferTests
     private readonly ItemGroupServices _serviceItemGroup;
     private readonly ItemLineServices _serviceItemLine;
     private readonly ItemTypeServices _serviceItemType;
+    private readonly SupplierAccess _supplierAccess;
+    private readonly SupplierServices _serviceSupplier;
 
     public TransferTests()
     {
@@ -36,13 +38,15 @@ public class TransferTests
         // Create new instance of Service
         _service = new(_transferAccess);
         _itemAccess = new(_dbContext);
+        _supplierAccess = new(_dbContext);
+        _serviceSupplier = new(_supplierAccess);
         _itemGroupAccess = new(_dbContext);
         _itemLineAccess = new(_dbContext);
         _itemTypeAccess = new(_dbContext);
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
         _serviceItemType = new(_itemTypeAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
     }
 
     [Fact]
@@ -84,7 +88,13 @@ public class TransferTests
         ItemLine testItemLine = new(11, "blablabla", "");
         ItemType testItemType = new(14, "blablablabla", "");
         TransferItemMovement mockItem1 = new(7435, 23);
-        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
+        Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
 
         bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
 

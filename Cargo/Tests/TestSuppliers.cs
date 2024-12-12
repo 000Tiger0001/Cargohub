@@ -14,10 +14,10 @@ public class SupplierTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
 
-        _dbContext = new ApplicationDbContext(options);
+        _dbContext = new(options);
 
         // Create a new instance of Access with the in-memory DbContext
-        _supplierAccess = new SupplierAccess(_dbContext);
+        _supplierAccess = new(_dbContext);
 
         // Create new instance of Service
         _service = new(_supplierAccess);

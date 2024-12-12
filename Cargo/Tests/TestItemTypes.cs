@@ -13,9 +13,9 @@ public class ItemTypeTests
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
-        _dbContext = new ApplicationDbContext(options);
+        _dbContext = new(options);
         _itemAccess = new(_dbContext);
-        _itemTypeAccess = new ItemTypeAccess(_dbContext);
+        _itemTypeAccess = new(_dbContext);
         _service = new(_itemTypeAccess, _itemAccess);
     }
 
