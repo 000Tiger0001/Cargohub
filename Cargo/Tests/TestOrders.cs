@@ -16,6 +16,9 @@ public class OrderTests
     private readonly ItemGroupAccess _itemGroupAccess;
     private readonly ItemLineAccess _itemLineAccess;
     private readonly ItemTypeAccess _itemTypeAccess;
+    private readonly ItemGroupServices _serviceItemGroup;
+    private readonly ItemLineServices _serviceItemLine;
+    private readonly ItemTypeServices _serviceItemType;
 
     public OrderTests()
     {
@@ -34,6 +37,9 @@ public class OrderTests
         _itemTypeAccess = new(_dbContext);
         _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
         _clientAccess = new(_dbContext);
+        _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
+        _serviceItemLine = new(_itemLineAccess, _itemAccess);
+        _serviceItemType = new(_itemTypeAccess, _itemAccess);
         _serviceClients = new(_clientAccess);
     }
 
@@ -77,6 +83,10 @@ public class OrderTests
     [Fact]
     public async Task GetItemsInOrder()
     {
+        ItemGroup testItemGroup = new(73, "Furniture", "");
+        ItemLine testItemLine = new(11, "blablabla", "");
+        ItemType testItemType = new(14, "blablablabla", "");
+
         OrderItemMovement mockItem1 = new(7435, 23);
         OrderItemMovement mockItem2 = new(9557, 1);
         OrderItemMovement mockItem3 = new(9553, 50);
@@ -87,15 +97,30 @@ public class OrderTests
         OrderItemMovement mockItem8 = new(7311, 21);
         OrderItemMovement mockItem9 = new(10669, 16);
 
-        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
-        Item item2 = new(9557, "hdaffhhds2", "random2", "r2", "5555 EE2", "hoie2", "jooh2", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
-        Item item3 = new(9553, "hdaffhhds3", "random3", "r3", "5555 EE3", "hoie3", "jooh3", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
-        Item item4 = new(10015, "hdaffhhds4", "random4", "r4", "5555 EE4", "hoie4", "jooh4", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
-        Item item5 = new(2084, "hdaffhhds5", "random5", "r5", "5555 EE5", "hoie5", "jooh5", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
-        Item item6 = new(3790, "hdaffhhds6", "random6", "r6", "5555 EE6", "hoie6", "jooh6", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
-        Item item7 = new(7369, "hdaffhhds7", "random7", "r7", "5555 EE7", "hoie7", "jooh7", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
-        Item item8 = new(7311, "hdaffhhds8", "random8", "r8", "5555 EE8", "hoie8", "jooh8", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
-        Item item9 = new(10669, "hdaffhhds9", "random9", "r9", "5555 EE9", "hoie9", "jooh9", 0, 0, 0, 100, 100, 100, 0, "0000", "0000");
+        Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item2 = new(9557, "hdaffhhds2", "random2", "r2", "5555 EE2", "hoie2", "jooh2", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item3 = new(9553, "hdaffhhds3", "random3", "r3", "5555 EE3", "hoie3", "jooh3", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item4 = new(10015, "hdaffhhds4", "random4", "r4", "5555 EE4", "hoie4", "jooh4", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item5 = new(2084, "hdaffhhds5", "random5", "r5", "5555 EE5", "hoie5", "jooh5", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item6 = new(3790, "hdaffhhds6", "random6", "r6", "5555 EE6", "hoie6", "jooh6", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item7 = new(7369, "hdaffhhds7", "random7", "r7", "5555 EE7", "hoie7", "jooh7", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item8 = new(7311, "hdaffhhds8", "random8", "r8", "5555 EE8", "hoie8", "jooh8", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+        Item item9 = new(10669, "hdaffhhds9", "random9", "r9", "5555 EE9", "hoie9", "jooh9", 11, 73, 14, 100, 100, 100, 0, "0000", "0000");
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
 
         bool IsItemAdded1 = await _serviceItems.AddItem(item1);
 
@@ -201,6 +226,21 @@ public class OrderTests
 
         Assert.True(IsItemRemoved9);
         Assert.Empty(await _serviceItems.GetItems());
+
+        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
+
+        Assert.True(IsItemGroupRemoved);
+        Assert.Empty(await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
+
+        Assert.True(IsItemLineRemoved);
+        Assert.Empty(await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
+
+        Assert.True(IsItemTypeRemoved);
+        Assert.Empty(await _serviceItemType.GetItemTypes());
     }
 
     [Fact]
