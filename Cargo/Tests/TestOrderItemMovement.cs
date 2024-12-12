@@ -31,7 +31,7 @@ public class OrderItemMovementTests
         _service = new(_OrderItemMovementAccess);
         _itemAccess = new(_dbContext);
         _supplierAccess = new(_dbContext);
-        _serviceSupplier = new(_supplierAccess);
+        _serviceSupplier = new(_supplierAccess, _itemAccess);
         _itemGroupAccess = new(_dbContext);
         _itemLineAccess = new(_dbContext);
         _itemTypeAccess = new(_dbContext);

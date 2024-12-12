@@ -86,7 +86,7 @@ public class IntegrationTests
         _serviceLocation = new(_locationAccess, _warehouseAccess);
         _serviceWarehouse = new(_warehouseAccess, _locationAccess, _orderAccess);
 
-        _serviceSupplier = new(_supplierAccess);
+        _serviceSupplier = new(_supplierAccess, _itemAccess);
     }
 
     [Fact]
@@ -635,8 +635,26 @@ public class IntegrationTests
     [Fact]
     public async Task RemoveSupplier()
     {
+        ItemGroup testItemGroup = new(1, "Furniture", "");
+        ItemLine testItemLine = new(1, "Home Appliances", "");
+        ItemType testItemType = new(1, "Desktop", "");
         Supplier testSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 1, 47, 13, 11, 1, "SUP0001", "E-86805-uTM");
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
 
         bool IsSupplierAdded = await _serviceSupplier.AddSupplier(testSupplier);
 
@@ -655,9 +673,10 @@ public class IntegrationTests
 
         Item? result = await _serviceItems.GetItem(1);
         Supplier? supplierResult = await _serviceSupplier.GetSupplier(result!.SupplierId);
-        Assert.Equal(0, result.SupplierId);
         Assert.NotEqual(testSupplier, supplierResult);
         Assert.Null(supplierResult);
+        Assert.Equal(0, result.SupplierId);
+        Assert.NotEqual(result, testItem);
     }
 
     [Fact]

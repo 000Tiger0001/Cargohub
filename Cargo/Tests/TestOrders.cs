@@ -33,7 +33,7 @@ public class OrderTests
         _orderAccess = new(_dbContext);
         _itemAccess = new(_dbContext);
         _supplierAccess = new(_dbContext);
-        _serviceSupplier = new(_supplierAccess);
+        _serviceSupplier = new(_supplierAccess, _itemAccess);
         _orderItemMovementAccess = new(_dbContext);
         _transferItemMovementAccess = new(_dbContext);
         _shipmentItemMovementAccess = new(_dbContext);

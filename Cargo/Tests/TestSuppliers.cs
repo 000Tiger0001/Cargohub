@@ -6,6 +6,7 @@ public class SupplierTests
     private readonly ApplicationDbContext _dbContext;
     private readonly SupplierAccess _supplierAccess;
     private readonly SupplierServices _service;
+    private readonly ItemAccess _itemAccess;
 
     public SupplierTests()
     {
@@ -18,9 +19,10 @@ public class SupplierTests
 
         // Create a new instance of Access with the in-memory DbContext
         _supplierAccess = new(_dbContext);
+        _itemAccess = new(_dbContext);
 
         // Create new instance of Service
-        _service = new(_supplierAccess);
+        _service = new(_supplierAccess, _itemAccess);
     }
 
     [Fact]
