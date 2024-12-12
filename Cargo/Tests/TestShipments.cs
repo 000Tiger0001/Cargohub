@@ -31,8 +31,8 @@ public class ShipmentTests
         _transferItemMovementAccess = new(_dbContext);
         _shipmentItemMovementAccess = new(_dbContext);
         _orderAccess = new(_dbContext);
-        _serviceOrder = new(_orderAccess);
         _itemAccess = new(_dbContext);
+        _serviceOrder = new(_orderAccess);
         _service = new(_shipmentAccess, _itemAccess, _orderAccess);
         _itemGroupAccess = new(_dbContext);
         _itemLineAccess = new(_dbContext);

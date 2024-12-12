@@ -19,6 +19,8 @@ public class OrderTests
     private readonly ItemGroupServices _serviceItemGroup;
     private readonly ItemLineServices _serviceItemLine;
     private readonly ItemTypeServices _serviceItemType;
+    private readonly ShipmentAccess _shipmentAccess;
+    private readonly ShipmentServices _servicesShipment;
 
     public OrderTests()
     {
@@ -27,7 +29,6 @@ public class OrderTests
                         .Options;
         _dbContext = new ApplicationDbContext(options);
         _orderAccess = new OrderAccess(_dbContext);
-        _service = new(_orderAccess);
         _itemAccess = new(_dbContext);
         _orderItemMovementAccess = new(_dbContext);
         _transferItemMovementAccess = new(_dbContext);
@@ -35,7 +36,10 @@ public class OrderTests
         _itemGroupAccess = new(_dbContext);
         _itemLineAccess = new(_dbContext);
         _itemTypeAccess = new(_dbContext);
+        _shipmentAccess = new(_dbContext);
+        _servicesShipment = new(_shipmentAccess, _itemAccess, _orderAccess);
         _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess);
+        _service = new(_orderAccess);
         _clientAccess = new(_dbContext);
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);

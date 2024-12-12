@@ -30,7 +30,7 @@ public class ShipmentServices
         List<Item> items = await _itemAccess.GetAll();
         foreach (ShipmentItemMovement shipmentItemMovement in shipment.Items!) if (items.FirstOrDefault(i => i.Id == shipmentItemMovement.ItemId) is null) return false;
         List<Order> orders = await _orderAccess.GetAll();
-        Order foundOrder = orders.FirstOrDefault(o => o.ShipmentId == shipment.OrderId)!;
+        Order foundOrder = orders.FirstOrDefault(o => o.ShipmentId == shipment.Id)!;
         if (doubleShipment is not null || foundOrder is null) return false;
         return await _shipmentAccess.Add(shipment);
     }

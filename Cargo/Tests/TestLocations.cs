@@ -8,24 +8,31 @@ public class LocationTests
     private readonly LocationServices _locationService;
     private readonly WarehouseServices _warehouseService;
     private readonly OrderAccess _orderAccess;
+    private readonly WarehouseAccess _warehouseAccess;
 
     public LocationTests()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
-        _dbContext = new ApplicationDbContext(options);
+        _dbContext = new(options);
         _orderAccess = new(_dbContext);
-        _locationAccess = new LocationAccess(_dbContext);
-        _locationService = new(_locationAccess);
-        _warehouseService = new(new(_dbContext), _locationAccess, _orderAccess);
+        _locationAccess = new(_dbContext);
+        _warehouseAccess = new(_dbContext);
+        _locationService = new(_locationAccess, _warehouseAccess);
+        _warehouseService = new(_warehouseAccess, _locationAccess, _orderAccess);
     }
 
     [Fact]
     public async Task GetAllLocations()
     {
+        Warehouse warehouse = new(1, "1234", "warehouse", "warehousestreet 1234", "1234 AB", "warehousecity", "warehouseprovince", "warehousecountry", "contact", "phone", "mail");
         Location mockLocation = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
-        
+
+        bool IsWarehouseAdded = await _warehouseService.AddWarehouse(warehouse);
+
+        Assert.True(IsWarehouseAdded);
+        Assert.Equal([warehouse], await _warehouseService.GetWarehouses());
         Assert.Empty(await _locationService.GetLocations());
 
         bool IsAdded = await _locationService.AddLocation(mockLocation);
@@ -42,7 +49,13 @@ public class LocationTests
     [Fact]
     public async Task GetLocation()
     {
+        Warehouse warehouse = new(1, "1234", "warehouse", "warehousestreet 1234", "1234 AB", "warehousecity", "warehouseprovince", "warehousecountry", "contact", "phone", "mail");
         Location mockLocation = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
+
+        bool IsWarehouseAdded = await _warehouseService.AddWarehouse(warehouse);
+
+        Assert.True(IsWarehouseAdded);
+        Assert.Equal([warehouse], await _warehouseService.GetWarehouses());
 
         await _locationService.AddLocation(mockLocation);
 
@@ -64,10 +77,10 @@ public class LocationTests
 
         Assert.Empty(await _locationService.GetLocationsInWarehouse(1));
 
+        bool IsAdded4 = await _warehouseService.AddWarehouse(mockWarehouse);
         bool IsAdded1 = await _locationService.AddLocation(mockLocation1);
         bool IsAdded2 = await _locationService.AddLocation(mockLocation2);
         bool IsAdded3 = await _locationService.AddLocation(mockLocation3);
-        bool IsAdded4 = await _warehouseService.AddWarehouse(mockWarehouse);
 
         Assert.True(IsAdded1);
         Assert.True(IsAdded2);
@@ -96,8 +109,13 @@ public class LocationTests
     [Fact]
     public async Task AddLocationsGood()
     {
+        Warehouse warehouse = new(1, "1234", "warehouse", "warehousestreet 1234", "1234 AB", "warehousecity", "warehouseprovince", "warehousecountry", "contact", "phone", "mail");
         Location mockLocation1 = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
 
+        bool IsWarehouseAdded = await _warehouseService.AddWarehouse(warehouse);
+
+        Assert.True(IsWarehouseAdded);
+        Assert.Equal([warehouse], await _warehouseService.GetWarehouses());
         Assert.Empty(await _locationService.GetLocations());
 
         bool IsAdded = await _locationService.AddLocation(mockLocation1);
@@ -131,7 +149,13 @@ public class LocationTests
     [Fact]
     public async Task AddDuplicateLocation()
     {
+        Warehouse warehouse = new(1, "1234", "warehouse", "warehousestreet 1234", "1234 AB", "warehousecity", "warehouseprovince", "warehousecountry", "contact", "phone", "mail");
         Location mockLocation1 = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
+
+        bool IsWarehouseAdded = await _warehouseService.AddWarehouse(warehouse);
+
+        Assert.True(IsWarehouseAdded);
+        Assert.Equal([warehouse], await _warehouseService.GetWarehouses());
 
         bool IsAdded = await _locationService.AddLocation(mockLocation1);
 
@@ -152,8 +176,14 @@ public class LocationTests
     [Fact]
     public async Task AddLocationWithDuplicateId()
     {
+        Warehouse warehouse = new(1, "1234", "warehouse", "warehousestreet 1234", "1234 AB", "warehousecity", "warehouseprovince", "warehousecountry", "contact", "phone", "mail");
         Location mockLocation1 = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
         Location mockLocation2 = new(1, 1, "A.1.1", "Row: A, Rack: 1, Shelf: 1");
+
+        bool IsWarehouseAdded = await _warehouseService.AddWarehouse(warehouse);
+
+        Assert.True(IsWarehouseAdded);
+        Assert.Equal([warehouse], await _warehouseService.GetWarehouses());
 
         bool IsAdded = await _locationService.AddLocation(mockLocation1);
 
@@ -174,8 +204,14 @@ public class LocationTests
     [Fact]
     public async Task UpdateLocation()
     {
+        Warehouse warehouse = new(1, "1234", "warehouse", "warehousestreet 1234", "1234 AB", "warehousecity", "warehouseprovince", "warehousecountry", "contact", "phone", "mail");
         Location mockLocation1 = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
         Location mockLocation2 = new(1, 1, "A.1.1", "Row: A, Rack: 1, Shelf: 1");
+
+        bool IsWarehouseAdded = await _warehouseService.AddWarehouse(warehouse);
+
+        Assert.True(IsWarehouseAdded);
+        Assert.Equal([warehouse], await _warehouseService.GetWarehouses());
 
         bool IsAdded = await _locationService.AddLocation(mockLocation1);
 
@@ -194,7 +230,13 @@ public class LocationTests
     [Fact]
     public async Task RemoveLocation()
     {
+        Warehouse warehouse = new(1, "1234", "warehouse", "warehousestreet 1234", "1234 AB", "warehousecity", "warehouseprovince", "warehousecountry", "contact", "phone", "mail");
         Location mockLocation1 = new(1, 1, "A.1.0", "Row: A, Rack: 1, Shelf: 0");
+
+        bool IsWarehouseAdded = await _warehouseService.AddWarehouse(warehouse);
+
+        Assert.True(IsWarehouseAdded);
+        Assert.Equal([warehouse], await _warehouseService.GetWarehouses());
 
         bool IsAdded = await _locationService.AddLocation(mockLocation1);
 

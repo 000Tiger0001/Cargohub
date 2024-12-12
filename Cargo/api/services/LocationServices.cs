@@ -1,10 +1,12 @@
 public class LocationServices
 {
     private readonly LocationAccess _locationAccess;
+    private readonly WarehouseAccess _warehouseAccess;
 
-    public LocationServices(LocationAccess locationAcces)
+    public LocationServices(LocationAccess locationAcces, WarehouseAccess warehouseAccess)
     {
         _locationAccess = locationAcces;
+        _warehouseAccess = warehouseAccess;
     }
 
     public async Task<List<Location>> GetLocations() => await _locationAccess.GetAll();
@@ -22,6 +24,8 @@ public class LocationServices
         List<Location> locations = await GetLocations();
         Location doubleLocation = locations.FirstOrDefault(l => l.Code == location.Code && l.Name == location.Name && l.WarehouseId == location.WarehouseId)!;
         if (doubleLocation is not null) return false;
+        Warehouse? warehouse = await _warehouseAccess.GetById(location.WarehouseId)!;
+        if (warehouse is null) return false;
         return await _locationAccess.Add(location);
     }
 
