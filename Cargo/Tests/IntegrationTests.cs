@@ -40,7 +40,8 @@ public class IntegrationTests
     private readonly SupplierAccess _supplierAccess;
     private readonly SupplierServices _serviceSupplier;
 
-
+    private readonly InventoryAccess _inventoryAccess;
+    private readonly InventoryServices _serviceInventory;
 
     public IntegrationTests()
     {
@@ -87,6 +88,8 @@ public class IntegrationTests
         _serviceWarehouse = new(_warehouseAccess, _locationAccess, _orderAccess);
 
         _serviceSupplier = new(_supplierAccess, _itemAccess);
+        _inventoryAccess = new(_dbContext);
+        _serviceInventory = new(_inventoryAccess);
     }
 
     [Fact]
@@ -617,6 +620,78 @@ public class IntegrationTests
         Assert.False(IsLocationAdded);
         Assert.Empty(await _serviceLocation.GetLocations());
         Assert.Null(await _serviceLocation.GetLocation(1));
+    }
+
+    [Fact]
+    public async Task AddInventoryWithoutLocations()
+    {
+        ItemGroup testItemGroup = new(1, "Furniture", "");
+        ItemLine testItemLine = new(1, "Home Appliances", "");
+        ItemType testItemType = new(1, "Desktop", "");
+        Supplier testSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 1, 47, 13, 11, 1, "SUP0001", "E-86805-uTM");
+        Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700], 262, 0, 80, 41, 141);
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(testSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([testSupplier], await _serviceSupplier.GetSuppliers());
+
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([testItem], await _serviceItems.GetItems());
+
+        bool IsInventoryAdded = await _serviceInventory.AddInventory(mockInventory1);
+
+        Assert.False(IsInventoryAdded);
+        Assert.Empty(await _serviceInventory.GetInventories());
+        Assert.Null(await _serviceInventory.GetInventory(1));
+    }
+
+    [Fact]
+    public async Task AddInventoryWithoutItem()
+    {
+        Warehouse testWarehouse = new(1, "YQZZNL56", "Heemskerk cargo hub", "Karlijndreef 281", "4002 AS", "Heemskerk", "Friesland", "NL", "Fem Keijzer", "(078) 0013363", "blamore@example.net");
+        Location location1 = new(3211, 1, "65384", "a.1.1");
+        Location location2 = new(24700, 1, "78934", "a.1.2");
+        Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700], 262, 0, 80, 41, 141);
+
+        bool IsWarehouseAdded = await _serviceWarehouse.AddWarehouse(testWarehouse);
+
+        Assert.True(IsWarehouseAdded);
+        Assert.Equal([testWarehouse], await _serviceWarehouse.GetWarehouses());
+
+        bool IsLocationAdded1 = await _serviceLocation.AddLocation(location1);
+
+        Assert.True(IsLocationAdded1);
+        Assert.Equal([location1], await _serviceLocation.GetLocations());
+
+        bool IsLocationAdded2 = await _serviceLocation.AddLocation(location2);
+
+        Assert.True(IsLocationAdded2);
+        Assert.Equal([location1, location2], await _serviceLocation.GetLocations());
+
+        bool IsInventoryAdded = await _serviceInventory.AddInventory(mockInventory1);
+
+        Assert.False(IsInventoryAdded);
+        Assert.Empty(await _serviceInventory.GetInventories());
+        Assert.Null(await _serviceInventory.GetInventory(1));
     }
 
     [Fact]
