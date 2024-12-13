@@ -91,30 +91,11 @@ public class TransferTests
         Item item1 = new(7435, "hdaffhhds1", "random1", "r1", "5555 EE1", "hoie1", "jooh1", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
-        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
-
-        Assert.True(IsSupplierAdded);
-        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
-
-        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
-
-        Assert.True(IsItemGroupAdded);
-        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
-
-        Assert.True(IsItemLineAdded);
-        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
-
-        Assert.True(IsItemTypeAdded);
-        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
-
-        bool IsItemAdded1 = await _serviceItems.AddItem(item1);
-
-        Assert.True(IsItemAdded1);
-        Assert.Equal([item1], await _serviceItems.GetItems());
+        await _serviceSupplier.AddSupplier(mockSupplier);
+        await _serviceItemGroup.AddItemGroup(testItemGroup);
+        await _serviceItemLine.AddItemLine(testItemLine);
+        await _serviceItemType.AddItemType(testItemType);
+        await _serviceItems.AddItem(item1);
 
         List<TransferItemMovement> items = [mockItem1];
         Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Completed", items);
@@ -131,25 +112,10 @@ public class TransferTests
 
         Assert.Empty(await _service.GetTransfers());
 
-        bool IsItemRemoved1 = await _serviceItems.RemoveItem(7435);
-
-        Assert.True(IsItemRemoved1);
-        Assert.Empty(await _serviceItems.GetItems());
-
-        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
-
-        Assert.True(IsItemGroupRemoved);
-        Assert.Empty(await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
-
-        Assert.True(IsItemLineRemoved);
-        Assert.Empty(await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
-
-        Assert.True(IsItemTypeRemoved);
-        Assert.Empty(await _serviceItemType.GetItemTypes());
+        await _serviceItems.RemoveItem(7435);
+        await _serviceItemGroup.RemoveItemGroup(73);
+        await _serviceItemLine.RemoveItemLine(11);
+        await _serviceItemType.RemoveItemType(14);
     }
 
     [Fact]

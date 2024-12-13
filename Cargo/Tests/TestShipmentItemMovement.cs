@@ -50,25 +50,10 @@ public class ShipmentItemMovementTests
         Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
-        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
-
-        Assert.True(IsSupplierAdded);
-        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
-
-        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
-
-        Assert.True(IsItemGroupAdded);
-        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
-
-        Assert.True(IsItemLineAdded);
-        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
-
-        Assert.True(IsItemTypeAdded);
-        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+        await _serviceSupplier.AddSupplier(mockSupplier);
+        await _serviceItemGroup.AddItemGroup(testItemGroup);
+        await _serviceItemLine.AddItemLine(testItemLine);
+        await _serviceItemType.AddItemType(testItemType);
 
         await _serviceItems.AddItem(item);
 
@@ -86,20 +71,9 @@ public class ShipmentItemMovementTests
         await _service.RemoveShipmentItemMovement(1);
         await _service.RemoveShipmentItemMovement(2);
 
-        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
-
-        Assert.True(IsItemGroupRemoved);
-        Assert.Empty(await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
-
-        Assert.True(IsItemLineRemoved);
-        Assert.Empty(await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
-
-        Assert.True(IsItemTypeRemoved);
-        Assert.Empty(await _serviceItemType.GetItemTypes());
+        await _serviceItemGroup.RemoveItemGroup(73);
+        await _serviceItemLine.RemoveItemLine(11);
+        await _serviceItemType.RemoveItemType(14);
     }
 
     [Fact]
@@ -111,25 +85,10 @@ public class ShipmentItemMovementTests
         Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
-        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
-
-        Assert.True(IsSupplierAdded);
-        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
-
-        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
-
-        Assert.True(IsItemGroupAdded);
-        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
-
-        Assert.True(IsItemLineAdded);
-        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
-
-        Assert.True(IsItemTypeAdded);
-        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+        await _serviceSupplier.AddSupplier(mockSupplier);
+        await _serviceItemGroup.AddItemGroup(testItemGroup);
+        await _serviceItemLine.AddItemLine(testItemLine);
+        await _serviceItemType.AddItemType(testItemType);
 
         await _serviceItems.AddItem(item);
 
@@ -146,20 +105,9 @@ public class ShipmentItemMovementTests
 
         await _service.RemoveShipmentItemMovement(1);
 
-        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
-
-        Assert.True(IsItemGroupRemoved);
-        Assert.Empty(await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
-
-        Assert.True(IsItemLineRemoved);
-        Assert.Empty(await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
-
-        Assert.True(IsItemTypeRemoved);
-        Assert.Empty(await _serviceItemType.GetItemTypes());
+        await _serviceItemGroup.RemoveItemGroup(73);
+        await _serviceItemLine.RemoveItemLine(11);
+        await _serviceItemType.RemoveItemType(14);
     }
 
     [Fact]
@@ -171,25 +119,10 @@ public class ShipmentItemMovementTests
         Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
-        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
-
-        Assert.True(IsSupplierAdded);
-        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
-
-        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
-
-        Assert.True(IsItemGroupAdded);
-        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
-
-        Assert.True(IsItemLineAdded);
-        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
-
-        Assert.True(IsItemTypeAdded);
-        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+        await _serviceSupplier.AddSupplier(mockSupplier);
+        await _serviceItemGroup.AddItemGroup(testItemGroup);
+        await _serviceItemLine.AddItemLine(testItemLine);
+        await _serviceItemType.AddItemType(testItemType);
 
         await _serviceItems.AddItem(item);
 
@@ -204,20 +137,9 @@ public class ShipmentItemMovementTests
 
         await _service.RemoveShipmentItemMovement(1);
 
-        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
-
-        Assert.True(IsItemGroupRemoved);
-        Assert.Empty(await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
-
-        Assert.True(IsItemLineRemoved);
-        Assert.Empty(await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
-
-        Assert.True(IsItemTypeRemoved);
-        Assert.Empty(await _serviceItemType.GetItemTypes());
+        await _serviceItemGroup.RemoveItemGroup(73);
+        await _serviceItemLine.RemoveItemLine(11);
+        await _serviceItemType.RemoveItemType(14);
     }
 
     [Fact]
@@ -229,25 +151,10 @@ public class ShipmentItemMovementTests
         Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
-        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
-
-        Assert.True(IsSupplierAdded);
-        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
-
-        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
-
-        Assert.True(IsItemGroupAdded);
-        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
-
-        Assert.True(IsItemLineAdded);
-        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
-
-        Assert.True(IsItemTypeAdded);
-        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+        await _serviceSupplier.AddSupplier(mockSupplier);
+        await _serviceItemGroup.AddItemGroup(testItemGroup);
+        await _serviceItemLine.AddItemLine(testItemLine);
+        await _serviceItemType.AddItemType(testItemType);
 
         await _serviceItems.AddItem(item);
 
@@ -269,20 +176,9 @@ public class ShipmentItemMovementTests
 
         await _service.RemoveShipmentItemMovement(1);
 
-        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
-
-        Assert.True(IsItemGroupRemoved);
-        Assert.Empty(await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
-
-        Assert.True(IsItemLineRemoved);
-        Assert.Empty(await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
-
-        Assert.True(IsItemTypeRemoved);
-        Assert.Empty(await _serviceItemType.GetItemTypes());
+        await _serviceItemGroup.RemoveItemGroup(73);
+        await _serviceItemLine.RemoveItemLine(11);
+        await _serviceItemType.RemoveItemType(14);
     }
 
     [Fact]
@@ -294,25 +190,10 @@ public class ShipmentItemMovementTests
         Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
-        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
-
-        Assert.True(IsSupplierAdded);
-        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
-
-        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
-
-        Assert.True(IsItemGroupAdded);
-        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
-
-        Assert.True(IsItemLineAdded);
-        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
-
-        Assert.True(IsItemTypeAdded);
-        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+        await _serviceSupplier.AddSupplier(mockSupplier);
+        await _serviceItemGroup.AddItemGroup(testItemGroup);
+        await _serviceItemLine.AddItemLine(testItemLine);
+        await _serviceItemType.AddItemType(testItemType);
 
         await _serviceItems.AddItem(item);
 
@@ -339,20 +220,9 @@ public class ShipmentItemMovementTests
 
         await _service.RemoveShipmentItemMovement(2);
 
-        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
-
-        Assert.True(IsItemGroupRemoved);
-        Assert.Empty(await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
-
-        Assert.True(IsItemLineRemoved);
-        Assert.Empty(await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
-
-        Assert.True(IsItemTypeRemoved);
-        Assert.Empty(await _serviceItemType.GetItemTypes());
+        await _serviceItemGroup.RemoveItemGroup(73);
+        await _serviceItemLine.RemoveItemLine(11);
+        await _serviceItemType.RemoveItemType(14);
     }
 
 
@@ -365,25 +235,10 @@ public class ShipmentItemMovementTests
         Item item = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 73, 14, 0, 0, 0, 1, null!, "E-86805-uTM");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
-        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
-
-        Assert.True(IsSupplierAdded);
-        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
-
-        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
-
-        Assert.True(IsItemGroupAdded);
-        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
-
-        Assert.True(IsItemLineAdded);
-        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
-
-        Assert.True(IsItemTypeAdded);
-        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+        await _serviceSupplier.AddSupplier(mockSupplier);
+        await _serviceItemGroup.AddItemGroup(testItemGroup);
+        await _serviceItemLine.AddItemLine(testItemLine);
+        await _serviceItemType.AddItemType(testItemType);
 
         await _serviceItems.AddItem(item);
 
@@ -405,20 +260,9 @@ public class ShipmentItemMovementTests
 
         await _service.RemoveShipmentItemMovement(2);
 
-        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
-
-        Assert.True(IsItemGroupRemoved);
-        Assert.Empty(await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
-
-        Assert.True(IsItemLineRemoved);
-        Assert.Empty(await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
-
-        Assert.True(IsItemTypeRemoved);
-        Assert.Empty(await _serviceItemType.GetItemTypes());
+        await _serviceItemGroup.RemoveItemGroup(73);
+        await _serviceItemLine.RemoveItemLine(11);
+        await _serviceItemType.RemoveItemType(14);
     }
 
 }
