@@ -40,13 +40,15 @@ public class ItemGroupTests
     {
         ItemGroup mockItemGroup = new(1, "Hardware", "");
 
-        await _service.AddItemGroup(mockItemGroup);
+        bool IsAdded = await _service.AddItemGroup(mockItemGroup);
 
+        Assert.True(IsAdded);
         Assert.Equal(mockItemGroup, await _service.GetItemGroup(1));
         Assert.Null(await _service.GetItemGroup(0));
 
-        await _service.RemoveItemGroup(1);
+        bool IsRemoved = await _service.RemoveItemGroup(1);
 
+        Assert.True(IsRemoved);
         Assert.Null(await _service.GetItemGroup(1));
     }
 
@@ -62,8 +64,9 @@ public class ItemGroupTests
         Assert.True(IsAdded);
         Assert.Equal([mockItemGroup], await _service.GetItemGroups());
 
-        await _service.RemoveItemGroup(1);
+        bool IsRemoved = await _service.RemoveItemGroup(1);
 
+        Assert.True(IsRemoved);
         Assert.Empty(await _service.GetItemGroups());
     }
 
@@ -99,8 +102,9 @@ public class ItemGroupTests
         Assert.False(IsAdded1);
         Assert.Equal([mockItemGroup], await _service.GetItemGroups());
 
-        await _service.RemoveItemGroup(1);
+        bool IsRemoved = await _service.RemoveItemGroup(1);
 
+        Assert.True(IsRemoved);
         Assert.Empty(await _service.GetItemGroups());
     }
 
@@ -120,8 +124,9 @@ public class ItemGroupTests
         Assert.False(IsAdded1);
         Assert.Equal([mockItemGroup1], await _service.GetItemGroups());
 
-        await _service.RemoveItemGroup(1);
+        bool IsRemoved = await _service.RemoveItemGroup(1);
 
+        Assert.True(IsRemoved);
         Assert.Empty(await _service.GetItemGroups());
     }
 

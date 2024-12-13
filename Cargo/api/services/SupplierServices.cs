@@ -23,7 +23,7 @@ public class SupplierServices
 
     public async Task<bool> UpdateSupplier(Supplier supplier)
     {
-        if (supplier is null || supplier.Id == 0) return false;
+        if (supplier is null || supplier.Id <= 0) return false;
         supplier.UpdatedAt = DateTime.Now;
         return await _supplierAccess.Update(supplier);
     }

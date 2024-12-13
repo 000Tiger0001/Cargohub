@@ -22,16 +22,14 @@ public class LocationServices
     public async Task<bool> AddLocation(Location location)
     {
         List<Location> locations = await GetLocations();
-        Location doubleLocation = locations.FirstOrDefault(l => l.Code == location.Code && l.Name == location.Name && l.WarehouseId == location.WarehouseId)!;
-        if (doubleLocation is not null) return false;
         Warehouse? warehouse = await _warehouseAccess.GetById(location.WarehouseId)!;
-        if (warehouse is null) return false;
+        if (locations.FirstOrDefault(l => l.Code == location.Code && l.Name == location.Name && l.WarehouseId == location.WarehouseId) is not null || warehouse is null) return false;
         return await _locationAccess.Add(location);
     }
 
     public async Task<bool> UpdateLocation(Location location)
     {
-        if (location is null || location.Id == 0) return false;
+        if (location is null || location.Id <= 0) return false;
         location.UpdatedAt = DateTime.Now;
         return await _locationAccess.Update(location);
     }

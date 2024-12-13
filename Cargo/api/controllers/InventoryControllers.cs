@@ -16,7 +16,7 @@ public class InventoryControllers : Controller
     [HttpGet("inventory/{inventoryId}")]
     public async Task<IActionResult> GetInventory(int inventoryId)
     {
-        if (inventoryId == 0) return BadRequest("Cannot proccess empty id. ");
+        if (inventoryId <= 0) return BadRequest("Cannot proccess this id. ");
         Inventory? inventory = await _inventoryService.GetInventory(inventoryId);
         if (inventory is null) return BadRequest("Inventory does not exist. ");
         return Ok(inventory);
@@ -25,7 +25,7 @@ public class InventoryControllers : Controller
     [HttpGet("inventories/item/{itemId}")]
     public async Task<IActionResult> GetInventoriesforItem(int itemId)
     {
-        if (itemId == 0) return BadRequest("Cannot proccess empty id. ");
+        if (itemId <= 0) return BadRequest("Can't proccess this id. ");
         List<Inventory> inventories = await _inventoryService.GetInventoriesforItem(itemId);
         if (inventories.Count <= 0) return BadRequest("No inventory found with this item id. ");
         return Ok(inventories);
@@ -34,7 +34,7 @@ public class InventoryControllers : Controller
     [HttpGet("inventories/item/{itemId}/totals")]
     public async Task<IActionResult> GetInventoryTotalsForItem(int itemId)
     {
-        if (itemId == 0) return BadRequest("Cannot proccess empty id. ");
+        if (itemId <= 0) return BadRequest("Can't proccess this id. ");
         Dictionary<string, int> result = await _inventoryService.GetInventoryTotalsForItem(itemId);
         if (result["total_expected"] == 0 && result["total_ordered"] == 0 && result["total_allocated"] == 0 && result["total_available"] == 0) return BadRequest("Id is invalid. ");
         return Ok(result);
@@ -63,7 +63,7 @@ public class InventoryControllers : Controller
     [HttpDelete("inventory/{inventoryId}")]
     public async Task<IActionResult> RemoveInventory(int inventoryId)
     {
-        if (inventoryId == 0) return BadRequest("Cannot proccess empty id. ");
+        if (inventoryId <= 0) return BadRequest("Can't proccess this id. ");
 
         bool IsRemoved = await _inventoryService.RemoveInventory(inventoryId);
         if (!IsRemoved) BadRequest("Inventory with given id doesn't exist. ");

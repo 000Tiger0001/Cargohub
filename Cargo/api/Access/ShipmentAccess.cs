@@ -39,10 +39,7 @@ public class ShipmentAccess : BaseAccess<Shipment>
                     existingItem.Amount = item.Amount;
                     existingItem.ItemId = item.ItemId;
                 }
-                else
-                {
-                    _context.Set<ShipmentItemMovement>().Add(item);
-                }
+                else _context.Set<ShipmentItemMovement>().Add(item);
             }
         }
         _context.Update(shipment);

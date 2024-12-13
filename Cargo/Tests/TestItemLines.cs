@@ -36,7 +36,7 @@ public class ItemLineTests
     }
 
     [Fact]
-    public async Task GetItem()
+    public async Task GetItemLine()
     {
         ItemLine mockItemLine = new(1, "Home Appliances", "Stuff for home");
 

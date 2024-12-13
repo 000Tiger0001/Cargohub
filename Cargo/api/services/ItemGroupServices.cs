@@ -17,14 +17,13 @@ public class ItemGroupServices
     {
         if (itemGroup is null || itemGroup.Name == "") return false;
         List<ItemGroup> itemGroups = await GetItemGroups();
-        ItemGroup doubleItemGroup = itemGroups.Find(i => i.Name == itemGroup.Name)!;
-        if (doubleItemGroup is not null) return false;
+        if (itemGroups.Find(i => i.Name == itemGroup.Name) is not null) return false;
         return await _itemGroupAccess.Add(itemGroup);
     }
 
     public async Task<bool> UpdateItemGroup(ItemGroup itemGroup)
     {
-        if (itemGroup is null || itemGroup.Id == 0) return false;
+        if (itemGroup is null || itemGroup.Id <= 0) return false;
         itemGroup.UpdatedAt = DateTime.Now;
         return await _itemGroupAccess.Update(itemGroup);
     }

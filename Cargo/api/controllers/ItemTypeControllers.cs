@@ -16,7 +16,7 @@ public class ItemTypeControllers : Controller
     [HttpGet("item-type/{itemTypeId}")]
     public async Task<IActionResult> GetItemType(int itemTypeId)
     {
-        if (itemTypeId == 0) return BadRequest("You can't use an empty id. ");
+        if (itemTypeId <= 0) return BadRequest("You can't use an this id. ");
         ItemType? itemType = await _itemTypeService.GetItemType(itemTypeId);
         if (itemType is null) return BadRequest("Item type not found. ");
         return Ok(itemType);
@@ -35,7 +35,7 @@ public class ItemTypeControllers : Controller
     [HttpPut("item-type")]
     public async Task<IActionResult> UpdateItemType([FromBody] ItemType itemType)
     {
-        if (itemType is null || itemType.Id == 0) return BadRequest("Not enough info. ");
+        if (itemType is null || itemType.Id <= 0) return BadRequest("Not enough info. ");
 
         bool IsUpdated = await _itemTypeService.UpdateItemType(itemType);
         if (!IsUpdated) return BadRequest("Item type can't be updated. ");
@@ -45,7 +45,7 @@ public class ItemTypeControllers : Controller
     [HttpDelete("item-type/{itemTypeId}")]
     public async Task<IActionResult> RemoveItemType(int itemTypeId)
     {
-        if (itemTypeId == 0) return BadRequest("Can't remove item type with empty id. ");
+        if (itemTypeId <= 0) return BadRequest("Can't remove item type with this id. ");
 
         bool IsRemoved = await _itemTypeService.RemoveItemType(itemTypeId);
         if (!IsRemoved) return BadRequest("Couldn't remove item type with given id. ");

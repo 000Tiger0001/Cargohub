@@ -16,7 +16,7 @@ public class ItemControllers : Controller
     [HttpGet("item/{itemId}")]
     public async Task<IActionResult> GetItem(int itemId)
     {
-        if (itemId == 0) return BadRequest("Id can't be empty. ");
+        if (itemId <= 0) return BadRequest("Can't proccess this id. ");
 
         Item? item = await _itemService.GetItem(itemId);
         if (item is null) return BadRequest("Item with given id doesn't exist. ");
@@ -36,7 +36,7 @@ public class ItemControllers : Controller
     [HttpPut("item")]
     public async Task<IActionResult> UpdateItem([FromBody] Item item)
     {
-        if (item is null || item.Id == 0) return BadRequest("Not enough info given. ");
+        if (item is null || item.Id <= 0) return BadRequest("Not enough info given. ");
 
         bool IsUpdated = await _itemService.UpdateItem(item);
         if (!IsUpdated) return BadRequest("Item couldn't be updated. ");
@@ -46,7 +46,7 @@ public class ItemControllers : Controller
     [HttpDelete("item/{itemId}")]
     public async Task<IActionResult> RemoveItem(int itemId)
     {
-        if (itemId == 0) return BadRequest("Given id isn't valid");
+        if (itemId <= 0) return BadRequest("Can't proccess this id. ");
 
         bool IsRemoved = await _itemService.RemoveItem(itemId);
         if (!IsRemoved) return BadRequest("Item couldn't be removed. ");
@@ -56,7 +56,7 @@ public class ItemControllers : Controller
     [HttpGet("item-type/{itemTypeId}/items")]
     public async Task<IActionResult> GetItemsForItemType(int itemTypeId)
     {
-        if (itemTypeId == 0) return BadRequest("Given id can't be empty. ");
+        if (itemTypeId <= 0) return BadRequest("Can't proccess this id. ");
 
         List<Item> items = await _itemService.GetItemsForItemType(itemTypeId);
         if (items.Count <= 0) return BadRequest("No items found with given item type id. ");
@@ -66,7 +66,7 @@ public class ItemControllers : Controller
     [HttpGet("item-line/{itemLineId}/items")]
     public async Task<IActionResult> GetItemsForItemLine(int itemLineId)
     {
-        if (itemLineId == 0) return BadRequest("Given id can't be empty. ");
+        if (itemLineId <= 0) return BadRequest("Can't proccess this id. ");
 
         List<Item> items = await _itemService.GetItemsForItemLine(itemLineId);
         if (items.Count <= 0) return BadRequest("No items found with given item line id. ");
@@ -76,7 +76,7 @@ public class ItemControllers : Controller
     [HttpGet("item-group/{itemGroupId}/items")]
     public async Task<IActionResult> GetItemsForItemGroup(int itemGroupId)
     {
-        if (itemGroupId == 0) return BadRequest("Given id can't be empty. ");
+        if (itemGroupId <= 0) return BadRequest("Can't proccess this id. ");
 
         List<Item> items = await _itemService.GetItemsForItemGroup(itemGroupId);
         if (items.Count <= 0) return BadRequest("No items found with given item group id. ");

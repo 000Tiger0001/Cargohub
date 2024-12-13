@@ -16,7 +16,7 @@ public class ShipmentControllers : Controller
     [HttpGet("shipment/{shipmentId}")]
     public async Task<IActionResult> GetShipment(int shipmentId)
     {
-        if (shipmentId == 0) return BadRequest("Not enough info given. ");
+        if (shipmentId <= 0) return BadRequest("Not enough info given. ");
 
         Shipment? shipment = await _shipmentService.GetShipment(shipmentId);
         if (shipment is null) return BadRequest("Couldn't find shipment with given id. ");
@@ -26,7 +26,7 @@ public class ShipmentControllers : Controller
     [HttpGet("shipments/{shipmentId}/items")]
     public async Task<IActionResult> GetItemsInShipment(int shipmentId)
     {
-        if (shipmentId == 0) return BadRequest("Not enough info given. ");
+        if (shipmentId <= 0) return BadRequest("Not enough info given. ");
 
         List<ShipmentItemMovement>? items = await _shipmentService.GetItemsInShipment(shipmentId);
         if (items == default || items.Count == 0) return BadRequest("Couldn't find any items in shipment with given id. ");
@@ -46,7 +46,7 @@ public class ShipmentControllers : Controller
     [HttpPut("shipment")]
     public async Task<IActionResult> UpdateShipment([FromBody] Shipment shipment)
     {
-        if (shipment is null || shipment.Id == 0) return BadRequest("Not enough info given. ");
+        if (shipment is null || shipment.Id <= 0) return BadRequest("Not enough info given. ");
 
         bool IsUpdated = await _shipmentService.UpdateShipment(shipment);
         if (!IsUpdated) return BadRequest("Couldn't update shipment. ");
@@ -56,7 +56,7 @@ public class ShipmentControllers : Controller
     [HttpDelete("shipment/{shipmentId}")]
     public async Task<IActionResult> RemoveShipment(int shipmentId)
     {
-        if (shipmentId == 0) return BadRequest("Given id is empty. ");
+        if (shipmentId <= 0) return BadRequest("Can't proccess this id. ");
 
         bool IsRemoved = await _shipmentService.RemoveShipment(shipmentId);
         if (!IsRemoved) return BadRequest("Couldn't remove shipment. ");

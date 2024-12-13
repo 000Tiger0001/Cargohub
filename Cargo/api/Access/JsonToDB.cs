@@ -52,15 +52,10 @@ public class JsonToDb
             string path = $"{folderPath}/{dataType.ToLower()}s.json";
 
             Type? accessType;
-            if (dataType == "Inventorie")
-            {
-                accessType = Type.GetType($"InventoryAccess");
-            }
-            else
-            {
-                // Use reflection to get the service for each data type
-                accessType = Type.GetType($"{dataType}Access");
-            }
+            if (dataType == "Inventorie") accessType = Type.GetType($"InventoryAccess");
+            // Use reflection to get the service for each data type
+            else accessType = Type.GetType($"{dataType}Access");
+
             if (accessType == null) continue;
 
             dynamic access = scope.ServiceProvider.GetRequiredService(accessType);
@@ -86,17 +81,11 @@ public class JsonToDb
                     foreach (var item in data)
                     {
                         var itemProperty = item.GetType().GetProperty("Id");
-                        if (itemProperty != null && itemProperty.CanWrite)
-                        {
-                            itemProperty.SetValue(item, null);
-                        }
+                        if (itemProperty != null && itemProperty.CanWrite) itemProperty.SetValue(item, null);
                     }
                 }
 
-                if (!await access.IsTableEmpty())
-                {
-                    Console.WriteLine($"Table for {dataType} is not empty, skipping add operation.");
-                }
+                if (!await access.IsTableEmpty()) Console.WriteLine($"Table for {dataType} is not empty, skipping add operation.");
                 else
                 {
                     try

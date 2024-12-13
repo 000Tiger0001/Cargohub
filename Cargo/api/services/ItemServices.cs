@@ -66,7 +66,7 @@ public class ItemServices
 
     public async Task<bool> UpdateItem(Item item)
     {
-        if (item is null || item.Id == 0) return false;
+        if (item is null || item.Id <= 0) return false;
         item.UpdatedAt = DateTime.Now;
         return await _itemAccess.Update(item);
     }
@@ -79,7 +79,7 @@ public class ItemServices
         List<ShipmentItemMovement> shipmentItemMovementsToDelete = shipmentItemMovement.Where(s => s.ItemId == itemId).ToList();
         List<OrderItemMovement> orderItemMovementsToDelete = orderItemMovements.Where(o => o.ItemId == itemId).ToList();
         List<TransferItemMovement> transferItemMovementsToDelete = transferItemMovements.Where(t => t.ItemId == itemId).ToList();
-        foreach (ShipmentItemMovement shipmentItem in shipmentItemMovementsToDelete) await _shipmentItemMovementAccess.Remove(shipmentItem.Id);
+        foreach (ShipmentItemMovement shipmentItem in shipmentItemMovementsToDelete) await _shipmentItemMovementAccess.Remove(itemId);
         foreach (OrderItemMovement orderItem in orderItemMovementsToDelete) await _orderItemMovementAccess.Remove(itemId);
         foreach (TransferItemMovement transferItem in transferItemMovementsToDelete) await _transferItemMovementAccess.Remove(itemId);
         return await _itemAccess.Remove(itemId);

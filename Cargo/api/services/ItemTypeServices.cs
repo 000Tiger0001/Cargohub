@@ -17,14 +17,13 @@ public class ItemTypeServices
     {
         if (itemType is null || itemType.Name == "") return false;
         List<ItemType> itemTypes = await GetItemTypes();
-        ItemType doubleItemType = itemTypes.FirstOrDefault(i => i.Name == itemType.Name)!;
-        if (doubleItemType is not null) return false;
+        if (itemTypes.FirstOrDefault(i => i.Name == itemType.Name) is not null) return false;
         return await _itemTypeAccess.Add(itemType);
     }
 
     public async Task<bool> UpdateItemType(ItemType itemType)
     {
-        if (itemType is null || itemType.Id == 0) return false;
+        if (itemType is null || itemType.Id <= 0) return false;
         itemType.UpdatedAt = DateTime.Now;
         return await _itemTypeAccess.Update(itemType);
     }

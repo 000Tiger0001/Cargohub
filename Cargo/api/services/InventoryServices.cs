@@ -40,14 +40,13 @@ public class InventoryServices
     public async Task<bool> AddInventory(Inventory inventory)
     {
         List<Inventory> inventories = await GetInventories();
-        Inventory doubleInventory = inventories.FirstOrDefault(i => i.ItemId == inventory.ItemId || i.ItemReference == inventory.ItemReference)!;
-        if (doubleInventory is not null) return false;
+        if (inventories.FirstOrDefault(i => i.ItemId == inventory.ItemId || i.ItemReference == inventory.ItemReference) is not null) return false;
         return await _inventoryAccess.Add(inventory);
     }
 
     public async Task<bool> UpdateInventory(Inventory inventory)
     {
-        if (inventory is null || inventory.Id == 0) return false;
+        if (inventory is null || inventory.Id <= 0) return false;
         inventory.UpdatedAt = DateTime.Now;
         return await _inventoryAccess.Update(inventory);
     }

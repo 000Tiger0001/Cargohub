@@ -16,14 +16,13 @@ public class ItemLineServices
     {
         if (itemLine is null || itemLine.Name == "") return false;
         List<ItemLine> itemLines = await GetItemLines();
-        ItemLine doubleItemLine = itemLines.Find(i => i.Name == itemLine.Name)!;
-        if (doubleItemLine is not null) return false;
+        if (itemLines.FirstOrDefault(i => i.Name == itemLine.Name) is not null) return false;
         return await _itemLineAccess.Add(itemLine);
     }
 
     public async Task<bool> UpdateItemLine(ItemLine itemLine)
     {
-        if (itemLine is null || itemLine.Id == 0) return false;
+        if (itemLine is null || itemLine.Id <= 0) return false;
         itemLine.UpdatedAt = DateTime.Now;
         return await _itemLineAccess.Update(itemLine);
     }
@@ -34,5 +33,5 @@ public class ItemLineServices
         items.ForEach(i => { if (itemLineId == i.ItemLineId) i.ItemLineId = 0; });
         await _itemAccess.UpdateMany(items);
         return await _itemLineAccess.Remove(itemLineId);
-    } 
+    }
 }

@@ -34,7 +34,7 @@ public class WarehouseControllers : Controller
     [HttpPut("warehouse")]
     public async Task<IActionResult> UpdateWarehouse([FromBody] Warehouse warehouse)
     {
-        if (warehouse is null || warehouse.Id == 0) return BadRequest("Warehouse doesn't have an id. ");
+        if (warehouse is null || warehouse.Id <= 0) return BadRequest("Warehouse doesn't have an id. ");
 
         bool IsUpdated = await _warehouseService.UpdateWarehouse(warehouse);
         if (!IsUpdated) return BadRequest("Warehouse couldn't be updated. ");
@@ -44,7 +44,7 @@ public class WarehouseControllers : Controller
     [HttpDelete("warehouse/{warehouseId}")]
     public async Task<IActionResult> RemoveWarehouse(int warehouseId)
     {
-        if (warehouseId == 0) return BadRequest("Can't remove warehouse with empty id. ");
+        if (warehouseId <= 0) return BadRequest("Can't remove warehouse with this id. ");
 
         bool IsRemoved = await _warehouseService.RemoveWarehouse(warehouseId);
         if (!IsRemoved) return BadRequest("Warehouse couldn't be removed. ");

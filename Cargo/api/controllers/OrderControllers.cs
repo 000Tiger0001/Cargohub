@@ -16,28 +16,28 @@ public class OrderControllers : Controller
     [HttpGet("orders/{orderId}")]
     public async Task<IActionResult> GetOrder(int orderId)
     {
-        if (orderId == 0) return BadRequest("Can't proccess this id. ");
+        if (orderId <= 0) return BadRequest("Can't proccess this id. ");
         return Ok(await _orderServices.GetOrder(orderId));
     }
 
     [HttpGet("order/{orderId}/items")]
     public async Task<IActionResult> GetItemsInOrder(int orderId)
     {
-        if (orderId == 0) return BadRequest("Can't proccess this id. ");
+        if (orderId <= 0) return BadRequest("Can't proccess this id. ");
         return Ok(await _orderServices.GetItemsInOrder(orderId));
     }
 
     [HttpGet("shipment/{shipmentId}/orders")]
     public async Task<IActionResult> GetOrdersInShipment(int shipmentId)
     {
-        if (shipmentId == 0) return BadRequest("Can't proccess this id. ");
+        if (shipmentId <= 0) return BadRequest("Can't proccess this id. ");
         return Ok(await _orderServices.GetOrdersInShipment(shipmentId));
     }
 
     [HttpGet("client/{clientId}/orders")]
     public async Task<IActionResult> GetOrdersForClient(int clientId)
     {
-        if (clientId == 0) return BadRequest("Can't proccess this id. ");
+        if (clientId <= 0) return BadRequest("Can't proccess this id. ");
         return Ok(await _orderServices.GetOrdersForClient(clientId));
     }
 
@@ -54,7 +54,7 @@ public class OrderControllers : Controller
     [HttpPut("order")]
     public async Task<IActionResult> UpdateOrder([FromBody] Order order)
     {
-        if (order.Id == 0) return BadRequest("Can't update this order. ");
+        if (order.Id <= 0) return BadRequest("Can't update this order. ");
 
         bool IsUpdated = await _orderServices.UpdateOrder(order);
         if (!IsUpdated) return BadRequest("Couldn't update order. ");
@@ -64,7 +64,7 @@ public class OrderControllers : Controller
     [HttpDelete("order/{orderId}")]
     public async Task<IActionResult> DeleteOrder(int orderId)
     {
-        if (orderId == 0) return BadRequest("Can't remove order with this id. ");
+        if (orderId <= 0) return BadRequest("Can't remove order with this id. ");
 
         bool IsRemoved = await _orderServices.RemoveOrder(orderId);
         if (!IsRemoved) return BadRequest("Couldn't remove order. ");

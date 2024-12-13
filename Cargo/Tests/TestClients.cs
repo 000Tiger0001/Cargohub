@@ -41,7 +41,7 @@ public class ClientTests
     [Fact]
     public async Task GetClient()
     {
-        Client mockClient = new Client(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
+        Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
 
         await _service.AddClient(mockClient);
 
