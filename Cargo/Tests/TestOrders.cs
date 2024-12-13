@@ -355,23 +355,6 @@ public class OrderTests
     }
 
     [Fact]
-    public async Task AddOrderBad()
-    {
-        Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
-
-        Assert.Empty(await _service.GetOrders());
-
-        /* De code hieronder is uitgecomment, omdat het een error geeft. */
-        //await _service.AddOrder(mockClient);
-
-        Assert.Empty(await _service.GetOrders());
-
-        await _service.RemoveOrder(1);
-
-        Assert.Empty(await _service.GetOrders());
-    }
-
-    [Fact]
     public async Task AddDuplicateOrder()
     {
         Order mockOrder1 = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, []);

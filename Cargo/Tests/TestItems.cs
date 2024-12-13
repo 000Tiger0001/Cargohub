@@ -563,23 +563,6 @@ public class ItemTests
     }
 
     [Fact]
-    public async Task AddItemBad()
-    {
-        Location mockLocation = new(1, 1, "", "");
-
-        Assert.Empty(await _service.GetItems());
-
-        /* De code hieronder is uitgecomment, omdat het een error geeft. */
-        //await _service.AddItem(mockLocation);
-
-        Assert.Empty(await _service.GetItems());
-
-        await _service.RemoveItem(1);
-
-        Assert.Empty(await _service.GetItems());
-    }
-
-    [Fact]
     public async Task AddDuplicateItem()
     {
         ItemGroup testItemGroup = new(73, "Furniture", "");

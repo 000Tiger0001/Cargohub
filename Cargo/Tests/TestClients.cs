@@ -71,23 +71,6 @@ public class ClientTests
     }
 
     [Fact]
-    public async Task AddBadClient()
-    {
-        Location mockLocation = new(1, 1, "", "");
-
-        Assert.Empty(await _service.GetClients());
-
-        /*This line beneath gives an error, because the method "AddClient()" can't get a location. */
-        //bool IsAdded = await _service.AddClient(mockLocation);
-
-        Assert.Empty(await _service.GetClients());
-
-        await _service.RemoveClient(1);
-
-        Assert.Empty(await _service.GetClients());
-    }
-
-    [Fact]
     public async Task AddDubplicateClient()
     {
         Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");

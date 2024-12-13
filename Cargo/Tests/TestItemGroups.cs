@@ -71,23 +71,6 @@ public class ItemGroupTests
     }
 
     [Fact]
-    public async Task AddItemGroupBad()
-    {
-        Client mockClient = new(1, "Joost", "JoostLaan 2", "Rotterdam", "5656AA", "Zuid-Holland", "Nederland", "Joost", "06 123456789", "JoostMagHetWeten@gmail.com");
-
-        Assert.Empty(await _service.GetItemGroups());
-
-        /* De code hieronder is uitgecomment, omdat het een error geeft. */
-        //await _service.AddItemGroup(mockClient);
-
-        Assert.Empty(await _service.GetItemGroups());
-
-        await _service.RemoveItemGroup(1);
-
-        Assert.Empty(await _service.GetItemGroups());
-    }
-
-    [Fact]
     public async Task AddDuplicateItemGroup()
     {
         ItemGroup mockItemGroup = new(1, "Hardware", "");

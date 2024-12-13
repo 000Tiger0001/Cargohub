@@ -138,23 +138,6 @@ public class InventoryTests
     }
 
     [Fact]
-    public async Task AddInventoryBad()
-    {
-        Location mockLocation = new(1, 1, "", "");
-
-        Assert.Empty(await _service.GetInventories());
-
-        /* De code hieronder is uitgecomment, omdat het een error geeft. */
-        //await _service.AddInventory(mockLocation);
-
-        Assert.Empty(await _service.GetInventories());
-
-        await _service.RemoveInventory(1);
-
-        Assert.Empty(await _service.GetInventories());
-    }
-
-    [Fact]
     public async Task AddDuplicateInventory()
     {
         Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);

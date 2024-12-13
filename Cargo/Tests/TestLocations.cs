@@ -130,23 +130,6 @@ public class LocationTests
     }
 
     [Fact]
-    public async Task AddLocationBad()
-    {
-        Client mockClient = new(1, "Joost", "JoostLaan 2", "Rotterdam", "5656AA", "Zuid-Holland", "Nederland", "Joost", "06 123456789", "JoostMagHetWeten@gmail.com");
-
-        Assert.Empty(await _locationService.GetLocations());
-
-        /* De code hieronder is uitgecomment, omdat het een error geeft. */
-        //await _locationService.AddLocation(mockClient);
-
-        Assert.Empty(await _locationService.GetLocations());
-
-        await _locationService.RemoveLocation(1);
-
-        Assert.Empty(await _locationService.GetLocations());
-    }
-
-    [Fact]
     public async Task AddDuplicateLocation()
     {
         Warehouse warehouse = new(1, "1234", "warehouse", "warehousestreet 1234", "1234 AB", "warehousecity", "warehouseprovince", "warehousecountry", "contact", "phone", "mail");
