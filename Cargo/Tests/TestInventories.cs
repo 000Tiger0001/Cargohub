@@ -6,6 +6,24 @@ public class InventoryTests
     private readonly ApplicationDbContext _dbContext;
     private readonly InventoryAccess _inventoryAccess;
     private readonly InventoryServices _service;
+    private readonly LocationAccess _locationAccess;
+    private readonly ItemAccess _itemAccess;
+    private readonly LocationServices _serviceLocation;
+    private readonly WarehouseAccess _warehouseAccess;
+    private readonly WarehouseServices _serviceWarehouse;
+    private readonly OrderAccess _orderAccess;
+    private readonly ItemGroupAccess _itemGroupAccess;
+    private readonly ItemLineAccess _itemLineAccess;
+    private readonly ItemTypeAccess _itemTypeAccess;
+    private readonly SupplierAccess _supplierAccess;
+    private readonly OrderItemMovementAccess _orderItemMovementAccess;
+    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private readonly TransferItemMovementAccess _transferItemMovementAccess;
+    private readonly SupplierServices _serviceSupplier;
+    private readonly ItemServices _serviceItems;
+    private readonly ItemGroupServices _serviceItemGroup;
+    private readonly ItemLineServices _serviceItemLine;
+    private readonly ItemTypeServices _serviceItemType;
 
     public InventoryTests()
     {
@@ -17,16 +35,83 @@ public class InventoryTests
         _dbContext = new(options);
 
         // Create a new instance of Access with the in-memory DbContext
+        _warehouseAccess = new(_dbContext);
         _inventoryAccess = new(_dbContext);
+        _locationAccess = new(_dbContext);
+        _itemAccess = new(_dbContext);
+        _orderAccess = new(_dbContext);
+        _itemGroupAccess = new(_dbContext);
+        _itemLineAccess = new(_dbContext);
+        _itemTypeAccess = new(_dbContext);
+        _supplierAccess = new(_dbContext);
+        _orderItemMovementAccess = new(_dbContext);
+        _shipmentItemMovementAccess = new(_dbContext);
+        _transferItemMovementAccess = new(_dbContext);
+        _serviceSupplier = new(_supplierAccess, _itemAccess);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
+        _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
+        _serviceItemLine = new(_itemLineAccess, _itemAccess);
+        _serviceItemType = new(_itemTypeAccess, _itemAccess);
+        _serviceLocation = new(_locationAccess, _warehouseAccess);
+        _serviceWarehouse = new(_warehouseAccess, _locationAccess, _orderAccess);
 
         // Create new instance of Service
-        _service = new(_inventoryAccess);
+        _service = new(_inventoryAccess, _locationAccess, _itemAccess);
     }
 
     [Fact]
     public async Task GetAllInventories()
     {
-        Inventory mockInventory = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700, 14123, 19538, 31071, 24701, 11606, 11817], 262, 0, 80, 41, 141);
+        Warehouse testWarehouse = new(1, "YQZZNL56", "Heemskerk cargo hub", "Karlijndreef 281", "4002 AS", "Heemskerk", "Friesland", "NL", "Fem Keijzer", "(078) 0013363", "blamore@example.net");
+        ItemGroup testItemGroup = new(1, "Furniture", "");
+        ItemLine testItemLine = new(1, "Home Appliances", "");
+        ItemType testItemType = new(1, "Desktop", "");
+        Supplier testSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 1, 47, 13, 11, 1, "SUP0001", "E-86805-uTM");
+        Location location1 = new(3211, 1, "65384", "a.1.1");
+        Location location2 = new(24700, 1, "78934", "a.1.2");
+        Inventory mockInventory = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700], 262, 0, 80, 41, 141);
+
+        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
+
+        Assert.True(IsItemGroupAdded);
+        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
+
+        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
+
+        Assert.True(IsItemLineAdded);
+        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
+
+        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
+
+        Assert.True(IsItemTypeAdded);
+        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
+
+        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(testSupplier);
+
+        Assert.True(IsSupplierAdded);
+        Assert.Equal([testSupplier], await _serviceSupplier.GetSuppliers());
+
+        bool IsItemAdded = await _serviceItems.AddItem(testItem);
+
+        Assert.True(IsItemAdded);
+        Assert.Equal([testItem], await _serviceItems.GetItems());
+
+        bool IsWarehouseAdded = await _serviceWarehouse.AddWarehouse(testWarehouse);
+
+        Assert.True(IsWarehouseAdded);
+        Assert.Equal([testWarehouse], await _serviceWarehouse.GetWarehouses());
+
+        bool IsLocationAdded1 = await _serviceLocation.AddLocation(location1);
+
+        Assert.True(IsLocationAdded1);
+        Assert.Equal([location1], await _serviceLocation.GetLocations());
+
+        bool IsLocationAdded2 = await _serviceLocation.AddLocation(location2);
+
+        Assert.True(IsLocationAdded2);
+        Assert.Equal([location1, location2], await _serviceLocation.GetLocations());
+
 
         Assert.Empty(await _service.GetInventories());
 

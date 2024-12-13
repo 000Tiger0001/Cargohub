@@ -89,7 +89,7 @@ public class IntegrationTests
 
         _serviceSupplier = new(_supplierAccess, _itemAccess);
         _inventoryAccess = new(_dbContext);
-        _serviceInventory = new(_inventoryAccess);
+        _serviceInventory = new(_inventoryAccess, _locationAccess, _itemAccess);
     }
 
     [Fact]
