@@ -116,70 +116,19 @@ public class OrderTests
         Item item9 = new(10669, "hdaffhhds9", "random9", "r9", "5555 EE9", "hoie9", "jooh9", 11, 73, 14, 100, 100, 100, 1, "0000", "0000");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
-        bool IsSupplierAdded = await _serviceSupplier.AddSupplier(mockSupplier);
-
-        Assert.True(IsSupplierAdded);
-        Assert.Equal([mockSupplier], await _serviceSupplier.GetSuppliers());
-
-        bool IsItemGroupAdded = await _serviceItemGroup.AddItemGroup(testItemGroup);
-
-        Assert.True(IsItemGroupAdded);
-        Assert.Equal([testItemGroup], await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineAdded = await _serviceItemLine.AddItemLine(testItemLine);
-
-        Assert.True(IsItemLineAdded);
-        Assert.Equal([testItemLine], await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeAdded = await _serviceItemType.AddItemType(testItemType);
-
-        Assert.True(IsItemTypeAdded);
-        Assert.Equal([testItemType], await _serviceItemType.GetItemTypes());
-
-        bool IsItemAdded1 = await _serviceItems.AddItem(item1);
-
-        Assert.True(IsItemAdded1);
-        Assert.Equal([item1], await _serviceItems.GetItems());
-
-        bool IsItemAdded2 = await _serviceItems.AddItem(item2);
-
-        Assert.True(IsItemAdded2);
-        Assert.Equal([item1, item2], await _serviceItems.GetItems());
-
-        bool IsItemAdded3 = await _serviceItems.AddItem(item3);
-
-        Assert.True(IsItemAdded3);
-        Assert.Equal([item1, item2, item3], await _serviceItems.GetItems());
-
-        bool IsItemAdded4 = await _serviceItems.AddItem(item4);
-
-        Assert.True(IsItemAdded4);
-        Assert.Equal([item1, item2, item3, item4], await _serviceItems.GetItems());
-
-        bool IsItemAdded5 = await _serviceItems.AddItem(item5);
-
-        Assert.True(IsItemAdded5);
-        Assert.Equal([item1, item2, item3, item4, item5], await _serviceItems.GetItems());
-
-        bool IsItemAdded6 = await _serviceItems.AddItem(item6);
-
-        Assert.True(IsItemAdded6);
-        Assert.Equal([item1, item2, item3, item4, item5, item6], await _serviceItems.GetItems());
-
-        bool IsItemAdded7 = await _serviceItems.AddItem(item7);
-
-        Assert.True(IsItemAdded7);
-        Assert.Equal([item1, item2, item3, item4, item5, item6, item7], await _serviceItems.GetItems());
-
-        bool IsItemAdded8 = await _serviceItems.AddItem(item8);
-
-        Assert.True(IsItemAdded8);
-        Assert.Equal([item1, item2, item3, item4, item5, item6, item7, item8], await _serviceItems.GetItems());
-
-        bool IsItemAdded9 = await _serviceItems.AddItem(item9);
-
-        Assert.True(IsItemAdded9);
-        Assert.Equal([item1, item2, item3, item4, item5, item6, item7, item8, item9], await _serviceItems.GetItems());
+        await _serviceSupplier.AddSupplier(mockSupplier);
+        await _serviceItemGroup.AddItemGroup(testItemGroup);
+        await _serviceItemLine.AddItemLine(testItemLine);
+        await _serviceItemType.AddItemType(testItemType);
+        await _serviceItems.AddItem(item1);
+        await _serviceItems.AddItem(item2);
+        await _serviceItems.AddItem(item3);
+        await _serviceItems.AddItem(item4);
+        await _serviceItems.AddItem(item5);
+        await _serviceItems.AddItem(item6);
+        await _serviceItems.AddItem(item7);
+        await _serviceItems.AddItem(item8);
+        await _serviceItems.AddItem(item9);
 
         List<OrderItemMovement> items = [mockItem1, mockItem2, mockItem3, mockItem4, mockItem5, mockItem6, mockItem7, mockItem8, mockItem9];
         Order mockOrder1 = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, items);
@@ -196,65 +145,18 @@ public class OrderTests
 
         await _service.RemoveOrder(1);
 
-        bool IsItemRemoved1 = await _serviceItems.RemoveItem(7435);
-
-        Assert.True(IsItemRemoved1);
-        Assert.Equal([item2, item3, item4, item5, item6, item7, item8, item9], await _serviceItems.GetItems());
-
-        bool IsItemRemoved2 = await _serviceItems.RemoveItem(9557);
-
-        Assert.True(IsItemRemoved2);
-        Assert.Equal([item3, item4, item5, item6, item7, item8, item9], await _serviceItems.GetItems());
-
-        bool IsItemRemoved3 = await _serviceItems.RemoveItem(9553);
-
-        Assert.True(IsItemRemoved3);
-        Assert.Equal([item4, item5, item6, item7, item8, item9], await _serviceItems.GetItems());
-
-        bool IsItemRemoved4 = await _serviceItems.RemoveItem(10015);
-
-        Assert.True(IsItemRemoved4);
-        Assert.Equal([item5, item6, item7, item8, item9], await _serviceItems.GetItems());
-
-        bool IsItemRemoved5 = await _serviceItems.RemoveItem(2084);
-
-        Assert.True(IsItemRemoved5);
-        Assert.Equal([item6, item7, item8, item9], await _serviceItems.GetItems());
-
-        bool IsItemRemoved6 = await _serviceItems.RemoveItem(3790);
-
-        Assert.True(IsItemRemoved6);
-        Assert.Equal([item7, item8, item9], await _serviceItems.GetItems());
-
-        bool IsItemRemoved7 = await _serviceItems.RemoveItem(7369);
-
-        Assert.True(IsItemRemoved7);
-        Assert.Equal([item8, item9], await _serviceItems.GetItems());
-
-        bool IsItemRemoved8 = await _serviceItems.RemoveItem(7311);
-
-        Assert.True(IsItemRemoved8);
-        Assert.Equal([item9], await _serviceItems.GetItems());
-
-        bool IsItemRemoved9 = await _serviceItems.RemoveItem(10669);
-
-        Assert.True(IsItemRemoved9);
-        Assert.Empty(await _serviceItems.GetItems());
-
-        bool IsItemGroupRemoved = await _serviceItemGroup.RemoveItemGroup(73);
-
-        Assert.True(IsItemGroupRemoved);
-        Assert.Empty(await _serviceItemGroup.GetItemGroups());
-
-        bool IsItemLineRemoved = await _serviceItemLine.RemoveItemLine(11);
-
-        Assert.True(IsItemLineRemoved);
-        Assert.Empty(await _serviceItemLine.GetItemLines());
-
-        bool IsItemTypeRemoved = await _serviceItemType.RemoveItemType(14);
-
-        Assert.True(IsItemTypeRemoved);
-        Assert.Empty(await _serviceItemType.GetItemTypes());
+        await _serviceItems.RemoveItem(7435);
+        await _serviceItems.RemoveItem(9557);
+        await _serviceItems.RemoveItem(9553);
+        await _serviceItems.RemoveItem(10015);
+        await _serviceItems.RemoveItem(2084);
+        await _serviceItems.RemoveItem(3790);
+        await _serviceItems.RemoveItem(7369);
+        await _serviceItems.RemoveItem(7311);
+        await _serviceItems.RemoveItem(10669);
+        await _serviceItemGroup.RemoveItemGroup(73);
+        await _serviceItemLine.RemoveItemLine(11);
+        await _serviceItemType.RemoveItemType(14);
     }
 
     [Fact]

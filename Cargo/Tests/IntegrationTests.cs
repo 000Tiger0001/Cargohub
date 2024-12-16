@@ -27,7 +27,6 @@ public class IntegrationTests
     private readonly ShipmentAccess _shipmentAccess;
     private readonly ShipmentServices _serviceShipment;
 
-
     private readonly TransferAccess _transferAccess;
     private readonly TransferServices _serviceTransfer;
 
