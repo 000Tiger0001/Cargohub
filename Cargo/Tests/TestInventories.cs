@@ -52,7 +52,7 @@ public class InventoryTests
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
         _serviceItemType = new(_itemTypeAccess, _itemAccess);
-        _serviceLocation = new(_locationAccess, _warehouseAccess);
+        _serviceLocation = new(_locationAccess, _warehouseAccess, _inventoryAccess);
         _serviceWarehouse = new(_warehouseAccess, _locationAccess, _orderAccess);
 
         // Create new instance of Service

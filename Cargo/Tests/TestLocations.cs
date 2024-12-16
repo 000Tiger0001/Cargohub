@@ -9,6 +9,7 @@ public class LocationTests
     private readonly WarehouseServices _warehouseService;
     private readonly OrderAccess _orderAccess;
     private readonly WarehouseAccess _warehouseAccess;
+    private readonly InventoryAccess _inventoryAccess;
 
     public LocationTests()
     {
@@ -19,7 +20,8 @@ public class LocationTests
         _orderAccess = new(_dbContext);
         _locationAccess = new(_dbContext);
         _warehouseAccess = new(_dbContext);
-        _locationService = new(_locationAccess, _warehouseAccess);
+        _inventoryAccess = new(_dbContext);
+        _locationService = new(_locationAccess, _warehouseAccess, _inventoryAccess);
         _warehouseService = new(_warehouseAccess, _locationAccess, _orderAccess);
     }
 

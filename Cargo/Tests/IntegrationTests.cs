@@ -76,7 +76,6 @@ public class IntegrationTests
 
         _orderAccess = new(_dbContext);
         _serviceOrder = new(_orderAccess, _itemAccess);
-
         _serviceShipment = new(_shipmentAccess, _itemAccess, _orderAccess);
 
         _transferAccess = new(_dbContext);
@@ -84,11 +83,11 @@ public class IntegrationTests
 
         _warehouseAccess = new(_dbContext);
         _locationAccess = new(_dbContext);
-        _serviceLocation = new(_locationAccess, _warehouseAccess);
         _serviceWarehouse = new(_warehouseAccess, _locationAccess, _orderAccess);
 
         _serviceSupplier = new(_supplierAccess, _itemAccess);
         _inventoryAccess = new(_dbContext);
+        _serviceLocation = new(_locationAccess, _warehouseAccess, _inventoryAccess);
         _serviceInventory = new(_inventoryAccess, _locationAccess, _itemAccess);
     }
 
@@ -498,6 +497,41 @@ public class IntegrationTests
         Assert.False(IsInventoryAdded);
         Assert.Empty(await _serviceInventory.GetInventories());
         Assert.Null(await _serviceInventory.GetInventory(1));
+    }
+
+    [Fact]
+    public async Task RemoveLocationInInventory()
+    {
+        Warehouse testWarehouse = new(1, "YQZZNL56", "Heemskerk cargo hub", "Karlijndreef 281", "4002 AS", "Heemskerk", "Friesland", "NL", "Fem Keijzer", "(078) 0013363", "blamore@example.net");
+        Location location1 = new(3211, 1, "65384", "a.1.1");
+        Location location2 = new(24700, 1, "78934", "a.1.2");
+        ItemGroup testItemGroup = new(1, "Furniture", "");
+        ItemLine testItemLine = new(1, "Home Appliances", "");
+        ItemType testItemType = new(1, "Desktop", "");
+        Supplier testSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
+        Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 1, 1, 1, 47, 13, 11, 1, "SUP0001", "E-86805-uTM");
+        Inventory mockInventory1 = new(1, 1, "Face-to-face clear-thinking complexity", "sjQ23408K", [3211, 24700], 262, 0, 80, 41, 141);
+
+        await _serviceWarehouse.AddWarehouse(testWarehouse);
+        await _serviceLocation.AddLocation(location1);
+        await _serviceLocation.AddLocation(location2);
+        await _serviceItemGroup.AddItemGroup(testItemGroup);
+        await _serviceItemLine.AddItemLine(testItemLine);
+        await _serviceItemType.AddItemType(testItemType);
+        await _serviceSupplier.AddSupplier(testSupplier);
+        await _serviceItems.AddItem(testItem);
+
+        bool IsInventoryAdded = await _serviceInventory.AddInventory(mockInventory1);
+
+        Assert.True(IsInventoryAdded);
+        Assert.Equal([mockInventory1], await _serviceInventory.GetInventories());
+
+        bool IsLocationRemoved = await _serviceLocation.RemoveLocation(24700);
+
+        Assert.True(IsLocationRemoved);
+        Assert.Equal([location1], await _serviceLocation.GetLocations());
+        Inventory? inventory = await _serviceInventory.GetInventory(1)!;
+        Assert.Equal([3211], inventory!.Locations);
     }
 
     [Fact]
