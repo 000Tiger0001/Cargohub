@@ -13,7 +13,7 @@ public class OrderControllers : Controller
     [HttpGet("orders")]
     public async Task<IActionResult> GetOrders() => Ok(await _orderServices.GetOrders());
 
-    [HttpGet("orders/{orderId}")]
+    [HttpGet("order/{orderId}")]
     public async Task<IActionResult> GetOrder(int orderId)
     {
         if (orderId <= 0) return BadRequest("Can't proccess this id. ");

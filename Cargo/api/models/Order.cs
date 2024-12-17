@@ -58,7 +58,7 @@ public class Order : IHasId
     public double TotalAmount { get; set; }
 
     [JsonProperty("total_discount")]
-    public double Totaldiscount { get; set; }
+    public double TotalDiscount { get; set; }
 
     [JsonProperty("total_tax")]
     public double TotalTax { get; set; }
@@ -94,7 +94,7 @@ public class Order : IHasId
         BillTo = billTo;
         ShipmentId = shipmentId;
         TotalAmount = totalAmount;
-        Totaldiscount = totalDiscount;
+        TotalDiscount = totalDiscount;
         TotalTax = totalTax;
         TotalSurcharge = totalSurcharge;
         Items = items;
@@ -127,7 +127,7 @@ public class Order : IHasId
                    order.BillTo == BillTo &&
                    order.ShipmentId == ShipmentId &&
                    order.TotalAmount == TotalAmount &&
-                   order.Totaldiscount == Totaldiscount &&
+                   order.TotalDiscount == TotalDiscount &&
                    order.TotalTax == TotalTax &&
                    order.TotalSurcharge == TotalSurcharge &&
                    itemsAreTheSame;

@@ -23,7 +23,7 @@ public class TransferControllers : Controller
         return Ok(transfer);
     }
 
-    [HttpGet("tranfer/{transferId}/items")]
+    [HttpGet("transfer/{transferId}/items")]
     public async Task<IActionResult> GetItemsInTransfer(int transferId)
     {
         if (transferId <= 0) return BadRequest("Can't proccess this id. ");

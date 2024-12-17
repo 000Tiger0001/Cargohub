@@ -1,10 +1,13 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 public class ShipmentItemMovement : ItemMovement
 {
     public int ShipmentId { get; set; }
 
     [ForeignKey("ShipmentId")]
+    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     public virtual Shipment? Shipment { get; set; }
 
     public ShipmentItemMovement(int itemId, int amount) : base(itemId, amount) { }
