@@ -1,14 +1,19 @@
 public class InventoryServices
 {
-    private InventoryAccess _inventoryAccess;
+    private readonly InventoryAccess _inventoryAccess;
+    private readonly LocationAccess _locationAccess;
+    private readonly ItemAccess _itemAccess;
 
-    public InventoryServices(InventoryAccess inventoryAccess)
+    public InventoryServices(InventoryAccess inventoryAccess, LocationAccess locationAccess, ItemAccess itemAccess)
     {
         _inventoryAccess = inventoryAccess;
+        _locationAccess = locationAccess;
+        _itemAccess = itemAccess;
     }
     public async Task<List<Inventory>> GetInventories() => await _inventoryAccess.GetAll();
 
     public async Task<Inventory?> GetInventory(int inventoryId) => await _inventoryAccess.GetById(inventoryId);
+
     public async Task<List<Inventory>> GetInventoriesforItem(int itemId)
     {
         List<Inventory> inventories = await GetInventories();
@@ -39,15 +44,16 @@ public class InventoryServices
     public async Task<bool> AddInventory(Inventory inventory)
     {
         List<Inventory> inventories = await GetInventories();
-        Inventory doubleInventory = inventories.FirstOrDefault(i => i.ItemId == inventory.ItemId || i.ItemReference == inventory.ItemReference)!;
-        if (doubleInventory is not null) return false;
+        List<Item> items = await _itemAccess.GetAll();
+        if (inventories.FirstOrDefault(i => i.ItemId == inventory.ItemId || i.ItemReference == inventory.ItemReference) is not null || items.FirstOrDefault(i => i.Id == inventory.ItemId) is null) return false;
+        List<Location> locations = await _locationAccess.GetAll();
+        foreach (int locationId in inventory.Locations!) if (locations.FirstOrDefault(l => l.Id == locationId) is null) return false;
         return await _inventoryAccess.Add(inventory);
     }
 
     public async Task<bool> UpdateInventory(Inventory inventory)
     {
-        if (inventory is null || inventory.Id == 0) return false;
-
+        if (inventory is null || inventory.Id <= 0) return false;
         inventory.UpdatedAt = DateTime.Now;
         return await _inventoryAccess.Update(inventory);
     }

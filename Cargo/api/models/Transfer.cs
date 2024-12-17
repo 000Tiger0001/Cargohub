@@ -40,4 +40,24 @@ public class Transfer : IHasId
         TransferStatus = transferStatus;
         Items = items;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Transfer transfer)
+        {
+            // Sort the items lists before comparing them
+            var sortedItems = Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
+            var sortedShipmentItems = transfer.Items?.OrderBy(i => i.ItemId).ThenBy(i => i.Amount).ToList();
+
+            bool itemsAreTheSame = sortedItems != null && sortedShipmentItems != null &&
+                       sortedItems.Count == sortedShipmentItems.Count &&
+                       sortedItems.SequenceEqual(sortedShipmentItems);
+            
+            return transfer.Id == Id && transfer.Reference == Reference && transfer.TransferFrom == TransferFrom
+            && transfer.TransferTo == TransferTo && transfer.TransferStatus == TransferStatus && itemsAreTheSame;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }

@@ -8,5 +8,4 @@ public class OrderItemMovementAccess : BaseAccess<OrderItemMovement>
     {
         return DB.AsNoTracking().Where(entity => entity.OrderId == orderId)!.ToList()!;
     }
-
 }

@@ -58,4 +58,19 @@ public class Client : IHasId
         ContactPhone = contactPhone;
         ContactEmail = contactemail;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Client other)
+        {
+            return Id == other.Id && Name == other.Name
+            && Address == other.Address && City == other.City
+            && ZipCode == other.ZipCode && Province == other.Province
+            && Country == other.Country && ContactName == other.ContactName
+            && ContactPhone == other.ContactPhone && ContactEmail == other.ContactEmail;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }

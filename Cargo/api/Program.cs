@@ -7,7 +7,6 @@ builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-// 123
 builder.Services.AddTransient<ClientServices>();
 builder.Services.AddTransient<InventoryServices>();
 builder.Services.AddTransient<ItemGroupServices>();
@@ -34,6 +33,9 @@ builder.Services.AddTransient<ShipmentAccess>();
 builder.Services.AddTransient<SupplierAccess>();
 builder.Services.AddTransient<TransferAccess>();
 builder.Services.AddTransient<WarehouseAccess>();
+builder.Services.AddTransient<OrderItemMovementAccess>();
+builder.Services.AddTransient<TransferItemMovementAccess>();
+builder.Services.AddTransient<ShipmentItemMovementAccess>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -73,6 +75,5 @@ int milliseconds = elapsedTime.Milliseconds;
 Console.WriteLine($"Time taken by TransferJsonToDb: {minutes} minutes, {seconds} seconds, and {milliseconds} milliseconds");
 Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalMinutes:F2} minutes");
 Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalSeconds:F2} seconds");
-Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalMilliseconds:F2} milliseconds");
 
 app.Run();
