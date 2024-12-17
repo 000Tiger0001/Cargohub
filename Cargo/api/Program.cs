@@ -33,6 +33,9 @@ builder.Services.AddTransient<ShipmentAccess>();
 builder.Services.AddTransient<SupplierAccess>();
 builder.Services.AddTransient<TransferAccess>();
 builder.Services.AddTransient<WarehouseAccess>();
+builder.Services.AddTransient<OrderItemMovementAccess>();
+builder.Services.AddTransient<TransferItemMovementAccess>();
+builder.Services.AddTransient<ShipmentItemMovementAccess>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));

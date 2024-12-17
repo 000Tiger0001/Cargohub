@@ -10,6 +10,7 @@ public class OrderItemMovement : ItemMovement
     [System.Text.Json.Serialization.JsonIgnore]
     public virtual Order? Order { get; set; }
 
+    public OrderItemMovement() { }
     public OrderItemMovement(int itemId, int amount) : base(itemId, amount) { }
     public OrderItemMovement(int id, int itemId, int amount) : base(id, itemId, amount) { }
 

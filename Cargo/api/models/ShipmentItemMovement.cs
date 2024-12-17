@@ -10,6 +10,8 @@ public class ShipmentItemMovement : ItemMovement
     [System.Text.Json.Serialization.JsonIgnore]
     public virtual Shipment? Shipment { get; set; }
 
+    public ShipmentItemMovement() { }
+
     public ShipmentItemMovement(int itemId, int amount) : base(itemId, amount) { }
     public ShipmentItemMovement(int id, int itemId, int amount) : base(id, itemId, amount) { }
 

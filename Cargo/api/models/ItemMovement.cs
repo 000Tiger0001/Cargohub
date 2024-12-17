@@ -46,6 +46,8 @@ public abstract class ItemMovement : IHasId
         Amount = amount;
     }
 
+    public ItemMovement() { }
+
     public override bool Equals(object? obj)
     {
         if (obj is ItemMovement itemMovement) return itemMovement.ItemId == ItemId && itemMovement.Amount == Amount;
