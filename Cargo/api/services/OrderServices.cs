@@ -1,21 +1,21 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-
 public class OrderServices
 {
-    private OrderAccess _orderAccess;
+    private readonly OrderAccess _orderAccess;
+    private readonly ItemAccess _itemAccess;
 
-    public OrderServices(OrderAccess orderAccess)
+    public OrderServices(OrderAccess orderAccess, ItemAccess itemAccess)
     {
         _orderAccess = orderAccess;
+        _itemAccess = itemAccess;
     }
     public async Task<List<Order>> GetOrders() => await _orderAccess.GetAll();
 
     public async Task<Order?> GetOrder(int orderId) => await _orderAccess.GetById(orderId)!;
 
-    public async Task<List<OrderItemMovement>?> GetItemsInOrder(int orderId)
+    public async Task<List<OrderItemMovement>> GetItemsInOrder(int orderId)
     {
         Order? order = await GetOrder(orderId);
-        if (order is null) return null;
+        if (order is null || order.Items is null || order.Items.Count <= 0) return [];
         return order.Items;
     }
 
@@ -37,12 +37,13 @@ public class OrderServices
         List<Order> orders = await GetOrders();
         Order doubleOrder = orders.FirstOrDefault(o => o.SourceId == order.SourceId && o.BillTo == order.BillTo && o.ExtraReference == order.ExtraReference && o.Items == order.Items && o.Notes == order.Notes && o.OrderDate == order.OrderDate && o.OrderStatus == order.OrderStatus && o.PickingNotes == order.PickingNotes && o.Reference == order.Reference && o.RequestDate == order.RequestDate && o.ShipmentId == order.ShipmentId && o.ShippingNotes == o.ShippingNotes && o.ShipTo == order.ShipTo && o.TotalAmount == order.TotalAmount && o.TotalDiscount == order.TotalDiscount)!;
         if (doubleOrder is not null) return false;
+        foreach (OrderItemMovement orderItemMovement in order.Items) if (await _itemAccess.GetById(orderItemMovement.ItemId) is null) return false;
         return await _orderAccess.Add(order);
     }
 
     public async Task<bool> UpdateOrder(Order order)
     {
-        if (order is null || order.Id == 0) return false;
+        if (order is null || order.Id <= 0) return false;
         order.UpdatedAt = DateTime.Now;
         return await _orderAccess.Update(order);
     }

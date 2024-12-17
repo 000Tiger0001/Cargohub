@@ -39,10 +39,7 @@ public class TransferAccess : BaseAccess<Transfer>
                     existingItem.Amount = item.Amount;
                     existingItem.ItemId = item.ItemId;
                 }
-                else
-                {
-                    _context.Set<TransferItemMovement>().Add(item);
-                }
+                else _context.Set<TransferItemMovement>().Add(item);
             }
         }
         _context.Update(transfer);

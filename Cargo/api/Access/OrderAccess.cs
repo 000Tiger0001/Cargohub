@@ -39,10 +39,7 @@ public class OrderAccess : BaseAccess<Order>
                     existingItem.Amount = item.Amount;
                     existingItem.ItemId = item.ItemId;
                 }
-                else
-                {
-                    _context.Set<OrderItemMovement>().Add(item);
-                }
+                else _context.Set<OrderItemMovement>().Add(item);
             }
         }
         _context.Update(order);

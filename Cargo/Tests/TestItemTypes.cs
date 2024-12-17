@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 public class ItemTypeTests
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly ItemAccess _itemAccess;
     private readonly ItemTypeAccess _itemTypeAccess;
     private readonly ItemTypeServices _service;
 
@@ -12,9 +13,10 @@ public class ItemTypeTests
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
-        _dbContext = new ApplicationDbContext(options);
-        _itemTypeAccess = new ItemTypeAccess(_dbContext);
-        _service = new(_itemTypeAccess);
+        _dbContext = new(options);
+        _itemAccess = new(_dbContext);
+        _itemTypeAccess = new(_dbContext);
+        _service = new(_itemTypeAccess, _itemAccess);
     }
 
     [Fact]
@@ -65,23 +67,6 @@ public class ItemTypeTests
         bool IsRemoved = await _service.RemoveItemType(1);
 
         Assert.True(IsRemoved);
-        Assert.Empty(await _service.GetItemTypes());
-    }
-
-    [Fact]
-    public async Task AddItemTypeBad()
-    {
-        Client mockClient = new(1, "Joost", "JoostLaan 2", "Rotterdam", "5656AA", "Zuid-Holland", "Nederland", "Joost", "06 123456789", "JoostMagHetWeten@gmail.com");
-
-        Assert.Empty(await _service.GetItemTypes());
-
-        /* De code hieronder is uitgecomment, omdat het een error geeft. */
-        //await _service.AddItemType(mockClient);
-
-        Assert.Empty(await _service.GetItemTypes());
-
-        await _service.RemoveItemType(1);
-
         Assert.Empty(await _service.GetItemTypes());
     }
 

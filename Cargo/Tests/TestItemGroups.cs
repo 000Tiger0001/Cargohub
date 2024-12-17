@@ -6,21 +6,23 @@ public class ItemGroupTests
     private readonly ApplicationDbContext _dbContext;
     private readonly ItemGroupAccess _itemGroupAccess;
     private readonly ItemGroupServices _service;
+    private readonly ItemAccess _itemAccess;
 
     public ItemGroupTests()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
-        _dbContext = new ApplicationDbContext(options);
-        _itemGroupAccess = new ItemGroupAccess(_dbContext);
-        _service = new (_itemGroupAccess);
+        _dbContext = new(options);
+        _itemAccess = new(_dbContext);
+        _itemGroupAccess = new(_dbContext);
+        _service = new(_itemGroupAccess, _itemAccess);
     }
 
     [Fact]
     public async Task GetAllItemGroups()
     {
-        ItemGroup mockItemGroup = new (1, "Hardware", "");
+        ItemGroup mockItemGroup = new(1, "Hardware", "");
 
         Assert.Empty(await _service.GetItemGroups());
 
@@ -38,13 +40,15 @@ public class ItemGroupTests
     {
         ItemGroup mockItemGroup = new(1, "Hardware", "");
 
-        await _service.AddItemGroup(mockItemGroup);
+        bool IsAdded = await _service.AddItemGroup(mockItemGroup);
 
+        Assert.True(IsAdded);
         Assert.Equal(mockItemGroup, await _service.GetItemGroup(1));
         Assert.Null(await _service.GetItemGroup(0));
 
-        await _service.RemoveItemGroup(1);
+        bool IsRemoved = await _service.RemoveItemGroup(1);
 
+        Assert.True(IsRemoved);
         Assert.Null(await _service.GetItemGroup(1));
     }
 
@@ -59,26 +63,10 @@ public class ItemGroupTests
 
         Assert.True(IsAdded);
         Assert.Equal([mockItemGroup], await _service.GetItemGroups());
-        
-        await _service.RemoveItemGroup(1);
 
-        Assert.Empty(await _service.GetItemGroups());
-    }
+        bool IsRemoved = await _service.RemoveItemGroup(1);
 
-    [Fact]
-    public async Task AddItemGroupBad()
-    {
-        Client mockClient = new(1, "Joost", "JoostLaan 2", "Rotterdam", "5656AA", "Zuid-Holland", "Nederland", "Joost", "06 123456789", "JoostMagHetWeten@gmail.com");
-
-        Assert.Empty(await _service.GetItemGroups());
-
-        /* De code hieronder is uitgecomment, omdat het een error geeft. */
-        //await _service.AddItemGroup(mockClient);
-
-        Assert.Empty(await _service.GetItemGroups());
-
-        await _service.RemoveItemGroup(1);
-
+        Assert.True(IsRemoved);
         Assert.Empty(await _service.GetItemGroups());
     }
 
@@ -97,8 +85,9 @@ public class ItemGroupTests
         Assert.False(IsAdded1);
         Assert.Equal([mockItemGroup], await _service.GetItemGroups());
 
-        await _service.RemoveItemGroup(1);
+        bool IsRemoved = await _service.RemoveItemGroup(1);
 
+        Assert.True(IsRemoved);
         Assert.Empty(await _service.GetItemGroups());
     }
 
@@ -118,8 +107,9 @@ public class ItemGroupTests
         Assert.False(IsAdded1);
         Assert.Equal([mockItemGroup1], await _service.GetItemGroups());
 
-        await _service.RemoveItemGroup(1);
+        bool IsRemoved = await _service.RemoveItemGroup(1);
 
+        Assert.True(IsRemoved);
         Assert.Empty(await _service.GetItemGroups());
     }
 

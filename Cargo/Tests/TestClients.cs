@@ -14,10 +14,10 @@ public class ClientTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
 
-        _dbContext = new ApplicationDbContext(options);
+        _dbContext = new(options);
 
         // Create a new instance of Access with the in-memory DbContext
-        _clientAccess = new ClientAccess(_dbContext);
+        _clientAccess = new(_dbContext);
 
         // Create new instance of Service
         _service = new(_clientAccess);
@@ -41,7 +41,7 @@ public class ClientTests
     [Fact]
     public async Task GetClient()
     {
-        Client mockClient = new Client(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
+        Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
 
         await _service.AddClient(mockClient);
 
@@ -64,23 +64,6 @@ public class ClientTests
 
         Assert.True(IsAdded);
         Assert.Equal(await _service.GetClient(1), mockClient);
-
-        await _service.RemoveClient(1);
-
-        Assert.Empty(await _service.GetClients());
-    }
-
-    [Fact]
-    public async Task AddBadClient()
-    {
-        Location mockLocation = new(1, 1, "", "");
-
-        Assert.Empty(await _service.GetClients());
-
-        /*This line beneath gives an error, because the method "AddClient()" can't get a location. */
-        //bool IsAdded = await _service.AddClient(mockLocation);
-
-        Assert.Empty(await _service.GetClients());
 
         await _service.RemoveClient(1);
 

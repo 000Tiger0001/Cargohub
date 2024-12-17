@@ -16,7 +16,7 @@ public class ItemGroupControllers : Controller
     [HttpGet("item-group/{itemGroupId}")]
     public async Task<IActionResult> GetItemGroup(int itemGroupId)
     {
-        if (itemGroupId == 0) return BadRequest("You can't use an empty string. ");
+        if (itemGroupId <= 0) return BadRequest("You can't use an this id. ");
         ItemGroup? itemGroup = await _itemGroupService.GetItemGroup(itemGroupId);
         if (itemGroup is null) return BadRequest("Item group not found. ");
         return Ok(itemGroup);
@@ -35,7 +35,7 @@ public class ItemGroupControllers : Controller
     [HttpPut("item-group")]
     public async Task<IActionResult> UpdateItemGroup([FromBody] ItemGroup itemGroup)
     {
-        if (itemGroup is null || itemGroup.Id == 0) return BadRequest("Not enough info. ");
+        if (itemGroup is null || itemGroup.Id <= 0) return BadRequest("Not enough info. ");
 
         bool IsUpdated = await _itemGroupService.UpdateItemGroup(itemGroup);
         if (!IsUpdated) return BadRequest("Item group can't be updated. ");
@@ -45,7 +45,7 @@ public class ItemGroupControllers : Controller
     [HttpDelete("item-group/{itemGroupId}")]
     public async Task<IActionResult> RemoveItemGroup(int itemGroupId)
     {
-        if (itemGroupId == 0) return BadRequest("Can't remove item group with empty id. ");
+        if (itemGroupId <= 0) return BadRequest("Can't remove item group with this id. ");
 
         bool IsRemoved = await _itemGroupService.RemoveItemGroup(itemGroupId);
         if (!IsRemoved) return BadRequest("Couldn't remove item group with given id. ");

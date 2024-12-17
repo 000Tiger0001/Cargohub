@@ -1,10 +1,10 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 public class ItemLineTests
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly ItemAccess _itemAccess;
     private readonly ItemLineAccess _itemLineAccess;
     private readonly ItemLineServices _service;
 
@@ -13,9 +13,10 @@ public class ItemLineTests
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
-        _dbContext = new ApplicationDbContext(options);
-        _itemLineAccess = new ItemLineAccess(_dbContext);
-        _service = new(_itemLineAccess);
+        _dbContext = new(options);
+        _itemAccess = new(_dbContext);
+        _itemLineAccess = new(_dbContext);
+        _service = new(_itemLineAccess, _itemAccess);
     }
 
     [Fact]
@@ -35,7 +36,7 @@ public class ItemLineTests
     }
 
     [Fact]
-    public async Task GetItem()
+    public async Task GetItemLine()
     {
         ItemLine mockItemLine = new(1, "Home Appliances", "Stuff for home");
 
@@ -66,23 +67,6 @@ public class ItemLineTests
         bool IsRemoved = await _service.RemoveItemLine(1);
 
         Assert.True(IsRemoved);
-        Assert.Empty(await _service.GetItemLines());
-    }
-
-    [Fact]
-    public async Task AddItemLineBad()
-    {
-        Client mockClient = new(1, "Joost", "JoostLaan 2", "Rotterdam", "5656AA", "Zuid-Holland", "Nederland", "Joost", "06 123456789", "JoostMagHetWeten@gmail.com");
-
-        Assert.Empty(await _service.GetItemLines());
-
-        /* De code hieronder is uitgecomment, omdat het een error geeft. */
-        //await _service.AddItemLine(mockClient);
-
-        Assert.Empty(await _service.GetItemLines());
-
-        await _service.RemoveItemLine(1);
-
         Assert.Empty(await _service.GetItemLines());
     }
 

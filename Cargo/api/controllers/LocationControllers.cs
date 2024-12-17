@@ -36,7 +36,7 @@ public class LocationControllers : Controller
     [HttpPost("location")]
     public async Task<IActionResult> AddLocation([FromBody] Location location)
     {
-        if (location.WarehouseId == 0 || location.Id == 0 || location.Code == default || location.Name == default) BadRequest("Data incomplete. ");
+        if (location.WarehouseId <= 0 || location.Id <= 0 || location.Code == default || location.Name == default) BadRequest("Data incomplete. ");
 
         bool IsAdded = await _locationAccess.AddLocation(location);
         if (!IsAdded) return BadRequest("This location already exists. ");
@@ -46,7 +46,7 @@ public class LocationControllers : Controller
     [HttpPut("location")]
     public async Task<IActionResult> UpdateLocation([FromBody] Location location)
     {
-        if (location.Id == 0) return BadRequest("Location doesn't have an id. ");
+        if (location.Id <= 0) return BadRequest("Location doesn't have an id. ");
 
         bool IsUpdated = await _locationAccess.UpdateLocation(location);
         if (!IsUpdated) return BadRequest("Location couldn't be updated. ");
@@ -56,7 +56,7 @@ public class LocationControllers : Controller
     [HttpDelete("location/{locationId}")]
     public async Task<IActionResult> RemoveLocation(int locationId)
     {
-        if (locationId == 0) return BadRequest("Cannot remove location with empty id. ");
+        if (locationId <= 0) return BadRequest("Can't remove location with this id. ");
 
         bool IsRemoved = await _locationAccess.RemoveLocation(locationId);
         if (!IsRemoved) return BadRequest("Can't remove location");

@@ -16,7 +16,7 @@ public class SupplierControllers : Controller
     [HttpGet("supplier/{supplierId}")]
     public async Task<IActionResult> GetSupplier(int supplierId)
     {
-        if (supplierId == 0) return BadRequest("Can't get supplier with empty id. ");
+        if (supplierId <= 0) return BadRequest("Can't get supplier with this id. ");
 
         Supplier? supplier = await _supplierService.GetSupplier(supplierId);
         if (supplier is null) BadRequest("Supplier not found. ");
@@ -36,7 +36,7 @@ public class SupplierControllers : Controller
     [HttpPut("supplier")]
     public async Task<IActionResult> UpdateSupplier([FromBody] Supplier supplier)
     {
-        if (supplier is null || supplier.Id == 0) return BadRequest("Not enough given. ");
+        if (supplier is null || supplier.Id <= 0) return BadRequest("Not enough given. ");
 
         bool IsUpdated = await _supplierService.UpdateSupplier(supplier);
         if (!IsUpdated) return BadRequest("Supplier can't be updated. ");
@@ -46,7 +46,7 @@ public class SupplierControllers : Controller
     [HttpDelete("supplier/{supplierId}")]
     public async Task<IActionResult> RemoveSupplier(int supplierId)
     {
-        if (supplierId == 0) return BadRequest("Can't remove supplier with empty id. ");
+        if (supplierId <= 0) return BadRequest("Can't remove supplier with this id. ");
 
         bool IsRemoved = await _supplierService.RemoveSupplier(supplierId);
         if (!IsRemoved) return BadRequest("Supplier can't be removed. ");

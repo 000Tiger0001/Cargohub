@@ -11,16 +11,9 @@ public abstract class BaseAccess<T> where T : class, IHasId
         DB = _context.Set<T>();
     }
 
-    public virtual async Task<List<T>> GetAll()
-    {
-        return await DB.AsNoTracking().ToListAsync();
-    }
+    public virtual async Task<List<T>> GetAll() => await DB.AsNoTracking().ToListAsync();
 
-    public virtual async Task<T?> GetById(int id)
-    {
-        return await DB.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id)!;
-    }
-
+    public virtual async Task<T?> GetById(int id) => await DB.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id)!;
 
     public async Task<bool> AddMany(List<T> data)
     {
@@ -39,6 +32,25 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
         var changes = await _context.SaveChangesAsync();
         // Clear the change tracker after the operation
+        ClearChangeTracker();
+        return changes > 0;
+    }
+
+    public async Task<bool> UpdateMany(List<T> data)
+    {
+        foreach (T entity in data)
+        {
+            if (entity == null) continue;
+
+            DetachEntity(entity);
+            T? existingEntity = await GetById(entity.Id);
+
+            if (existingEntity == null) continue;
+
+            await Update(entity);
+        }
+
+        int changes = await _context.SaveChangesAsync();
         ClearChangeTracker();
         return changes > 0;
     }
@@ -88,37 +100,28 @@ public abstract class BaseAccess<T> where T : class, IHasId
     {
         var entity = await GetById(id);
         // Retrieve entity to ensure it exists
-        if (entity != null)
-        {
-            DB.Remove(entity);
-            var changes = await _context.SaveChangesAsync();
-            // Return true if the entity was successfully deleted
-            return changes > 0;
-        }
-        return false;
+        if (entity is null) return false;
+
+        DB.Remove(entity);
+        var changes = await _context.SaveChangesAsync();
+        // Return true if the entity was successfully deleted
+        return changes > 0;
     }
 
     public void DetachEntity(T entity)
     {
-        if (_context.Entry(entity).State == EntityState.Detached)
-            return;
-
+        if (_context.Entry(entity).State == EntityState.Detached) return;
         _context.Entry(entity).State = EntityState.Detached;
     }
 
     public void ClearChangeTracker()
     {
-        foreach (var entry in _context.ChangeTracker.Entries())
-        {
-            entry.State = EntityState.Detached;
-        }
+        foreach (var entry in _context.ChangeTracker.Entries()) entry.State = EntityState.Detached;
     }
 
 
 
     // Check if the table is empty
-    public async Task<bool> IsTableEmpty()
-    {
-        return !await DB.AnyAsync();
-    }
+    public async Task<bool> IsTableEmpty() => !await DB.AnyAsync();
+
 }

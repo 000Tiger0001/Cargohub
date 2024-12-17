@@ -1,6 +1,6 @@
 public class ClientServices
 {
-    private ClientAccess _clientAccess;
+    private readonly ClientAccess _clientAccess;
 
     public ClientServices(ClientAccess clientAccess)
     {
@@ -22,7 +22,7 @@ public class ClientServices
 
     public async Task<bool> UpdateClient(Client client)
     {
-        if (client == null || client.Id == 0) return false;
+        if (client == null || client.Id <= 0) return false;
         client.UpdatedAt = DateTime.Now;
         return await _clientAccess.Update(client);
     }
