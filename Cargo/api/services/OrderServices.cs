@@ -20,10 +20,7 @@ public class OrderServices
     }
     public async Task<List<Order>> GetOrders() => await _orderAccess.GetAll();
 
-    public async Task<Order> GetOrder(int orderId)
-    {
-        return await _orderAccess.GetById(orderId);
-    }
+    public async Task<Order> GetOrder(int orderId) => await _orderAccess.GetById(orderId);
 
     public async Task<List<OrderItemMovement>> GetItemsInOrder(int orderId)
     {
@@ -69,14 +66,14 @@ public class OrderServices
         }
     }*/
 
-    private bool _updateItemsinInventory(Order order, Inventory inventory, int oldAmount, OrderItemMovement newItemMovement)
+    private async Task<bool> _updateItemsinInventory(Order order, Inventory inventory, int oldAmount, OrderItemMovement newItemMovement)
     {
         if (order!.OrderStatus == "pending")
         {
             int changeamount = newItemMovement.Amount - oldAmount;
             inventory.TotalOrdered += changeamount;
             inventory.TotalOnHand -= changeamount;
-            _inventoryAccess.Update(inventory);
+            await _inventoryAccess.Update(inventory);
             return true;
         }
         else if (order!.OrderStatus == "packed")
@@ -84,7 +81,7 @@ public class OrderServices
             int changeamount = newItemMovement.Amount - oldAmount;
             inventory.TotalAllocated += changeamount;
             inventory.TotalOnHand -= changeamount;
-            _inventoryAccess.Update(inventory);
+            await _inventoryAccess.Update(inventory);
             return true;
         }
         return false;
@@ -116,7 +113,7 @@ public class OrderServices
                     await _orderItemMovementAccess.Remove(orderItemMovement.Id);
                 }
 
-                _updateItemsinInventory(order, inventory, orderItemMovement.Amount, changeInItem);
+                await _updateItemsinInventory(order!, inventory, orderItemMovement.Amount, changeInItem);
             }
 
             //check for new Items that were not in old
@@ -128,12 +125,12 @@ public class OrderServices
                     await _orderItemMovementAccess.Add(orderItemMovementNew);
 
                     //update inventory based on order
-                    _updateItemsinInventory(order, inventory, 0, orderItemMovementNew);
+                    await _updateItemsinInventory(order!, inventory, 0, orderItemMovementNew);
                 }
             }
             return true;
         }
-        catch (Exception ex)
+        catch
         {
             return false;
         }

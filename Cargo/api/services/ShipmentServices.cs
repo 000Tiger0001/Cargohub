@@ -39,7 +39,7 @@ public class ShipmentServices
         return await _shipmentAccess.Update(shipment); ;
     }
 
-    private bool _updateItemsinInventory(Shipment shipment, Inventory inventory, int oldAmount, ShipmentItemMovement newItemMovement)
+    private async Task<bool> _updateItemsinInventory(Shipment shipment, Inventory inventory, int oldAmount, ShipmentItemMovement newItemMovement)
     {
         if (shipment!.ShipmentType == 'O')
         {
@@ -47,7 +47,7 @@ public class ShipmentServices
             {
                 int changeamount = newItemMovement.Amount - oldAmount;
                 inventory.TotalAllocated -= changeamount;
-                _inventoryAccess.Update(inventory);
+                await _inventoryAccess.Update(inventory);
                 return true;
             }
         }
@@ -77,7 +77,7 @@ public class ShipmentServices
 
                 //update inventory based on order
                 Inventory inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovement.ItemId);
-                _updateItemsinInventory(shipment, inventory, shipmentItemMovement.Amount, changeInItem);
+                await _updateItemsinInventory(shipment!, inventory, shipmentItemMovement.Amount, changeInItem);
             }
 
             //check for new Items that were not in old
@@ -88,13 +88,13 @@ public class ShipmentServices
                 {
                     await _shipmentItemMovementAccess.Add(shipmentItemMovementNew);
 
-                    _updateItemsinInventory(shipment, inventory, 0, shipmentItemMovementNew);
+                    await _updateItemsinInventory(shipment!, inventory, 0, shipmentItemMovementNew);
                 }
             }
             return true;
         }
 
-        catch (Exception ex)
+        catch
         {
             return false;
         }
