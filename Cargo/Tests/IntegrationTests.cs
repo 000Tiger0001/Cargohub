@@ -77,10 +77,10 @@ public class IntegrationTests
 
         _orderAccess = new(_dbContext);
         _serviceOrder = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess);
-        _serviceShipment = new(_shipmentAccess, _shipmentItemMovementAccess, _inventoryAccess, _itemAccess);
+        _serviceShipment = new(_shipmentAccess, _shipmentItemMovementAccess, _inventoryAccess, _itemAccess, _orderAccess);
 
         _transferAccess = new(_dbContext);
-        _serviceTransfer = new(_transferAccess, _transferItemMovementAccess);
+        _serviceTransfer = new(_transferAccess, _transferItemMovementAccess, _itemAccess);
 
         _warehouseAccess = new(_dbContext);
         _locationAccess = new(_dbContext);
