@@ -82,19 +82,19 @@ public class ShipmentServices
 
 
                 //update inventory based on order
-                Inventory inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovement.ItemId);
-                await _updateItemsinInventory(shipment!, inventory, shipmentItemMovement.Amount, changeInItem);
+                Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovement.ItemId);
+                await _updateItemsinInventory(shipment!, inventory!, shipmentItemMovement.Amount, changeInItem);
             }
 
             //check for new Items that were not in old
             foreach (ShipmentItemMovement shipmentItemMovementNew in items)
             {
-                Inventory inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovementNew.ItemId);
+                Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovementNew.ItemId);
                 if (!shipmentItemMovements.Contains(shipmentItemMovementNew))
                 {
                     await _shipmentItemMovementAccess.Add(shipmentItemMovementNew);
 
-                    await _updateItemsinInventory(shipment!, inventory, 0, shipmentItemMovementNew);
+                    await _updateItemsinInventory(shipment!, inventory!, 0, shipmentItemMovementNew);
                 }
             }
             return true;

@@ -14,7 +14,7 @@ public class OrderServices
     }
     public async Task<List<Order>> GetOrders() => await _orderAccess.GetAll();
 
-    public async Task<Order> GetOrder(int orderId) => await _orderAccess.GetById(orderId);
+    public async Task<Order?> GetOrder(int orderId) => await _orderAccess.GetById(orderId);
 
     public async Task<List<OrderItemMovement>> GetItemsInOrder(int orderId)
     {
@@ -77,12 +77,12 @@ public class OrderServices
         try
         {
             //check for old items to update or to remove
-            Order order = await _orderAccess.GetById(orderId);
+            Order? order = await _orderAccess.GetById(orderId);
             List<OrderItemMovement> orderItemMovements = await _orderItemMovementAccess.GetAllByOrderId(orderId);
             foreach (OrderItemMovement orderItemMovement in orderItemMovements)
             {
                 OrderItemMovement changeInItem = items.First(item => item.Id == orderItemMovement.ItemId);
-                Inventory inventory = await _inventoryAccess.GetInventoryByItemId(orderItemMovement.ItemId);
+                Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(orderItemMovement.ItemId);
                 changeInItem.Id = orderItemMovement.Id;
 
                 //update existing item
@@ -99,19 +99,19 @@ public class OrderServices
                     await _orderItemMovementAccess.Remove(orderItemMovement.Id);
                 }
 
-                await _updateItemsinInventory(order!, inventory, orderItemMovement.Amount, changeInItem);
+                await _updateItemsinInventory(order!, inventory!, orderItemMovement.Amount, changeInItem);
             }
 
             //check for new Items that were not in old
             foreach (OrderItemMovement orderItemMovementNew in items)
             {
-                Inventory inventory = await _inventoryAccess.GetInventoryByItemId(orderItemMovementNew.ItemId);
+                Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(orderItemMovementNew.ItemId);
                 if (!orderItemMovements.Contains(orderItemMovementNew))
                 {
                     await _orderItemMovementAccess.Add(orderItemMovementNew);
 
                     //update inventory based on order
-                    await _updateItemsinInventory(order!, inventory, 0, orderItemMovementNew);
+                    await _updateItemsinInventory(order!, inventory!, 0, orderItemMovementNew);
                 }
             }
             return true;
