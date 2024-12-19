@@ -40,7 +40,7 @@ public class ShipmentTests
         _supplierAccess = new(_dbContext);
         _serviceSupplier = new(_supplierAccess, _itemAccess);
         _serviceOrder = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess);
-        _service = new(_shipmentAccess, _shipmentItemMovementAccess, _inventoryAccess, _itemAccess);
+        _service = new(_shipmentAccess, _shipmentItemMovementAccess, _inventoryAccess, _itemAccess, _orderAccess);
         _itemGroupAccess = new(_dbContext);
         _itemLineAccess = new(_dbContext);
         _itemTypeAccess = new(_dbContext);
