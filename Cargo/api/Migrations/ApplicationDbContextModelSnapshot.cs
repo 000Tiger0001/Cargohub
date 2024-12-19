@@ -327,13 +327,13 @@ namespace Cargo.Migrations
                     b.Property<double>("TotalAmount")
                         .HasColumnType("REAL");
 
+                    b.Property<double>("TotalDiscount")
+                        .HasColumnType("REAL");
+
                     b.Property<double>("TotalSurcharge")
                         .HasColumnType("REAL");
 
                     b.Property<double>("TotalTax")
-                        .HasColumnType("REAL");
-
-                    b.Property<double>("Totaldiscount")
                         .HasColumnType("REAL");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -373,7 +373,7 @@ namespace Cargo.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItemMovement");
+                    b.ToTable("OrderItemMovements");
                 });
 
             modelBuilder.Entity("Shipment", b =>
@@ -453,14 +453,14 @@ namespace Cargo.Migrations
                     b.Property<string>("ItemIdString")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ShipmentId")
+                    b.Property<int>("Shipment_Id")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ShipmentId");
+                    b.HasIndex("Shipment_Id");
 
-                    b.ToTable("ShipmentItemMovement");
+                    b.ToTable("ShipmentItemMovements");
                 });
 
             modelBuilder.Entity("Supplier", b =>
@@ -564,7 +564,7 @@ namespace Cargo.Migrations
 
                     b.HasIndex("TransferId");
 
-                    b.ToTable("TransferItemMovement");
+                    b.ToTable("TransferItemMovements");
                 });
 
             modelBuilder.Entity("Warehouse", b =>
@@ -700,7 +700,7 @@ namespace Cargo.Migrations
                 {
                     b.HasOne("Shipment", "Shipment")
                         .WithMany("Items")
-                        .HasForeignKey("ShipmentId")
+                        .HasForeignKey("Shipment_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
