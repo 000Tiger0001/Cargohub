@@ -4,7 +4,7 @@ public class TransferServices
     private readonly TransferItemMovementAccess _transferItemMovementAccess;
     private readonly ItemAccess _itemAccess;
 
-    public TransferServices(TransferAccess transferAccess, TransferItemMovementAccess transferItemMovementAccess)
+    public TransferServices(TransferAccess transferAccess, TransferItemMovementAccess transferItemMovementAccess, ItemAccess itemAccess)
     {
         _transferAccess = transferAccess;
         _transferItemMovementAccess = transferItemMovementAccess;

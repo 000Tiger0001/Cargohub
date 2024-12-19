@@ -5,12 +5,13 @@ public class ShipmentServices
     private readonly InventoryAccess _inventoryAccess;
     private readonly ItemAccess _itemAccess;
     private readonly OrderAccess _orderAccess;
-    public ShipmentServices(ShipmentAccess shipmentAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, InventoryAccess inventoryAccess, ItemAccess itemAccess)
+    public ShipmentServices(ShipmentAccess shipmentAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, InventoryAccess inventoryAccess, ItemAccess itemAccess, OrderAccess orderAccess)
     {
         _shipmentAccess = shipmentAccess;
         _shipmentItemMovementAccess = shipmentItemMovementAccess;
         _inventoryAccess = inventoryAccess;
         _itemAccess = itemAccess;
+        _orderAccess = orderAccess;
     }
 
     public async Task<List<Shipment>> GetShipments() => await _shipmentAccess.GetAll();
@@ -64,8 +65,8 @@ public class ShipmentServices
         try
         {
             List<ShipmentItemMovement?> shipmentItemMovements = await _shipmentItemMovementAccess.GetAllByOrderId(shipmentId);
-            Shipment shipment = await _shipmentAccess.GetById(shipmentId);
-            foreach (ShipmentItemMovement shipmentItemMovement in shipmentItemMovements)
+            Shipment? shipment = await _shipmentAccess.GetById(shipmentId);
+            foreach (ShipmentItemMovement? shipmentItemMovement in shipmentItemMovements)
             {
                 ShipmentItemMovement changeInItem = items.First(item => item.Id == shipmentItemMovement!.ItemId);
 
