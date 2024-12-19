@@ -3,9 +3,9 @@ using Newtonsoft.Json;
 
 public class ShipmentItemMovement : ItemMovement
 {
-    public int ShipmentId { get; set; }
+    public int Shipment_Id { get; set; }
 
-    [ForeignKey("ShipmentId")]
+    [ForeignKey("Shipment_Id")]
     [JsonIgnore]
     [System.Text.Json.Serialization.JsonIgnore]
     public virtual Shipment? Shipment { get; set; }

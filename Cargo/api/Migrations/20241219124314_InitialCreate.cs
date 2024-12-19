@@ -179,22 +179,22 @@ namespace Cargo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShipmentItemMovement",
+                name: "ShipmentItemMovements",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ShipmentId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Shipment_Id = table.Column<int>(type: "INTEGER", nullable: false),
                     ItemIdString = table.Column<string>(type: "TEXT", nullable: true),
                     ItemId = table.Column<int>(type: "INTEGER", nullable: false),
                     Amount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShipmentItemMovement", x => x.Id);
+                    table.PrimaryKey("PK_ShipmentItemMovements", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShipmentItemMovement_Shipments_ShipmentId",
-                        column: x => x.ShipmentId,
+                        name: "FK_ShipmentItemMovements_Shipments_Shipment_Id",
+                        column: x => x.Shipment_Id,
                         principalTable: "Shipments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -255,7 +255,7 @@ namespace Cargo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TransferItemMovement",
+                name: "TransferItemMovements",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -267,9 +267,9 @@ namespace Cargo.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TransferItemMovement", x => x.Id);
+                    table.PrimaryKey("PK_TransferItemMovements", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TransferItemMovement_Transfers_TransferId",
+                        name: "FK_TransferItemMovements_Transfers_TransferId",
                         column: x => x.TransferId,
                         principalTable: "Transfers",
                         principalColumn: "Id",
@@ -319,7 +319,7 @@ namespace Cargo.Migrations
                     BillTo = table.Column<int>(type: "INTEGER", nullable: true),
                     ShipmentId = table.Column<int>(type: "INTEGER", nullable: true),
                     TotalAmount = table.Column<double>(type: "REAL", nullable: false),
-                    Totaldiscount = table.Column<double>(type: "REAL", nullable: false),
+                    TotalDiscount = table.Column<double>(type: "REAL", nullable: false),
                     TotalTax = table.Column<double>(type: "REAL", nullable: false),
                     TotalSurcharge = table.Column<double>(type: "REAL", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -372,7 +372,7 @@ namespace Cargo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItemMovement",
+                name: "OrderItemMovements",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -384,9 +384,9 @@ namespace Cargo.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItemMovement", x => x.Id);
+                    table.PrimaryKey("PK_OrderItemMovements", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderItemMovement_Orders_OrderId",
+                        name: "FK_OrderItemMovements_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
@@ -424,8 +424,8 @@ namespace Cargo.Migrations
                 column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItemMovement_OrderId",
-                table: "OrderItemMovement",
+                name: "IX_OrderItemMovements_OrderId",
+                table: "OrderItemMovements",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
@@ -439,13 +439,13 @@ namespace Cargo.Migrations
                 column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShipmentItemMovement_ShipmentId",
-                table: "ShipmentItemMovement",
-                column: "ShipmentId");
+                name: "IX_ShipmentItemMovements_Shipment_Id",
+                table: "ShipmentItemMovements",
+                column: "Shipment_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TransferItemMovement_TransferId",
-                table: "TransferItemMovement",
+                name: "IX_TransferItemMovements_TransferId",
+                table: "TransferItemMovements",
                 column: "TransferId");
         }
 
@@ -462,13 +462,13 @@ namespace Cargo.Migrations
                 name: "Locations");
 
             migrationBuilder.DropTable(
-                name: "OrderItemMovement");
+                name: "OrderItemMovements");
 
             migrationBuilder.DropTable(
-                name: "ShipmentItemMovement");
+                name: "ShipmentItemMovements");
 
             migrationBuilder.DropTable(
-                name: "TransferItemMovement");
+                name: "TransferItemMovements");
 
             migrationBuilder.DropTable(
                 name: "Items");
