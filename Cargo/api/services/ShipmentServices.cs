@@ -3,17 +3,14 @@ public class ShipmentServices
     private readonly ShipmentAccess _shipmentAccess;
     private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
     private readonly InventoryAccess _inventoryAccess;
-    private readonly ShipmentAccess _shipmentAccess;
     private readonly ItemAccess _itemAccess;
     private readonly OrderAccess _orderAccess;
-    public ShipmentServices(ShipmentAccess shipmentAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, InventoryAccess inventoryAccess)
+    public ShipmentServices(ShipmentAccess shipmentAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, InventoryAccess inventoryAccess, ItemAccess itemAccess)
     {
         _shipmentAccess = shipmentAccess;
         _shipmentItemMovementAccess = shipmentItemMovementAccess;
         _inventoryAccess = inventoryAccess;
-        _shipmentAccess = shipmentAccess;
         _itemAccess = itemAccess;
-        _orderAccess = orderAccess;
     }
 
     public async Task<List<Shipment>> GetShipments() => await _shipmentAccess.GetAll();
