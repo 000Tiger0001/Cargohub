@@ -27,4 +27,12 @@ public class ItemType : IHasId
         Name = name;
         Description = description;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is ItemType itemType) return itemType.Id == Id && itemType.Name == Name && itemType.Description == Description;
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }

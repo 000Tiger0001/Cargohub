@@ -29,4 +29,12 @@ public class ItemGroup : IHasId
         Name = name;
         Description = description;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is ItemGroup other) return Id == other.Id && Name == other.Name && Description == other.Description;
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }

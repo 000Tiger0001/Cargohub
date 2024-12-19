@@ -30,13 +30,22 @@ public class Item : IHasId
     public string? CommodityCode { get; set; }
 
     [JsonProperty("item_line")]
-    public int ItemLineId { get; set; }
+    public int? ItemLineId { get; set; }
+
+    [ForeignKey("ItemLineId")]
+    public virtual ItemLine? ItemLine { get; set; }
 
     [JsonProperty("item_group")]
-    public int ItemGroupId { get; set; }
+    public int? ItemGroupId { get; set; }
+
+    [ForeignKey("ItemGroupId")]
+    public virtual ItemGroup? ItemGroup { get; set; }
 
     [JsonProperty("item_type")]
-    public int ItemTypeId { get; set; }
+    public int? ItemTypeId { get; set; }
+
+    [ForeignKey("ItemTypeId")]
+    public virtual ItemType? ItemType { get; set; }
 
     [JsonProperty("unit_purchase_quantity")]
     public int UnitPurchaseQuantity { get; set; }
@@ -49,6 +58,9 @@ public class Item : IHasId
 
     [JsonProperty("supplier_id")]
     public int SupplierId { get; set; }
+
+    [ForeignKey("SupplierId")]
+    public virtual Supplier? Supplier { get; set; }
 
     [JsonProperty("supplier_code")]
     public string? SupplierCode { get; set; }
@@ -83,4 +95,22 @@ public class Item : IHasId
         SupplierCode = supplierCode;
         SupplierPartNumber = supplierPartNumber;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Item item)
+        {
+            return item.Id == Id && item.Code == Code && item.Description == Description
+            && item.ShortDescription == ShortDescription && item.UpcCode == UpcCode
+            && item.ModelNumber == ModelNumber && item.CommodityCode == CommodityCode
+            && item.ItemLineId == ItemLineId && item.ItemGroupId == ItemGroupId
+            && item.ItemTypeId == ItemTypeId && item.UnitPurchaseQuantity == UnitPurchaseQuantity
+            && item.UnitOrderQuantity == UnitOrderQuantity && item.PackOrderQuantity == PackOrderQuantity
+            && item.SupplierId == SupplierId && item.SupplierCode == SupplierCode
+            && item.SupplierPartNumber == SupplierPartNumber;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }

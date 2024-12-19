@@ -8,33 +8,33 @@ public class JsonToDb
         List<string> dataTypes = new List<string>()
         {
             "Client",
-            "Inventorie",
-            "Item",
+            "Supplier",
+            "Warehouse",
+            "Shipment",
             "ItemGroup",
             "ItemLine",
             "ItemType",
+            "Item",
+            "Inventorie",
             "Location",
             "Order",
-            "Shipment",
-            "Supplier",
-            "Transfer",
-            "Warehouse"
+            "Transfer"
         };
 
         List<Type> classes = new List<Type>()
         {
             typeof(Client),
-            typeof(Inventory),
-            typeof(Item),
+            typeof(Supplier),
+            typeof(Warehouse),
+            typeof(Shipment),
             typeof(ItemGroup),
             typeof(ItemLine),
             typeof(ItemType),
+            typeof(Item),
+            typeof(Inventory),
             typeof(Location),
             typeof(Order),
-            typeof(Shipment),
-            typeof(Supplier),
-            typeof(Transfer),
-            typeof(Warehouse)
+            typeof(Transfer)
         };
 
         using var scope = app.Services.CreateScope();
@@ -52,15 +52,10 @@ public class JsonToDb
             string path = $"{folderPath}/{dataType.ToLower()}s.json";
 
             Type? accessType;
-            if (dataType == "Inventorie")
-            {
-                accessType = Type.GetType($"InventoryAccess");
-            }
-            else
-            {
-                // Use reflection to get the service for each data type
-                accessType = Type.GetType($"{dataType}Access");
-            }
+            if (dataType == "Inventorie") accessType = Type.GetType($"InventoryAccess");
+            // Use reflection to get the service for each data type
+            else accessType = Type.GetType($"{dataType}Access");
+
             if (accessType == null) continue;
 
             dynamic access = scope.ServiceProvider.GetRequiredService(accessType);
@@ -78,28 +73,19 @@ public class JsonToDb
                 var items = JsonConvert.DeserializeObject(content, listType);
                 var data = (IEnumerable<object>)items!;
 
-                // make sure ID doesn`t start with 0
+                // make sure id is not negative and 0
+                // let EF update values for you by using [DatabaseGenerated(DatabaseGeneratedOption.Identity)] in models
                 if (data.Any())
                 {
                     var firstItem = data.ElementAt(0);
-                    // Map and increment the id for each item if the first item's index is 0
-                    int id = 1;
                     foreach (var item in data)
                     {
-                        // Here we are assuming each item has an 'Id' property, and it's of type 'int'
                         var itemProperty = item.GetType().GetProperty("Id");
-                        if (itemProperty != null && itemProperty.CanWrite)
-                        {
-                            itemProperty.SetValue(item, id);
-                            id++;
-                        }
+                        if (itemProperty != null && itemProperty.CanWrite) itemProperty.SetValue(item, null);
                     }
                 }
 
-                if (!await access.IsTableEmpty())
-                {
-                    Console.WriteLine($"Table for {dataType} is not empty, skipping add operation.");
-                }
+                if (!await access.IsTableEmpty()) Console.WriteLine($"Table for {dataType} is not empty, skipping add operation.");
                 else
                 {
                     try
@@ -115,6 +101,7 @@ public class JsonToDb
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Error adding item: {ex.Message}");
+                        break;
                     }
                 }
             }
