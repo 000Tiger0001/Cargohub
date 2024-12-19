@@ -53,6 +53,16 @@ public class ShipmentControllers : Controller
         return Ok("Shipment updated. ");
     }
 
+    [HttpPut("update-items-in-shipment")]
+    public async Task<IActionResult> UpdateItemsInOrder([FromBody] List<ShipmentItemMovement> shipmentItemMovements, int shipmentId)
+    {
+        if (await _shipmentService.UpdateItemsinShipment(shipmentId, shipmentItemMovements))
+        {
+            return Ok("Items updated");
+        }
+        return BadRequest("Couldn't update items.");
+    }
+
     [HttpDelete("shipment/{shipmentId}")]
     public async Task<IActionResult> RemoveShipment(int shipmentId)
     {

@@ -42,6 +42,7 @@ public class IntegrationTests
     private readonly InventoryAccess _inventoryAccess;
     private readonly InventoryServices _serviceInventory;
 
+
     public IntegrationTests()
     {
         // Use an in-memory SQLite database for testing
@@ -51,6 +52,7 @@ public class IntegrationTests
 
         _dbContext = new(options);
 
+        _inventoryAccess = new(_dbContext);
         // Create a new instance of LocationAccess with the in-memory DbContext
         _itemGroupAccess = new(_dbContext);
         _itemAccess = new(_dbContext);
@@ -74,11 +76,11 @@ public class IntegrationTests
         _shipmentAccess = new(_dbContext);
 
         _orderAccess = new(_dbContext);
-        _serviceOrder = new(_orderAccess, _itemAccess);
-        _serviceShipment = new(_shipmentAccess, _itemAccess, _orderAccess);
+        _serviceOrder = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess);
+        _serviceShipment = new(_shipmentAccess, _shipmentItemMovementAccess, _inventoryAccess, _itemAccess);
 
         _transferAccess = new(_dbContext);
-        _serviceTransfer = new(_transferAccess, _itemAccess);
+        _serviceTransfer = new(_transferAccess, _transferItemMovementAccess);
 
         _warehouseAccess = new(_dbContext);
         _locationAccess = new(_dbContext);

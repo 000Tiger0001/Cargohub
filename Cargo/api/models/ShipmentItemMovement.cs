@@ -3,7 +3,8 @@ using Newtonsoft.Json;
 
 public class ShipmentItemMovement : ItemMovement
 {
-    public int ShipmentId { get; set; }
+    [JsonProperty("Shipment_Id")]
+    public int Shipment_Id { get; set; }
 
     [ForeignKey("ShipmentId")]
     [JsonIgnore]

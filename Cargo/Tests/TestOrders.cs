@@ -23,6 +23,7 @@ public class OrderTests
     private readonly ShipmentServices _servicesShipment;
     private readonly SupplierAccess _supplierAccess;
     private readonly SupplierServices _serviceSupplier;
+    private readonly InventoryAccess _inventoryAccess;
 
     public OrderTests()
     {
@@ -30,6 +31,7 @@ public class OrderTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
         _dbContext = new(options);
+        _inventoryAccess = new(_dbContext);
         _orderAccess = new(_dbContext);
         _itemAccess = new(_dbContext);
         _supplierAccess = new(_dbContext);
@@ -41,9 +43,9 @@ public class OrderTests
         _itemLineAccess = new(_dbContext);
         _itemTypeAccess = new(_dbContext);
         _shipmentAccess = new(_dbContext);
-        _servicesShipment = new(_shipmentAccess, _itemAccess, _orderAccess);
+        _servicesShipment = new(_shipmentAccess, _shipmentItemMovementAccess, _inventoryAccess, _itemAccess);
         _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
-        _service = new(_orderAccess, _itemAccess);
+        _service = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess);
         _clientAccess = new(_dbContext);
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
