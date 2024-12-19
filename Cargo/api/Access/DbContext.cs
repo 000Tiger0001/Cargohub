@@ -56,7 +56,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Shipment>()
             .HasMany(s => s.Items)
             .WithOne(sim => sim.Shipment)
-            .HasForeignKey(sim => sim.ShipmentId)
+            .HasForeignKey(sim => sim.Shipment_Id)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Item>(entity =>
