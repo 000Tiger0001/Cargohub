@@ -64,7 +64,7 @@ public class ShipmentServices
     {
         try
         {
-            List<ShipmentItemMovement?> shipmentItemMovements = await _shipmentItemMovementAccess.GetAllByOrderId(shipmentId);
+            List<ShipmentItemMovement> shipmentItemMovements = await _shipmentItemMovementAccess.GetAllByOrderId(shipmentId);
             Shipment? shipment = await _shipmentAccess.GetById(shipmentId);
             foreach (ShipmentItemMovement? shipmentItemMovement in shipmentItemMovements)
             {
