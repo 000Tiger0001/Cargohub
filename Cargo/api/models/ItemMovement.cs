@@ -21,10 +21,7 @@ public abstract class ItemMovement : IHasId
             if (!string.IsNullOrEmpty(ItemIdString) && ItemIdString.StartsWith("P"))
             {
                 string numericPart = ItemIdString.Substring(1); // Remove the "P" prefix
-                if (int.TryParse(numericPart, out int numericId))
-                {
-                    return numericId;
-                }
+                if (int.TryParse(numericPart, out int numericId)) return numericId;
             }
             return 0; // Default value in case conversion fails
         }
@@ -36,4 +33,26 @@ public abstract class ItemMovement : IHasId
 
     [JsonProperty("amount")]
     public int Amount { get; set; }
+
+    public ItemMovement(int itemId, int amount)
+    {
+        ItemId = itemId;
+        Amount = amount;
+    }
+    public ItemMovement(int id, int itemId, int amount)
+    {
+        Id = id;
+        ItemId = itemId;
+        Amount = amount;
+    }
+
+    public ItemMovement() { }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is ItemMovement itemMovement) return itemMovement.ItemId == ItemId && itemMovement.Amount == Amount;
+        return false;
+    }
+
+    public override int GetHashCode() => ItemId.GetHashCode();
 }

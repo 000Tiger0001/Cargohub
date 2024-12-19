@@ -100,6 +100,17 @@ public class Warehouse : IHasId
         ContactPhone = contactPhone;
         ContactEmail = contactEmail;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Warehouse warehouse)
+        {
+            return warehouse.Id == Id && warehouse.Code == Code && warehouse.Name == Name && warehouse.Address == Address 
+            && warehouse.Zip == Zip && warehouse.City == City && warehouse.Province == Province && warehouse.Country == Country 
+            && warehouse.ContactName == ContactName && warehouse.ContactPhone == ContactPhone && warehouse.ContactEmail == ContactEmail;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() => Id.GetHashCode();
 }
-
-

@@ -1,42 +1,50 @@
 public class ShipmentServices
 {
-    private ShipmentAccess _shipmentAccess;
-
-    private ShipmentItemMovementAccess _shipmentItemMovementAccess;
-    private InventoryAccess _inventoryAccess;
+    private readonly ShipmentAccess _shipmentAccess;
+    private readonly ShipmentItemMovementAccess _shipmentItemMovementAccess;
+    private readonly InventoryAccess _inventoryAccess;
+    private readonly ShipmentAccess _shipmentAccess;
+    private readonly ItemAccess _itemAccess;
+    private readonly OrderAccess _orderAccess;
     public ShipmentServices(ShipmentAccess shipmentAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, InventoryAccess inventoryAccess)
     {
         _shipmentAccess = shipmentAccess;
         _shipmentItemMovementAccess = shipmentItemMovementAccess;
         _inventoryAccess = inventoryAccess;
+        _shipmentAccess = shipmentAccess;
+        _itemAccess = itemAccess;
+        _orderAccess = orderAccess;
     }
+
     public async Task<List<Shipment>> GetShipments() => await _shipmentAccess.GetAll();
 
     public async Task<Shipment?> GetShipment(int shipmentId) => await _shipmentAccess.GetById(shipmentId);
 
-    public async Task<List<ShipmentItemMovement>?> GetItemsInShipment(int shipmentId)
+    public async Task<List<ShipmentItemMovement>> GetItemsInShipment(int shipmentId)
     {
         Shipment? shipment = await GetShipment(shipmentId);
         if (shipment is null) return [];
-        return shipment.Items;
+        return shipment.Items!;
     }
 
     public async Task<bool> AddShipment(Shipment shipment)
     {
         if (shipment is null) return false;
-
         List<Shipment> shipments = await GetShipments();
         Shipment doubleShipment = shipments.FirstOrDefault(s => s.OrderId == shipment.OrderId && s.SourceId == shipment.SourceId && s.OrderDate == shipment.OrderDate && s.RequestDate == shipment.RequestDate && s.ShipmentDate == shipment.ShipmentDate && s.ShipmentType == shipment.ShipmentType && s.Notes == shipment.Notes && s.CarrierCode == shipment.CarrierCode && s.CarrierDescription == shipment.CarrierDescription && s.ServiceCode == shipment.ServiceCode && s.PaymentType == shipment.PaymentType && s.TransferMode == shipment.TransferMode && s.TotalPackageCount == shipment.TotalPackageCount && s.TotalPackageWeight == shipment.TotalPackageWeight && s.Items == shipment.Items)!;
-        if (doubleShipment is not null) return false;
-        return await _shipmentAccess.Add(shipment); ;
+        List<Item> items = await _itemAccess.GetAll();
+        List<Order> orders = await _orderAccess.GetAll();
+        Order foundOrder = orders.FirstOrDefault(o => o.ShipmentId == shipment.Id)!;
+        if (doubleShipment is not null || foundOrder is null) return false;
+        foreach (ShipmentItemMovement shipmentItemMovement in shipment.Items!) if (items.FirstOrDefault(i => i.Id == shipmentItemMovement.ItemId) is null) return false;
+        return await _shipmentAccess.Add(shipment);
     }
 
     public async Task<bool> UpdateShipment(Shipment shipment)
     {
-        if (shipment is null || shipment.Id == 0) return false;
-
+        if (shipment is null || shipment.Id <= 0) return false;
         shipment.UpdatedAt = DateTime.Now;
-        return await _shipmentAccess.Update(shipment); ;
+        return await _shipmentAccess.Update(shipment);
     }
 
     private async Task<bool> _updateItemsinInventory(Shipment shipment, Inventory inventory, int oldAmount, ShipmentItemMovement newItemMovement)
