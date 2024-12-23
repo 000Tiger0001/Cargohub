@@ -40,7 +40,7 @@ public class ShipmentServices
 
     public async Task<bool> UpdateShipment(Shipment shipment)
     {
-        if (shipment is null || shipment.Id <= 0) return false;
+        if (shipment is null || shipment.Id <= 0 || shipment.ShipmentStatus == "Delivered") return false;
         shipment.UpdatedAt = DateTime.Now;
         return await _shipmentAccess.Update(shipment);
     }
@@ -49,7 +49,7 @@ public class ShipmentServices
     {
         if (shipment!.ShipmentType == 'O')
         {
-            if (shipment!.ShipmentStatus == "pending")
+            if (shipment!.ShipmentStatus == "Pending")
             {
                 int changeamount = newItemMovement.Amount - oldAmount;
                 inventory.TotalAllocated -= changeamount;

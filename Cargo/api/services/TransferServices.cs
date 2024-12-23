@@ -32,7 +32,7 @@ public class TransferServices
 
     public async Task<bool> UpdateTransfer(Transfer transfer)
     {
-        if (transfer is null || transfer.Id <= 0) return false;
+        if (transfer is null || transfer.Id <= 0 || transfer.TransferStatus == "Completed") return false;
         transfer.UpdatedAt = DateTime.Now;
         return await _transferAccess.Update(transfer);
     }

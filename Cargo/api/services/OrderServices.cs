@@ -47,14 +47,14 @@ public class OrderServices
 
     public async Task<bool> UpdateOrder(Order order)
     {
-        if (order is null || order.Id <= 0) return false;
+        if (order is null || order.Id <= 0 || order.OrderStatus == "Delivered") return false;
         order.UpdatedAt = DateTime.Now;
         return await _orderAccess.Update(order);
     }
 
     private async Task<bool> _updateItemsinInventory(Order order, Inventory inventory, int oldAmount, OrderItemMovement newItemMovement)
     {
-        if (order!.OrderStatus == "pending")
+        if (order!.OrderStatus == "Pending")
         {
             int changeamount = newItemMovement.Amount - oldAmount;
             inventory.TotalOrdered += changeamount;
@@ -62,7 +62,7 @@ public class OrderServices
             await _inventoryAccess.Update(inventory);
             return true;
         }
-        else if (order!.OrderStatus == "packed")
+        else if (order!.OrderStatus == "Packed")
         {
             int changeamount = newItemMovement.Amount - oldAmount;
             inventory.TotalAllocated += changeamount;
