@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,15 +23,19 @@ public class User : IHasId
     [JsonProperty("address")]
     public string? Address { get; set; }
 
+    [JsonProperty("role")]
+    public string? Role { get; set; }
+
     public User() { }
 
-    public User(int id, string username, string password, string email, string address)
+    public User(int id, string username, string password, string email, string address, string role)
     {
         Id = id;
         Username = username;
         Password = password;
         Email = email;
         Address = address;
+        Role = role;
     }
 
     public override bool Equals(object? obj)
@@ -45,4 +50,10 @@ public class User : IHasId
     }
 
     public override int GetHashCode() => Id.GetHashCode();
+
+    public async Task<bool> HasRight(List<string> rights)
+    {
+        if (rights.Contains(Role)) return true;
+        return false;
+    }
 }
