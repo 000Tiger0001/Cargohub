@@ -11,9 +11,11 @@ public class ItemControllers : Controller
     }
 
     [HttpGet("items")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetItems() => Ok(await _itemService.GetItems());
 
     [HttpGet("item/{itemId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Operative", "Floor Manager", "Supervisor", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetItem(int itemId)
     {
         if (itemId <= 0) return BadRequest("Can't proccess this id. ");
@@ -24,6 +26,7 @@ public class ItemControllers : Controller
     }
 
     [HttpPost("item")]
+    [RightsFilter(["Admin", "Logistics", "Warehouse Manager", "Sales"])]
     public async Task<IActionResult> AddItem([FromBody] Item item)
     {
         if (item is null || item.Code == "" || item.CommodityCode == "" || item.Description == "" || item.ItemGroupId == default || item.ItemLineId == default || item.ItemTypeId == default || item.ModelNumber == "" || item.UpcCode == "" || item.ShortDescription == "") return BadRequest("Not enough info given. ");
@@ -34,6 +37,7 @@ public class ItemControllers : Controller
     }
 
     [HttpPut("item")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Sales"])]
     public async Task<IActionResult> UpdateItem([FromBody] Item item)
     {
         if (item is null || item.Id <= 0) return BadRequest("Not enough info given. ");
@@ -44,6 +48,7 @@ public class ItemControllers : Controller
     }
 
     [HttpDelete("item/{itemId}")]
+    [RightsFilter(["Admin"])]
     public async Task<IActionResult> RemoveItem(int itemId)
     {
         if (itemId <= 0) return BadRequest("Can't proccess this id. ");
@@ -54,6 +59,7 @@ public class ItemControllers : Controller
     }
 
     [HttpGet("item-type/{itemTypeId}/items")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetItemsForItemType(int itemTypeId)
     {
         if (itemTypeId <= 0) return BadRequest("Can't proccess this id. ");
@@ -64,6 +70,7 @@ public class ItemControllers : Controller
     }
 
     [HttpGet("item-line/{itemLineId}/items")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetItemsForItemLine(int itemLineId)
     {
         if (itemLineId <= 0) return BadRequest("Can't proccess this id. ");
@@ -74,6 +81,7 @@ public class ItemControllers : Controller
     }
 
     [HttpGet("item-group/{itemGroupId}/items")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetItemsForItemGroup(int itemGroupId)
     {
         if (itemGroupId <= 0) return BadRequest("Can't proccess this id. ");

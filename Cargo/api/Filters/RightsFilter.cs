@@ -3,12 +3,10 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 public class RightsFilter : Attribute, IAsyncActionFilter
 {
-    private readonly UserServices _userServices;
     private readonly string[] _roles;
 
-    public RightsFilter(UserServices userServices, string[] roles)
+    public RightsFilter(string[] roles)
     {
-        _userServices = userServices;
         _roles = roles;
     }
     public async Task OnActionExecutionAsync(ActionExecutingContext actioncontext, ActionExecutionDelegate next)
@@ -20,10 +18,7 @@ public class RightsFilter : Attribute, IAsyncActionFilter
             actioncontext.HttpContext.Response.StatusCode = 401;
             return;
         }
-        int userId = (int)actioncontext.HttpContext.Session.GetInt32("UserId")!;
-        User user = await _userServices.GetUser(userId);
-
-        if (!_roles.Contains(user.Role))
+        if (!_roles.Contains(actioncontext.HttpContext.Session.GetString("Role")))
         {
             Console.WriteLine($"You have no right to this controller");
             actioncontext.HttpContext.Response.StatusCode = 401;

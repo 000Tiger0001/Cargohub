@@ -4,16 +4,20 @@ using Microsoft.AspNetCore.Mvc;
 public class InventoryControllers : Controller
 {
     private InventoryServices _inventoryService;
+    private UserServices _userServices;
 
-    public InventoryControllers(InventoryServices inventoryServices)
+    public InventoryControllers(InventoryServices inventoryServices, UserServices userServices)
     {
         _inventoryService = inventoryServices;
+        _userServices = userServices;
     }
 
     [HttpGet("inventories")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetInventories() => Ok(await _inventoryService.GetInventories());
 
     [HttpGet("inventory/{inventoryId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Operative", "Floor Manager", "Supervisor", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetInventory(int inventoryId)
     {
         if (inventoryId <= 0) return BadRequest("Cannot proccess this id. ");
@@ -23,6 +27,7 @@ public class InventoryControllers : Controller
     }
 
     [HttpGet("inventories/item/{itemId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetInventoriesforItem(int itemId)
     {
         if (itemId <= 0) return BadRequest("Can't proccess this id. ");
@@ -32,6 +37,7 @@ public class InventoryControllers : Controller
     }
 
     [HttpGet("inventories/item/{itemId}/totals")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetInventoryTotalsForItem(int itemId)
     {
         if (itemId <= 0) return BadRequest("Can't proccess this id. ");
@@ -41,6 +47,7 @@ public class InventoryControllers : Controller
     }
 
     [HttpPost("inventory")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Logistics"])]
     public async Task<IActionResult> AddInventory([FromBody] Inventory inventory)
     {
         if (inventory is null || inventory.Description == default || inventory.ItemReference == default || inventory.ItemId == 0) BadRequest("Not enough info given. ");
@@ -51,6 +58,7 @@ public class InventoryControllers : Controller
     }
 
     [HttpPut("inventory")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Logistics", "Inventory Manager"])]
     public async Task<IActionResult> UpdateInventory([FromBody] Inventory inventory)
     {
         if (inventory is null || inventory.Id == 0 || inventory.ItemId == 0) BadRequest("Not enough info given. ");
@@ -61,6 +69,7 @@ public class InventoryControllers : Controller
     }
 
     [HttpDelete("inventory/{inventoryId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager"])]
     public async Task<IActionResult> RemoveInventory(int inventoryId)
     {
         if (inventoryId <= 0) return BadRequest("Can't proccess this id. ");

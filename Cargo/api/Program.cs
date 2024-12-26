@@ -1,12 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-
+using Microsoft.AspNetCore.DataProtection;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
-
+builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 builder.Services.AddTransient<ClientServices>();
 builder.Services.AddTransient<InventoryServices>();
 builder.Services.AddTransient<ItemGroupServices>();
@@ -19,6 +25,7 @@ builder.Services.AddTransient<ShipmentServices>();
 builder.Services.AddTransient<SupplierServices>();
 builder.Services.AddTransient<TransferServices>();
 builder.Services.AddTransient<WarehouseServices>();
+builder.Services.AddTransient<UserServices>();
 
 // Access to DB
 builder.Services.AddTransient<ClientAccess>();
@@ -36,6 +43,7 @@ builder.Services.AddTransient<WarehouseAccess>();
 builder.Services.AddTransient<OrderItemMovementAccess>();
 builder.Services.AddTransient<TransferItemMovementAccess>();
 builder.Services.AddTransient<ShipmentItemMovementAccess>();
+builder.Services.AddTransient<UserAccess>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -44,6 +52,7 @@ builder.WebHost.ConfigureKestrel(options =>
 {
     options.Limits.MaxResponseBufferSize = 104857600; // 100 MB
 });
+
 
 WebApplication app = builder.Build();
 
@@ -55,9 +64,9 @@ else
 }
 
 app.UseStaticFiles();
+app.UseSession();
 app.UseRouting();
 app.MapControllers();
-//app.UseSession();
 app.UseAuthorization();
 app.Urls.Add("http://localhost:3000");
 

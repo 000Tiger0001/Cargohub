@@ -11,9 +11,11 @@ public class WarehouseControllers : Controller
     }
 
     [HttpGet("warehouses")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetWarehouses() => Ok(await _warehouseService.GetWarehouses());
 
     [HttpGet("warehouse/{warehouseId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetWarehouse(int warehouseId)
     {
         Warehouse? warehouse = await _warehouseService.GetWarehouse(warehouseId)!;
@@ -22,6 +24,7 @@ public class WarehouseControllers : Controller
     }
 
     [HttpPost("warehouse")]
+    [RightsFilter(["Admin", "Warehouse Manager"])]
     public async Task<IActionResult> AddWarehouse([FromBody] Warehouse warehouse)
     {
         if (warehouse is null || warehouse.Code == "" || warehouse.Name == "" || warehouse.Address == "" || warehouse.Zip == "" || warehouse.City == "" || warehouse.Province == "" || warehouse.Country == "") return BadRequest("Not enough info given");
@@ -32,6 +35,7 @@ public class WarehouseControllers : Controller
     }
 
     [HttpPut("warehouse")]
+    [RightsFilter(["Admin"])]
     public async Task<IActionResult> UpdateWarehouse([FromBody] Warehouse warehouse)
     {
         if (warehouse is null || warehouse.Id <= 0) return BadRequest("Warehouse doesn't have an id. ");
@@ -42,6 +46,7 @@ public class WarehouseControllers : Controller
     }
 
     [HttpDelete("warehouse/{warehouseId}")]
+    [RightsFilter(["Admin"])]
     public async Task<IActionResult> RemoveWarehouse(int warehouseId)
     {
         if (warehouseId <= 0) return BadRequest("Can't remove warehouse with this id. ");

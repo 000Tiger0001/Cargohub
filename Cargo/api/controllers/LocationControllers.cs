@@ -11,6 +11,7 @@ public class LocationControllers : Controller
     }
 
     [HttpGet("locations")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst", "Sales", "Logistics"])]
     public async Task<IActionResult> GetAllLocations()
     {
         List<Location> locations = await _locationAccess.GetLocations();
@@ -18,6 +19,7 @@ public class LocationControllers : Controller
     }
 
     [HttpGet("location/{locationId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst", "Sales", "Logistics"])]
     public async Task<IActionResult> GetLocation(int locationId)
     {
         Location? location = await _locationAccess.GetLocation(locationId);
@@ -26,6 +28,7 @@ public class LocationControllers : Controller
     }
 
     [HttpGet("warehouse/{warehouseId}/locations")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst", "Sales", "Logistics"])]
     public async Task<IActionResult> GetLocationsFromWarehouse(int warehouseId)
     {
         List<Location> locations = await _locationAccess.GetLocationsInWarehouse(warehouseId);
@@ -34,6 +37,7 @@ public class LocationControllers : Controller
     }
 
     [HttpPost("location")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager"])]
     public async Task<IActionResult> AddLocation([FromBody] Location location)
     {
         if (location.WarehouseId <= 0 || location.Id <= 0 || location.Code == default || location.Name == default) BadRequest("Data incomplete. ");
@@ -44,6 +48,8 @@ public class LocationControllers : Controller
     }
 
     [HttpPut("location")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager"])]
+
     public async Task<IActionResult> UpdateLocation([FromBody] Location location)
     {
         if (location.Id <= 0) return BadRequest("Location doesn't have an id. ");
@@ -54,6 +60,7 @@ public class LocationControllers : Controller
     }
 
     [HttpDelete("location/{locationId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager"])]
     public async Task<IActionResult> RemoveLocation(int locationId)
     {
         if (locationId <= 0) return BadRequest("Can't remove location with this id. ");

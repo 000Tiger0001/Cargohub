@@ -11,9 +11,11 @@ public class ItemTypeControllers : Controller
     }
 
     [HttpGet("item-types")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Sales", "Logistics", "Analyst"])]
     public async Task<IActionResult> GetItemtypes() => Ok(await _itemTypeService.GetItemTypes());
 
     [HttpGet("item-type/{itemTypeId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Sales", "Logistics", "Analyst"])]
     public async Task<IActionResult> GetItemType(int itemTypeId)
     {
         if (itemTypeId <= 0) return BadRequest("You can't use an this id. ");
@@ -23,6 +25,7 @@ public class ItemTypeControllers : Controller
     }
 
     [HttpPost("item-type")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager"])]
     public async Task<IActionResult> AddItemType([FromBody] ItemType itemType)
     {
         if (itemType is null || itemType.Name == "") return BadRequest("Not enough info. ");
@@ -33,6 +36,7 @@ public class ItemTypeControllers : Controller
     }
 
     [HttpPut("item-type")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager"])]
     public async Task<IActionResult> UpdateItemType([FromBody] ItemType itemType)
     {
         if (itemType is null || itemType.Id <= 0) return BadRequest("Not enough info. ");
@@ -43,6 +47,7 @@ public class ItemTypeControllers : Controller
     }
 
     [HttpDelete("item-type/{itemTypeId}")]
+    [RightsFilter(["Admin"])]
     public async Task<IActionResult> RemoveItemType(int itemTypeId)
     {
         if (itemTypeId <= 0) return BadRequest("Can't remove item type with this id. ");
