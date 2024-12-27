@@ -25,6 +25,18 @@ public class OrderServices
         return orders.Where(order => order.WarehouseId == user?.Warehouse).ToList()!;
     }
 
+    public async Task<List<Order>> GetOrdersInShipmentForUser(int shipmentId, int userId)
+    {
+        List<Order?> orders = await GetOrdersForUser(userId);
+        return orders.Where(o => o!.ShipmentId == shipmentId).ToList()!;
+    }
+
+    public async Task<List<Order>> GetOrdersForClientForUser(int clientId, int userId)
+    {
+        List<Order?> orders = await GetOrdersForUser(userId);
+        return orders.Where(o => o!.SourceId == clientId).ToList()!;
+    }
+
     public async Task<List<OrderItemMovement>> GetItemsInOrder(int orderId)
     {
         Order? order = await GetOrder(orderId);

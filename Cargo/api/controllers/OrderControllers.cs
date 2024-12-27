@@ -40,6 +40,10 @@ public class OrderControllers : Controller
     public async Task<IActionResult> GetOrdersInShipment(int shipmentId)
     {
         if (shipmentId <= 0) return BadRequest("Can't proccess this id. ");
+        if (HttpContext.Session.GetString("Role") == "Operative" || HttpContext.Session.GetString("Role") == "Supervisor")
+        {
+            return Ok(await _orderServices.GetOrdersInShipmentForUser(shipmentId, (int)HttpContext.Session.GetInt32("UserId")!));
+        }
         return Ok(await _orderServices.GetOrdersInShipment(shipmentId));
     }
 
@@ -48,6 +52,10 @@ public class OrderControllers : Controller
     public async Task<IActionResult> GetOrdersForClient(int clientId)
     {
         if (clientId <= 0) return BadRequest("Can't proccess this id. ");
+        if (HttpContext.Session.GetString("Role") == "Operative" || HttpContext.Session.GetString("Role") == "Supervisor")
+        {
+            return Ok(await _orderServices.GetOrdersForClientForUser(clientId, (int)HttpContext.Session.GetInt32("UserId")!));
+        }
         return Ok(await _orderServices.GetOrdersForClient(clientId));
     }
 
