@@ -13,8 +13,15 @@ public class InventoryControllers : Controller
     }
 
     [HttpGet("inventories")]
-    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
-    public async Task<IActionResult> GetInventories() => Ok(await _inventoryService.GetInventories());
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales", "Operative", "Supervisor"])]
+    public async Task<IActionResult> GetInventories()
+    {
+        if (HttpContext.Session.GetString("Role") == "Operative" || HttpContext.Session.GetString("Role") == "Supervisor")
+        {
+            return Ok(await _inventoryService.GetInventoriesforUser((int)HttpContext.Session.GetInt32("UserId")!));
+        }
+        return Ok(await _inventoryService.GetInventories());
+    }
 
     [HttpGet("inventory/{inventoryId}")]
     [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Operative", "Floor Manager", "Supervisor", "Analyst", "Logistics", "Sales"])]

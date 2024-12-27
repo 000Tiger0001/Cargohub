@@ -25,6 +25,8 @@ public class User : IHasId
 
     [JsonProperty("role")]
     public string? Role { get; set; }
+    [JsonProperty("warehouse")]
+    public int? Warehouse { get; set; }
 
     public User() { }
 

@@ -13,7 +13,11 @@ public class OrderControllers : Controller
 
     [HttpGet("orders")]
     [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst", "Sales", "Logistics"])]
-    public async Task<IActionResult> GetOrders() => Ok(await _orderServices.GetOrders());
+    public async Task<IActionResult> GetOrders()
+    {
+        if (HttpContext.Session.GetString("Role") == "Operative" || HttpContext.Session.GetString("Role") == "Supervisor") return Ok(await _orderServices.GetOrdersForUser((int)HttpContext.Session.GetInt32("UserId")));
+        return Ok(await _orderServices.GetOrders());
+    }
 
     [HttpGet("order/{orderId}")]
     [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst", "Sales", "Logistics"])]

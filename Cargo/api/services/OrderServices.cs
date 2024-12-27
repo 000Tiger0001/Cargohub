@@ -4,17 +4,26 @@ public class OrderServices
     private OrderItemMovementAccess _orderItemMovementAccess;
     private InventoryAccess _inventoryAccess;
     private readonly ItemAccess _itemAccess;
+    private readonly UserAccess _userAccess;
 
-    public OrderServices(OrderAccess orderAccess, OrderItemMovementAccess orderItemMovementAccess, InventoryAccess inventoryAccess, ItemAccess itemAccess)
+    public OrderServices(OrderAccess orderAccess, OrderItemMovementAccess orderItemMovementAccess, InventoryAccess inventoryAccess, ItemAccess itemAccess, UserAccess userAccess)
     {
         _orderItemMovementAccess = orderItemMovementAccess;
         _orderAccess = orderAccess;
         _inventoryAccess = inventoryAccess;
         _itemAccess = itemAccess;
+        _userAccess = userAccess;
     }
     public async Task<List<Order>> GetOrders() => await _orderAccess.GetAll();
 
     public async Task<Order?> GetOrder(int orderId) => await _orderAccess.GetById(orderId);
+
+    public async Task<List<Order?>> GetOrdersForUser(int userId)
+    {
+        User? user = await _userAccess.GetById(userId);
+        List<Order> orders = await GetOrders();
+        return orders.Where(order => order.WarehouseId == user?.Warehouse).ToList()!;
+    }
 
     public async Task<List<OrderItemMovement>> GetItemsInOrder(int orderId)
     {

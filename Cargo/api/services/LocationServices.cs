@@ -3,12 +3,14 @@ public class LocationServices
     private readonly LocationAccess _locationAccess;
     private readonly WarehouseAccess _warehouseAccess;
     private readonly InventoryAccess _inventoryAccess;
+    private readonly UserAccess _userAccess;
 
-    public LocationServices(LocationAccess locationAcces, WarehouseAccess warehouseAccess, InventoryAccess inventoryAccess)
+    public LocationServices(LocationAccess locationAcces, WarehouseAccess warehouseAccess, InventoryAccess inventoryAccess, UserAccess userAccess)
     {
         _locationAccess = locationAcces;
         _warehouseAccess = warehouseAccess;
         _inventoryAccess = inventoryAccess;
+        _userAccess = userAccess;
     }
 
     public async Task<List<Location>> GetLocations() => await _locationAccess.GetAll();
@@ -34,6 +36,13 @@ public class LocationServices
         if (location is null || location.Id <= 0) return false;
         location.UpdatedAt = DateTime.Now;
         return await _locationAccess.Update(location);
+    }
+
+    public async Task<List<Location>> GetLocationsOfUser(int userId)
+    {
+        List<Location> locations = await GetLocations();
+        User user = await _userAccess.GetById(userId);
+        return locations.Where(location => location.WarehouseId == user.Warehouse).ToList();
     }
 
     public async Task<bool> RemoveLocation(int locationId)

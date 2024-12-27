@@ -11,8 +11,15 @@ public class ItemControllers : Controller
     }
 
     [HttpGet("items")]
-    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
-    public async Task<IActionResult> GetItems() => Ok(await _itemService.GetItems());
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales", "Operative", "Supervisor"])]
+    public async Task<IActionResult> GetItems()
+    {
+        if (HttpContext.Session.GetString("Role") == "Operative" || HttpContext.Session.GetString("Role") == "Supervisor")
+        {
+            return Ok(await _itemService.GetItemsforUser((int)HttpContext.Session.GetInt32("UserId")!));
+        }
+        return Ok(await _itemService.GetItems());
+    }
 
     [HttpGet("item/{itemId}")]
     [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Operative", "Floor Manager", "Supervisor", "Analyst", "Logistics", "Sales"])]
