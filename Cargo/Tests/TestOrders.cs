@@ -24,6 +24,11 @@ public class OrderTests
     private readonly SupplierAccess _supplierAccess;
     private readonly SupplierServices _serviceSupplier;
     private readonly InventoryAccess _inventoryAccess;
+    private readonly UserAccess _userAccess;
+    private readonly InventoryServices _inventoryServices;
+    private readonly LocationAccess _locationAccess;
+    private readonly LocationServices _locationServices;
+    private readonly WarehouseAccess _warehouseAccess;
 
     public OrderTests()
     {
@@ -38,14 +43,19 @@ public class OrderTests
         _serviceSupplier = new(_supplierAccess, _itemAccess);
         _orderItemMovementAccess = new(_dbContext);
         _transferItemMovementAccess = new(_dbContext);
+        _locationAccess = new(_dbContext);
+        _warehouseAccess = new(_dbContext);
         _shipmentItemMovementAccess = new(_dbContext);
         _itemGroupAccess = new(_dbContext);
+        _userAccess = new(_dbContext);
         _itemLineAccess = new(_dbContext);
         _itemTypeAccess = new(_dbContext);
         _shipmentAccess = new(_dbContext);
         _servicesShipment = new(_shipmentAccess, _shipmentItemMovementAccess, _inventoryAccess, _itemAccess, _orderAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
-        _service = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess);
+        _locationServices = new(_locationAccess, _warehouseAccess, _inventoryAccess, _userAccess);
+        _inventoryServices = new(_inventoryAccess, _locationAccess, _itemAccess, _userAccess, _locationServices);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess, _inventoryServices);
+        _service = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess, _userAccess);
         _clientAccess = new(_dbContext);
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);

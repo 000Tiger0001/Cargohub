@@ -1,5 +1,6 @@
 using Xunit;
 using Microsoft.EntityFrameworkCore;
+using Xunit.Sdk;
 
 public class InventoryTests
 {
@@ -24,6 +25,8 @@ public class InventoryTests
     private readonly ItemGroupServices _serviceItemGroup;
     private readonly ItemLineServices _serviceItemLine;
     private readonly ItemTypeServices _serviceItemType;
+    private readonly InventoryServices _inventoryServices;
+    private readonly UserAccess _useraccess;
 
     public InventoryTests()
     {
@@ -36,6 +39,7 @@ public class InventoryTests
 
         // Create a new instance of Access with the in-memory DbContext
         _warehouseAccess = new(_dbContext);
+        _useraccess = new(_dbContext);
         _inventoryAccess = new(_dbContext);
         _locationAccess = new(_dbContext);
         _itemAccess = new(_dbContext);
@@ -48,15 +52,16 @@ public class InventoryTests
         _shipmentItemMovementAccess = new(_dbContext);
         _transferItemMovementAccess = new(_dbContext);
         _serviceSupplier = new(_supplierAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
         _serviceItemType = new(_itemTypeAccess, _itemAccess);
-        _serviceLocation = new(_locationAccess, _warehouseAccess, _inventoryAccess);
+        _serviceLocation = new(_locationAccess, _warehouseAccess, _inventoryAccess, _useraccess);
+        _inventoryServices = new(_inventoryAccess, _locationAccess, _itemAccess, _useraccess, _serviceLocation);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess, _inventoryServices);
         _serviceWarehouse = new(_warehouseAccess, _locationAccess, _orderAccess);
 
         // Create new instance of Service
-        _service = new(_inventoryAccess, _locationAccess, _itemAccess);
+        _service = new(_inventoryAccess, _locationAccess, _itemAccess, _useraccess, _serviceLocation);
     }
 
     [Fact]

@@ -42,6 +42,8 @@ public class IntegrationTests
     private readonly InventoryAccess _inventoryAccess;
     private readonly InventoryServices _serviceInventory;
 
+    private readonly UserAccess _userAccess;
+
 
     public IntegrationTests()
     {
@@ -51,6 +53,8 @@ public class IntegrationTests
                         .Options;
 
         _dbContext = new(options);
+
+        _userAccess = new(_dbContext);
 
         _inventoryAccess = new(_dbContext);
         // Create a new instance of LocationAccess with the in-memory DbContext
@@ -70,13 +74,12 @@ public class IntegrationTests
 
         // Create new instance of locationService
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
 
         // Initialize the controller with LocationAccess
         _shipmentAccess = new(_dbContext);
 
         _orderAccess = new(_dbContext);
-        _serviceOrder = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess);
+        _serviceOrder = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess, _userAccess);
         _serviceShipment = new(_shipmentAccess, _shipmentItemMovementAccess, _inventoryAccess, _itemAccess, _orderAccess);
 
         _transferAccess = new(_dbContext);
@@ -88,8 +91,10 @@ public class IntegrationTests
 
         _serviceSupplier = new(_supplierAccess, _itemAccess);
         _inventoryAccess = new(_dbContext);
-        _serviceLocation = new(_locationAccess, _warehouseAccess, _inventoryAccess);
-        _serviceInventory = new(_inventoryAccess, _locationAccess, _itemAccess);
+        _serviceLocation = new(_locationAccess, _warehouseAccess, _inventoryAccess, _userAccess);
+        _serviceInventory = new(_inventoryAccess, _locationAccess, _itemAccess, _userAccess, _serviceLocation);
+
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess, _serviceInventory);
     }
 
     [Fact]

@@ -18,6 +18,12 @@ public class OrderItemMovementTests
     private readonly ItemTypeServices _serviceItemType;
     private readonly SupplierAccess _supplierAccess;
     private readonly SupplierServices _serviceSupplier;
+    private readonly InventoryServices _inventoryServices;
+    private readonly InventoryAccess _inventoryAccess;
+    private readonly LocationAccess _locationAccess;
+    private readonly WarehouseAccess _warehouseAccess;
+    private readonly UserAccess _userAccess;
+    private readonly LocationServices _locationServices;
 
     public OrderItemMovementTests()
     {
@@ -38,7 +44,13 @@ public class OrderItemMovementTests
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
         _serviceItemType = new(_itemTypeAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _OrderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
+        _userAccess = new(_dbContext);
+        _locationAccess = new(_dbContext);
+        _warehouseAccess = new(_dbContext);
+        _inventoryAccess = new(_dbContext);
+        _locationServices = new(_locationAccess, _warehouseAccess, _inventoryAccess, _userAccess);
+        _inventoryServices = new(_inventoryAccess, _locationAccess, _itemAccess, _userAccess, _locationServices);
+        _serviceItems = new(_itemAccess, _OrderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess, _inventoryServices);
     }
     [Fact]
     public async Task GetOrderItemMovements()

@@ -22,6 +22,11 @@ public class ShipmentTests
     private readonly SupplierAccess _supplierAccess;
     private readonly SupplierServices _serviceSupplier;
     private readonly InventoryAccess _inventoryAccess;
+    private readonly WarehouseAccess _warehouseAccess;
+    private readonly UserAccess _userAccess;
+    private readonly InventoryServices _inventoryServices;
+    private readonly LocationAccess _locationAccess;
+    private LocationServices _locationServices;
 
 
     public ShipmentTests()
@@ -30,6 +35,9 @@ public class ShipmentTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
         _dbContext = new(options);
+        _userAccess = new(_dbContext);
+        _warehouseAccess = new(_dbContext);
+        _locationAccess = new(_dbContext);
         _inventoryAccess = new(_dbContext);
         _shipmentAccess = new(_dbContext);
         _orderItemMovementAccess = new(_dbContext);
@@ -39,7 +47,6 @@ public class ShipmentTests
         _itemAccess = new(_dbContext);
         _supplierAccess = new(_dbContext);
         _serviceSupplier = new(_supplierAccess, _itemAccess);
-        _serviceOrder = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess);
         _service = new(_shipmentAccess, _shipmentItemMovementAccess, _inventoryAccess, _itemAccess, _orderAccess);
         _itemGroupAccess = new(_dbContext);
         _itemLineAccess = new(_dbContext);
@@ -47,7 +54,10 @@ public class ShipmentTests
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
         _serviceItemType = new(_itemTypeAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
+        _serviceOrder = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess, _userAccess);
+        _locationServices = new(_locationAccess, _warehouseAccess, _inventoryAccess, _userAccess);
+        _inventoryServices = new(_inventoryAccess, _locationAccess, _itemAccess, _userAccess, _locationServices);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess, _inventoryServices);
     }
 
     [Fact]
