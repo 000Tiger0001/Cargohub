@@ -23,9 +23,9 @@ public class UserControllers : Controller
             HttpContext.Session.SetString("Role", LoggedInUser.Username!);
             return Ok($"Welcome {LoggedInUser.Username}!");
         }
-        catch
+        catch (Exception ex)
         {
-            return BadRequest("Error in Login!");
+            return BadRequest(ex);
         }
     }
 
