@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Microsoft.AspNetCore.DataProtection;
-using YamlDotNet.Serialization;
-using Swashbuckle.AspNetCore.Swagger;
+
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
