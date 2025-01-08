@@ -107,20 +107,10 @@ public class OrderServices
                 Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(orderItemMovement.ItemId);
                 changeInItem.Id = orderItemMovement.Id;
 
-                //update existing item
-                if (items.Select(item => item.ItemId).Contains(orderItemMovement.ItemId))
-                {
-                    //item is getting updated
-                    await _orderItemMovementAccess.Update(changeInItem);
-
-
-                }
+                //update existing item and item is getting updated
+                if (items.Select(item => item.ItemId).Contains(orderItemMovement.ItemId)) await _orderItemMovementAccess.Update(changeInItem);
                 //remove item completely
-                else
-                {
-                    await _orderItemMovementAccess.Remove(orderItemMovement.Id);
-                }
-
+                else await _orderItemMovementAccess.Remove(orderItemMovement.Id);
                 await _updateItemsinInventory(order!, inventory!, orderItemMovement.Amount, changeInItem);
             }
 

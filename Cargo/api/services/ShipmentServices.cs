@@ -77,11 +77,7 @@ public class ShipmentServices
                     changeInItem.Id = shipmentItemMovement.Id;
                     await _shipmentItemMovementAccess.Update(changeInItem);
                 }
-                else
-                {
-                    await _shipmentItemMovementAccess.Remove(shipmentItemMovement.Id);
-                }
-
+                else await _shipmentItemMovementAccess.Remove(shipmentItemMovement.Id);
 
                 //update inventory based on order
                 Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovement.ItemId);
@@ -95,7 +91,6 @@ public class ShipmentServices
                 if (!shipmentItemMovements.Contains(shipmentItemMovementNew))
                 {
                     await _shipmentItemMovementAccess.Add(shipmentItemMovementNew);
-
                     await _updateItemsinInventory(shipment!, inventory!, 0, shipmentItemMovementNew);
                 }
             }

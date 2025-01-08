@@ -39,14 +39,11 @@ public class ItemServices
     {
         List<Inventory> inventories = await _inventoryServices.GetInventoriesforUser(userId);
         List<int> itemsId = inventories.Select(inventory => inventory.ItemId).ToList();
-        List<Item> items = new();
+        List<Item> items = [];
         foreach (int itemId in itemsId)
         {
             Item? item = await GetItem(itemId);
-            if (item is not null)
-            {
-                items.Add(item);
-            }
+            if (item is not null) items.Add(item);
 
         }
         return items;
