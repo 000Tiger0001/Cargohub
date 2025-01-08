@@ -269,7 +269,7 @@ public class IntegrationTests
         OrderItemMovement orderItemMovement = new(1, 1);
         Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, [testShipmentItemMovement]);
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
-        Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
+        Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "Pending", "Pending", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
         await _serviceSupplier.AddSupplier(mockSupplier);
@@ -282,7 +282,8 @@ public class IntegrationTests
         Assert.True(IsItemAdded);
         Assert.Equal([testItem], await _serviceItems.GetItems());
 
-        await _serviceOrder.AddOrder(testOrder);
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+        Assert.True(IsOrderAdded);
 
         bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
 
@@ -312,7 +313,7 @@ public class IntegrationTests
         ItemLine testItemLine = new(11, "Home Appliances", "");
         ItemType testItemType = new(1, "Desktop", "");
         TransferItemMovement testTransferItemMovement = new(1, 23);
-        Transfer testTransfer = new(1, "TR00001", 0, 9229, "Uncompleted", [testTransferItemMovement]);
+        Transfer testTransfer = new(1, "TR00001", 0, 9229, "Pending", [testTransferItemMovement]);
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
