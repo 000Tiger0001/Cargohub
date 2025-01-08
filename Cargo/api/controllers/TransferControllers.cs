@@ -11,9 +11,11 @@ public class TransferControllers : Controller
     }
 
     [HttpGet("transfers")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst"])]
     public async Task<IActionResult> GetTransfers() => Ok(await _transferServices.GetTransfers());
 
     [HttpGet("transfer/{transferId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst"])]
     public async Task<IActionResult> GetTransfer(int transferId)
     {
         if (transferId <= 0) return BadRequest("Can't proccess this id. ");
@@ -24,6 +26,7 @@ public class TransferControllers : Controller
     }
 
     [HttpGet("transfer/{transferId}/items")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst"])]
     public async Task<IActionResult> GetItemsInTransfer(int transferId)
     {
         if (transferId <= 0) return BadRequest("Can't proccess this id. ");
@@ -34,6 +37,7 @@ public class TransferControllers : Controller
     }
 
     [HttpPost("transfer")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor"])]
     public async Task<IActionResult> AddTransfer([FromBody] Transfer transfer)
     {
         if (transfer is null || transfer.Reference == "" || (transfer.TransferFrom <= 0 && transfer.TransferTo <= 0) || transfer.TransferStatus == "") return BadRequest("Not enough given. ");
@@ -44,6 +48,7 @@ public class TransferControllers : Controller
     }
 
     [HttpPut("transfer")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor"])]
     public async Task<IActionResult> UpdateTransfer([FromBody] Transfer transfer)
     {
         if (transfer is null || transfer.Id <= 0) return BadRequest("Not enough info given. ");
@@ -54,6 +59,7 @@ public class TransferControllers : Controller
     }
 
     [HttpDelete("transfer/{transferId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager"])]
     public async Task<IActionResult> RemoveTransfer(int transferId)
     {
         if (transferId <= 0) BadRequest("Can't proccess this string. ");

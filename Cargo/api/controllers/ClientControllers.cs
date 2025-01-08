@@ -11,9 +11,11 @@ public class ClientControllers : Controller
     }
 
     [HttpGet("clients")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetClients() => Ok(await _clientService.GetClients());
 
     [HttpGet("client/{clientId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetClient(int clientId)
     {
         if (clientId <= 0) return BadRequest("Can't get client with this id. ");
@@ -24,6 +26,7 @@ public class ClientControllers : Controller
     }
 
     [HttpPost("client")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Logistics", "Sales"])]
     public async Task<IActionResult> AddClient([FromBody] Client client)
     {
         if (client is null || client.Name == "" || client.Address == "" || client.City == "" || client.ZipCode == "" || client.Province == "" || client.Country == "" || client.ContactName == "" || client.ContactPhone == "" || client.ContactEmail == "") return BadRequest("Not enough info given. ");
@@ -34,6 +37,7 @@ public class ClientControllers : Controller
     }
 
     [HttpPut("client")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Logistics", "Sales"])]
     public async Task<IActionResult> UpdateClient([FromBody] Client client)
     {
         if (client is null || client.Id <= 0) return BadRequest("Not enough info given. ");
@@ -44,6 +48,7 @@ public class ClientControllers : Controller
     }
 
     [HttpDelete("client/{clientId}")]
+    [RightsFilter(["Admin"])]
     public async Task<IActionResult> RemoveClient(int clientId)
     {
         if (clientId <= 0) return BadRequest("Can't remove client with this id. ");

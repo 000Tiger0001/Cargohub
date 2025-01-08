@@ -32,18 +32,24 @@ public class Item : IHasId
     [JsonProperty("item_line")]
     public int? ItemLineId { get; set; }
 
+    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     [ForeignKey("ItemLineId")]
     public virtual ItemLine? ItemLine { get; set; }
 
     [JsonProperty("item_group")]
     public int? ItemGroupId { get; set; }
 
+    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     [ForeignKey("ItemGroupId")]
     public virtual ItemGroup? ItemGroup { get; set; }
 
     [JsonProperty("item_type")]
     public int? ItemTypeId { get; set; }
 
+    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     [ForeignKey("ItemTypeId")]
     public virtual ItemType? ItemType { get; set; }
 
@@ -59,6 +65,8 @@ public class Item : IHasId
     [JsonProperty("supplier_id")]
     public int SupplierId { get; set; }
 
+    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     [ForeignKey("SupplierId")]
     public virtual Supplier? Supplier { get; set; }
 

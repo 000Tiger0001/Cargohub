@@ -5,6 +5,7 @@ public class ShipmentServices
     private readonly InventoryAccess _inventoryAccess;
     private readonly ItemAccess _itemAccess;
     private readonly OrderAccess _orderAccess;
+
     public ShipmentServices(ShipmentAccess shipmentAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, InventoryAccess inventoryAccess, ItemAccess itemAccess, OrderAccess orderAccess)
     {
         _shipmentAccess = shipmentAccess;
@@ -28,6 +29,7 @@ public class ShipmentServices
     public async Task<bool> AddShipment(Shipment shipment)
     {
         if (shipment is null) return false;
+        if (shipment.ShipmentStatus != "Transit" && shipment.ShipmentStatus != "Pending" && shipment.ShipmentStatus != "Delivered") return false;
         List<Shipment> shipments = await GetShipments();
         Shipment doubleShipment = shipments.FirstOrDefault(s => s.OrderId == shipment.OrderId && s.SourceId == shipment.SourceId && s.OrderDate == shipment.OrderDate && s.RequestDate == shipment.RequestDate && s.ShipmentDate == shipment.ShipmentDate && s.ShipmentType == shipment.ShipmentType && s.Notes == shipment.Notes && s.CarrierCode == shipment.CarrierCode && s.CarrierDescription == shipment.CarrierDescription && s.ServiceCode == shipment.ServiceCode && s.PaymentType == shipment.PaymentType && s.TransferMode == shipment.TransferMode && s.TotalPackageCount == shipment.TotalPackageCount && s.TotalPackageWeight == shipment.TotalPackageWeight && s.Items == shipment.Items)!;
         List<Item> items = await _itemAccess.GetAll();
@@ -40,7 +42,8 @@ public class ShipmentServices
 
     public async Task<bool> UpdateShipment(Shipment shipment)
     {
-        if (shipment is null || shipment.Id <= 0) return false;
+        if (shipment is null || shipment.Id <= 0 || shipment.ShipmentStatus == "Delivered") return false;
+        if (shipment.ShipmentStatus != "Transit" && shipment.ShipmentStatus != "Pending" && shipment.ShipmentStatus != "Delivered") return false;
         shipment.UpdatedAt = DateTime.Now;
         return await _shipmentAccess.Update(shipment);
     }
@@ -49,7 +52,7 @@ public class ShipmentServices
     {
         if (shipment!.ShipmentType == 'O')
         {
-            if (shipment!.ShipmentStatus == "pending")
+            if (shipment!.ShipmentStatus == "Pending")
             {
                 int changeamount = newItemMovement.Amount - oldAmount;
                 inventory.TotalAllocated -= changeamount;
@@ -75,11 +78,7 @@ public class ShipmentServices
                     changeInItem.Id = shipmentItemMovement.Id;
                     await _shipmentItemMovementAccess.Update(changeInItem);
                 }
-                else
-                {
-                    await _shipmentItemMovementAccess.Remove(shipmentItemMovement.Id);
-                }
-
+                else await _shipmentItemMovementAccess.Remove(shipmentItemMovement.Id);
 
                 //update inventory based on order
                 Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovement.ItemId);
@@ -93,13 +92,11 @@ public class ShipmentServices
                 if (!shipmentItemMovements.Contains(shipmentItemMovementNew))
                 {
                     await _shipmentItemMovementAccess.Add(shipmentItemMovementNew);
-
                     await _updateItemsinInventory(shipment!, inventory!, 0, shipmentItemMovementNew);
                 }
             }
             return true;
         }
-
         catch
         {
             return false;

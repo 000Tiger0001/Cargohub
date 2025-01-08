@@ -18,6 +18,12 @@ public class TransferItemMovementTests
     private readonly ItemTypeServices _serviceItemType;
     private readonly SupplierAccess _supplierAccess;
     private readonly SupplierServices _serviceSupplier;
+    private readonly WarehouseAccess _warehouseAccess;
+    private readonly UserAccess _userAccess;
+    private readonly InventoryServices _inventoryServices;
+    private readonly LocationAccess _locationAccess;
+    private LocationServices _locationServices;
+    private InventoryAccess _inventoryAccess;
 
     public TransferItemMovementTests()
     {
@@ -25,6 +31,10 @@ public class TransferItemMovementTests
                         .UseInMemoryDatabase(Guid.NewGuid().ToString()) // In-memory database
                         .Options;
         _dbContext = new(options);
+        _userAccess = new(_dbContext);
+        _warehouseAccess = new(_dbContext);
+        _locationAccess = new(_dbContext);
+        _inventoryAccess = new(_dbContext);
         _orderItemMovementAccess = new(_dbContext);
         _shipmentItemMovementAccess = new(_dbContext);
         _TransferItemMovementAccess = new(_dbContext);
@@ -38,7 +48,9 @@ public class TransferItemMovementTests
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
         _serviceItemType = new(_itemTypeAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
+        _locationServices = new(_locationAccess, _warehouseAccess, _inventoryAccess, _userAccess);
+        _inventoryServices = new(_inventoryAccess, _locationAccess, _itemAccess, _userAccess, _locationServices);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _TransferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess, _inventoryServices);
     }
     [Fact]
     public async Task GetTransferItemMovements()

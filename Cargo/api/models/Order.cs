@@ -39,6 +39,8 @@ public class Order : IHasId
     [JsonProperty("warehouse_id")]
     public int WarehouseId { get; set; }
 
+    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     [ForeignKey("WarehouseId")]
     public virtual Warehouse? Warehouse { get; set; }
 
@@ -51,6 +53,8 @@ public class Order : IHasId
     [JsonProperty("shipment_id")]
     public int? ShipmentId { get; set; } = null;
 
+    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     [ForeignKey("ShipmentId")]
     public virtual Shipment? Shipment { get; set; }
 
