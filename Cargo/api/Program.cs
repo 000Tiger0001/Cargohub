@@ -6,7 +6,6 @@ using Swashbuckle.AspNetCore.Swagger;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo(@"C:\DataProtectionKeys"))
@@ -53,7 +52,6 @@ builder.Services.AddTransient<UserAccess>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-// builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -81,7 +79,6 @@ builder.WebHost.ConfigureKestrel(options =>
 
 WebApplication app = builder.Build();
 
-// http://localhost:3000/swagger/v1/swagger.json - for JSON
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -123,7 +120,8 @@ app.Urls.Add("http://localhost:3000");
 
 
 var stopwatch = Stopwatch.StartNew();
-// Call the method you want to benchmark
+
+// Call the method to benchmark
 await JsonToDb.TransferJsonToDb(app);
 
 stopwatch.Stop();
@@ -133,7 +131,5 @@ int seconds = elapsedTime.Seconds;
 int milliseconds = elapsedTime.Milliseconds;
 
 Console.WriteLine($"Time taken by TransferJsonToDb: {minutes} minutes, {seconds} seconds, and {milliseconds} milliseconds");
-Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalMinutes:F2} minutes");
-Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalSeconds:F2} seconds");
 
 app.Run();
