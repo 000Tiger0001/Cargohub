@@ -20,7 +20,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<OrderItemMovement>? OrderItemMovements { get; set; }
     public DbSet<ShipmentItemMovement>? ShipmentItemMovements { get; set; }
     public DbSet<TransferItemMovement>? TransferItemMovements { get; set; }
-
+    public DbSet<User>? Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
