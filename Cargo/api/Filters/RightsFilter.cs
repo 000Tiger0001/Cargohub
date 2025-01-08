@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 public class RightsFilter : Attribute, IAsyncActionFilter
 {
     private readonly string[] _roles;
+    public static string[] validRoles = ["admin", "warehouse manager", "inventory Manager", "floor Manager", "operative", "supervisor", "analyst", "logistics", "sales"];
 
     public RightsFilter(string[] roles)
     {
-        _roles = roles;
+        _roles = roles.Select(r => r.ToLowerInvariant()).ToArray();
     }
     public async Task OnActionExecutionAsync(ActionExecutingContext actioncontext, ActionExecutionDelegate next)
     {

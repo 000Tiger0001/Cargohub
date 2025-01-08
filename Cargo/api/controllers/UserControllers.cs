@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
+
 [Route("Cargohub")]
 public class UserControllers : Controller
 {
@@ -20,7 +21,7 @@ public class UserControllers : Controller
             if (HttpContext.Session.GetInt32("UserId") != null) return BadRequest("You are already logged in on this session!");
             if (HttpContext.Session.GetInt32("UserId") == LoggedInUser.Id) return BadRequest("User is already logged in. ");
             HttpContext.Session.SetInt32("UserId", LoggedInUser.Id);
-            HttpContext.Session.SetString("Role", LoggedInUser.Username!);
+            HttpContext.Session.SetString("Role", LoggedInUser.Role!.ToLowerInvariant());
             return Ok($"Welcome {LoggedInUser.Username}!");
         }
         catch (Exception ex)
@@ -33,7 +34,8 @@ public class UserControllers : Controller
     public async Task<IActionResult> MakeAccount([FromBody] User user)
     {
         if (user is null) return BadRequest("This is not a user.");
-        if (user.Email == "None" || user.Username == "None" || user.Role == "None" || user.Password == "None") return BadRequest("Data is not complete.");
+        if (user.Email == "" || user.Username == "" || user.Role == "" || user.Password == "") return BadRequest("Data is not complete.");
+        if (!RightsFilter.validRoles.Contains(user.Role!.ToLowerInvariant())) return BadRequest("This Role is invalid!");
         bool IsUserWritenToJson = await _userServices.SaveUser(user);
         if (!IsUserWritenToJson) return BadRequest("Something went wrong!");
         return Ok("User registered");
