@@ -65,7 +65,7 @@ public class TransferTests
     [Fact]
     public async Task GetAllTransfers()
     {
-        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Uncompleted", []);
+        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Pending", []);
 
         Assert.Empty(await _service.GetTransfers());
 
@@ -81,7 +81,7 @@ public class TransferTests
     [Fact]
     public async Task GetTransfer()
     {
-        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Uncompleted", []);
+        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Pending", []);
 
         bool IsAdded = await _service.AddTransfer(mockTransfer);
         Assert.True(IsAdded);
@@ -111,7 +111,7 @@ public class TransferTests
         await _serviceItems.AddItem(item1);
 
         List<TransferItemMovement> items = [mockItem1];
-        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Uncompleted", items);
+        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Pending", items);
 
         await _service.AddTransfer(mockTransfer);
 
@@ -134,7 +134,7 @@ public class TransferTests
     [Fact]
     public async Task AddTransfer()
     {
-        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Uncompleted", []);
+        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Pending", []);
 
         Assert.Empty(await _service.GetTransfers());
 
@@ -152,7 +152,7 @@ public class TransferTests
     [Fact]
     public async Task AddDuplicateTransfer()
     {
-        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Uncompleted", []);
+        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Pending", []);
 
         bool IsAdded1 = await _service.AddTransfer(mockTransfer);
 
@@ -173,8 +173,8 @@ public class TransferTests
     [Fact]
     public async Task AddTransferWithDuplicateId()
     {
-        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Uncompleted", []);
-        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Uncompleted", []);
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Pending", []);
+        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Pending", []);
 
         bool IsAdded1 = await _service.AddTransfer(mockTransfer1);
 
@@ -195,8 +195,8 @@ public class TransferTests
     [Fact]
     public async Task UpdateTransfer()
     {
-        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Uncompleted", []);
-        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Uncompleted", []);
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Pending", []);
+        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Pending", []);
 
         bool IsAdded = await _service.AddTransfer(mockTransfer1);
 
@@ -235,7 +235,7 @@ public class TransferTests
     [Fact]
     public async Task RemoveTransfer()
     {
-        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Uncompleted", []);
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Pending", []);
 
         bool IsAdded = await _service.AddTransfer(mockTransfer1);
 
