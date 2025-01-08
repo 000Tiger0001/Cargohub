@@ -10,8 +10,9 @@ public class ItemServices
     private readonly ItemLineAccess _itemLineAccess;
     private readonly ItemTypeAccess _itemTypeAccess;
     private readonly SupplierAccess _supplierAccess;
+    private readonly InventoryServices _inventoryServices;
 
-    public ItemServices(ItemAccess itemAccess, OrderItemMovementAccess orderItemMovementAccess, TransferItemMovementAccess transferItemMovementAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, ItemGroupAccess itemGroupAccess, ItemLineAccess itemLineAccess, ItemTypeAccess itemTypeAccess, SupplierAccess supplierAccess)
+    public ItemServices(ItemAccess itemAccess, OrderItemMovementAccess orderItemMovementAccess, TransferItemMovementAccess transferItemMovementAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, ItemGroupAccess itemGroupAccess, ItemLineAccess itemLineAccess, ItemTypeAccess itemTypeAccess, SupplierAccess supplierAccess, InventoryServices inventoryServices)
     {
         _itemAccess = itemAccess;
         _orderItemMovementAccess = orderItemMovementAccess;
@@ -21,6 +22,7 @@ public class ItemServices
         _itemLineAccess = itemLineAccess;
         _itemTypeAccess = itemTypeAccess;
         _supplierAccess = supplierAccess;
+        _inventoryServices = inventoryServices;
     }
 
     public async Task<List<Item>> GetItems() => await _itemAccess.GetAll();
@@ -31,6 +33,19 @@ public class ItemServices
     {
         List<Item> items = await GetItems();
         return items.FindAll(i => i.ItemLineId == itemLineId);
+    }
+
+    public async Task<List<Item>> GetItemsforUser(int userId)
+    {
+        List<Inventory> inventories = await _inventoryServices.GetInventoriesforUser(userId);
+        List<int> itemsId = inventories.Select(inventory => inventory.ItemId).ToList();
+        List<Item> items = [];
+        foreach (int itemId in itemsId)
+        {
+            Item? item = await GetItem(itemId);
+            if (item is not null) items.Add(item);
+        }
+        return items;
     }
 
     public async Task<List<Item>> GetItemsForItemGroup(int itemGroupId)

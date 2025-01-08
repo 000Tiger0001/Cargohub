@@ -3,13 +3,19 @@ public class InventoryServices
     private readonly InventoryAccess _inventoryAccess;
     private readonly LocationAccess _locationAccess;
     private readonly ItemAccess _itemAccess;
+    private readonly UserAccess _userAccess;
+    private readonly LocationServices _locationServices;
 
-    public InventoryServices(InventoryAccess inventoryAccess, LocationAccess locationAccess, ItemAccess itemAccess)
+    public InventoryServices(InventoryAccess inventoryAccess, LocationAccess locationAccess, ItemAccess itemAccess, UserAccess userAccess, LocationServices locationServices)
     {
         _inventoryAccess = inventoryAccess;
         _locationAccess = locationAccess;
         _itemAccess = itemAccess;
+        _userAccess = userAccess;
+        _locationAccess = locationAccess;
+        _locationServices = locationServices;
     }
+
     public async Task<List<Inventory>> GetInventories() => await _inventoryAccess.GetAll();
 
     public async Task<Inventory?> GetInventory(int inventoryId) => await _inventoryAccess.GetById(inventoryId);
@@ -18,6 +24,14 @@ public class InventoryServices
     {
         List<Inventory> inventories = await GetInventories();
         return inventories.Where(i => i.ItemId == itemId).ToList();
+    }
+
+    public async Task<List<Inventory>> GetInventoriesforUser(int userId)
+    {
+        List<Location> locations = await _locationServices.GetLocationsOfUser(userId);
+        List<int> locationIds = locations.Select(location => location.Id).ToList();
+        List<Inventory> inventories = await GetInventories();
+        return inventories.Where(inventory => inventory.Locations!.Any(location => locationIds.Contains(location))).ToList();
     }
 
     public async Task<Dictionary<string, int>> GetInventoryTotalsForItem(int itemId)

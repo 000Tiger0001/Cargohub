@@ -11,9 +11,11 @@ public class SupplierControllers : Controller
     }
 
     [HttpGet("suppliers")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales"])]
     public async Task<IActionResult> GetSuppliers() => Ok(await _supplierService.GetSuppliers());
 
     [HttpGet("supplier/{supplierId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst", "Sales", "Logistics"])]
     public async Task<IActionResult> GetSupplier(int supplierId)
     {
         if (supplierId <= 0) return BadRequest("Can't get supplier with this id. ");
@@ -24,6 +26,7 @@ public class SupplierControllers : Controller
     }
 
     [HttpPost("supplier")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Logistics", "Sales"])]
     public async Task<IActionResult> AddSupplier([FromBody] Supplier supplier)
     {
         if (supplier is null || supplier.Address == "" || supplier.AddressExtra == "" || supplier.City == "" || supplier.Code == "" || supplier.ContactName == "" || supplier.Country == "" || supplier.Name == "" || supplier.Phonenumber == "" || supplier.Province == "" || supplier.Reference == "" || supplier.ZipCode == "") return BadRequest("Not enough info given. ");
@@ -34,6 +37,7 @@ public class SupplierControllers : Controller
     }
 
     [HttpPut("supplier")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Logistics", "Sales"])]
     public async Task<IActionResult> UpdateSupplier([FromBody] Supplier supplier)
     {
         if (supplier is null || supplier.Id <= 0) return BadRequest("Not enough given. ");
@@ -44,6 +48,7 @@ public class SupplierControllers : Controller
     }
 
     [HttpDelete("supplier/{supplierId}")]
+    [RightsFilter(["Admin", "Warehouse Manager"])]
     public async Task<IActionResult> RemoveSupplier(int supplierId)
     {
         if (supplierId <= 0) return BadRequest("Can't remove supplier with this id. ");

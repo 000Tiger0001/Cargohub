@@ -11,9 +11,11 @@ public class ItemLineControllers : Controller
     }
 
     [HttpGet("item-lines")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Sales", "Logistics", "Analyst"])]
     public async Task<IActionResult> GetItemLines() => Ok(await _itemLineService.GetItemLines());
 
     [HttpGet("item-line/{itemLineId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Sales", "Logistics", "Analyst"])]
     public async Task<IActionResult> GetItemLine(int itemLineId)
     {
         if (itemLineId <= 0) return BadRequest("You can't use an this id. ");
@@ -23,6 +25,7 @@ public class ItemLineControllers : Controller
     }
 
     [HttpPost("item-line")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager"])]
     public async Task<IActionResult> AddItemLine([FromBody] ItemLine itemLine)
     {
         if (itemLine is null || itemLine.Name == "") return BadRequest("Not enough info. ");
@@ -33,6 +36,7 @@ public class ItemLineControllers : Controller
     }
 
     [HttpPut("item-line")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager"])]
     public async Task<IActionResult> UpdateItemLine([FromBody] ItemLine itemLine)
     {
         if (itemLine is null || itemLine.Id <= 0) return BadRequest("Not enough info. ");
@@ -43,6 +47,7 @@ public class ItemLineControllers : Controller
     }
 
     [HttpDelete("item-line/{itemLineId}")]
+    [RightsFilter(["Admin"])]
     public async Task<IActionResult> RemoveItemLine(int itemLineId)
     {
         if (itemLineId <= 0) return BadRequest("Can't remove item line with this id. ");

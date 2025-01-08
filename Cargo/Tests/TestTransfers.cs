@@ -19,6 +19,12 @@ public class TransferTests
     private readonly ItemTypeServices _serviceItemType;
     private readonly SupplierAccess _supplierAccess;
     private readonly SupplierServices _serviceSupplier;
+    private readonly WarehouseAccess _warehouseAccess;
+    private readonly UserAccess _userAccess;
+    private readonly InventoryServices _inventoryServices;
+    private readonly LocationAccess _locationAccess;
+    private LocationServices _locationServices;
+    private InventoryAccess _inventoryAccess;
 
     public TransferTests()
     {
@@ -35,6 +41,11 @@ public class TransferTests
         _transferItemMovementAccess = new(_dbContext);
         _shipmentItemMovementAccess = new(_dbContext);
 
+        _userAccess = new(_dbContext);
+        _warehouseAccess = new(_dbContext);
+        _locationAccess = new(_dbContext);
+        _inventoryAccess = new(_dbContext);
+
         // Create new instance of Service
         _itemAccess = new(_dbContext);
         _service = new(_transferAccess, _transferItemMovementAccess, _itemAccess);
@@ -46,13 +57,15 @@ public class TransferTests
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
         _serviceItemLine = new(_itemLineAccess, _itemAccess);
         _serviceItemType = new(_itemTypeAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
+        _locationServices = new(_locationAccess, _warehouseAccess, _inventoryAccess, _userAccess);
+        _inventoryServices = new(_inventoryAccess, _locationAccess, _itemAccess, _userAccess, _locationServices);
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess, _inventoryServices);
     }
 
     [Fact]
     public async Task GetAllTransfers()
     {
-        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", []);
+        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Pending", []);
 
         Assert.Empty(await _service.GetTransfers());
 
@@ -68,7 +81,7 @@ public class TransferTests
     [Fact]
     public async Task GetTransfer()
     {
-        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", []);
+        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Pending", []);
 
         bool IsAdded = await _service.AddTransfer(mockTransfer);
         Assert.True(IsAdded);
@@ -98,7 +111,7 @@ public class TransferTests
         await _serviceItems.AddItem(item1);
 
         List<TransferItemMovement> items = [mockItem1];
-        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Completed", items);
+        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Pending", items);
 
         await _service.AddTransfer(mockTransfer);
 
@@ -121,7 +134,7 @@ public class TransferTests
     [Fact]
     public async Task AddTransfer()
     {
-        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Completed", []);
+        Transfer mockTransfer = new(1, "TR00001", 0, 9229, "Pending", []);
 
         Assert.Empty(await _service.GetTransfers());
 
@@ -139,7 +152,7 @@ public class TransferTests
     [Fact]
     public async Task AddDuplicateTransfer()
     {
-        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Completed", []);
+        Transfer mockTransfer = new(2, "TR00001", 0, 9229, "Pending", []);
 
         bool IsAdded1 = await _service.AddTransfer(mockTransfer);
 
@@ -160,8 +173,8 @@ public class TransferTests
     [Fact]
     public async Task AddTransferWithDuplicateId()
     {
-        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", []);
-        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Completed", []);
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Pending", []);
+        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Pending", []);
 
         bool IsAdded1 = await _service.AddTransfer(mockTransfer1);
 
@@ -182,8 +195,8 @@ public class TransferTests
     [Fact]
     public async Task UpdateTransfer()
     {
-        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", []);
-        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Completed", []);
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Pending", []);
+        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Pending", []);
 
         bool IsAdded = await _service.AddTransfer(mockTransfer1);
 
@@ -200,9 +213,29 @@ public class TransferTests
     }
 
     [Fact]
-    public async Task RemoveTransfer()
+    public async Task UpdateTransferWrong()
     {
         Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Completed", []);
+        Transfer mockTransfer2 = new(2, "TR00002", 9229, 9284, "Completed", []);
+
+        bool IsAdded = await _service.AddTransfer(mockTransfer1);
+
+        Assert.False(IsAdded);
+        Assert.Equal([], await _service.GetTransfers());
+
+        bool IsUpdated = await _service.UpdateTransfer(mockTransfer2);
+
+        Assert.False(IsUpdated);
+        Assert.Equal([], await _service.GetTransfers());
+        Assert.NotEqual([mockTransfer1, mockTransfer2], await _service.GetTransfers());
+
+        await _service.RemoveTransfer(2);
+    }
+
+    [Fact]
+    public async Task RemoveTransfer()
+    {
+        Transfer mockTransfer1 = new(2, "TR00001", 0, 9229, "Pending", []);
 
         bool IsAdded = await _service.AddTransfer(mockTransfer1);
 

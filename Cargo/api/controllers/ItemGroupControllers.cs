@@ -11,9 +11,11 @@ public class ItemGroupControllers : Controller
     }
 
     [HttpGet("item-groups")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Sales", "Logistics", "Analyst"])]
     public async Task<IActionResult> GetItemGroups() => Ok(await _itemGroupService.GetItemGroups());
 
     [HttpGet("item-group/{itemGroupId}")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Sales", "Logistics", "Analyst"])]
     public async Task<IActionResult> GetItemGroup(int itemGroupId)
     {
         if (itemGroupId <= 0) return BadRequest("You can't use an this id. ");
@@ -23,6 +25,7 @@ public class ItemGroupControllers : Controller
     }
 
     [HttpPost("item-group")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager"])]
     public async Task<IActionResult> AddItemGroup([FromBody] ItemGroup itemGroup)
     {
         if (itemGroup is null || itemGroup.Name == "") return BadRequest("Not enough info. ");
@@ -33,6 +36,7 @@ public class ItemGroupControllers : Controller
     }
 
     [HttpPut("item-group")]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager"])]
     public async Task<IActionResult> UpdateItemGroup([FromBody] ItemGroup itemGroup)
     {
         if (itemGroup is null || itemGroup.Id <= 0) return BadRequest("Not enough info. ");
@@ -43,6 +47,7 @@ public class ItemGroupControllers : Controller
     }
 
     [HttpDelete("item-group/{itemGroupId}")]
+    [RightsFilter(["Admin"])]
     public async Task<IActionResult> RemoveItemGroup(int itemGroupId)
     {
         if (itemGroupId <= 0) return BadRequest("Can't remove item group with this id. ");

@@ -42,6 +42,8 @@ public class IntegrationTests
     private readonly InventoryAccess _inventoryAccess;
     private readonly InventoryServices _serviceInventory;
 
+    private readonly UserAccess _userAccess;
+
 
     public IntegrationTests()
     {
@@ -51,6 +53,8 @@ public class IntegrationTests
                         .Options;
 
         _dbContext = new(options);
+
+        _userAccess = new(_dbContext);
 
         _inventoryAccess = new(_dbContext);
         // Create a new instance of LocationAccess with the in-memory DbContext
@@ -70,13 +74,12 @@ public class IntegrationTests
 
         // Create new instance of locationService
         _serviceItemGroup = new(_itemGroupAccess, _itemAccess);
-        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess);
 
         // Initialize the controller with LocationAccess
         _shipmentAccess = new(_dbContext);
 
         _orderAccess = new(_dbContext);
-        _serviceOrder = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess);
+        _serviceOrder = new(_orderAccess, _orderItemMovementAccess, _inventoryAccess, _itemAccess, _userAccess);
         _serviceShipment = new(_shipmentAccess, _shipmentItemMovementAccess, _inventoryAccess, _itemAccess, _orderAccess);
 
         _transferAccess = new(_dbContext);
@@ -88,8 +91,10 @@ public class IntegrationTests
 
         _serviceSupplier = new(_supplierAccess, _itemAccess);
         _inventoryAccess = new(_dbContext);
-        _serviceLocation = new(_locationAccess, _warehouseAccess, _inventoryAccess);
-        _serviceInventory = new(_inventoryAccess, _locationAccess, _itemAccess);
+        _serviceLocation = new(_locationAccess, _warehouseAccess, _inventoryAccess, _userAccess);
+        _serviceInventory = new(_inventoryAccess, _locationAccess, _itemAccess, _userAccess, _serviceLocation);
+
+        _serviceItems = new(_itemAccess, _orderItemMovementAccess, _transferItemMovementAccess, _shipmentItemMovementAccess, _itemGroupAccess, _itemLineAccess, _itemTypeAccess, _supplierAccess, _serviceInventory);
     }
 
     [Fact]
@@ -216,7 +221,7 @@ public class IntegrationTests
         ItemLine testItemLine = new(11, "Home Appliances", "");
         ItemType testItemType = new(1, "Desktop", "");
         OrderItemMovement testOrderItemMovement = new(1, 1);
-        Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [testOrderItemMovement]);
+        Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Pending", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 18, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, [testOrderItemMovement]);
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
@@ -264,7 +269,7 @@ public class IntegrationTests
         OrderItemMovement orderItemMovement = new(1, 1);
         Shipment testShipment = new(1, 1, 33, DateTime.Parse("2000-03-09"), DateTime.Parse("2000-03-11"), DateTime.Parse("2000-03-13"), 'I', "Pending", "Zee vertrouwen klas rots heet lachen oneven begrijpen.", "DPD", "Dynamic Parcel Distribution", "Fastest", "Manual", "Ground", 31, 594.42, [testShipmentItemMovement]);
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
-        Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "P", "To deliver", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
+        Order testOrder = new(1, 1, DateTime.Now, DateTime.Now, "123", "1", "Pending", "Pending", "Be carefull", "Don't trow", 1, 1, 1, 1, 12, 12, 12, 12, [orderItemMovement]);
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
         await _serviceSupplier.AddSupplier(mockSupplier);
@@ -277,7 +282,8 @@ public class IntegrationTests
         Assert.True(IsItemAdded);
         Assert.Equal([testItem], await _serviceItems.GetItems());
 
-        await _serviceOrder.AddOrder(testOrder);
+        bool IsOrderAdded = await _serviceOrder.AddOrder(testOrder);
+        Assert.True(IsOrderAdded);
 
         bool IsShipmentAdded = await _serviceShipment.AddShipment(testShipment);
 
@@ -307,7 +313,7 @@ public class IntegrationTests
         ItemLine testItemLine = new(11, "Home Appliances", "");
         ItemType testItemType = new(1, "Desktop", "");
         TransferItemMovement testTransferItemMovement = new(1, 23);
-        Transfer testTransfer = new(1, "TR00001", 0, 9229, "Completed", [testTransferItemMovement]);
+        Transfer testTransfer = new(1, "TR00001", 0, 9229, "Pending", [testTransferItemMovement]);
         Item testItem = new(1, "sjQ23408K", "Face-to-face clear-thinking complexity", "must", "6523540947122", "63-OFFTq0T", "oTo304", 11, 1, 1, 47, 13, 11, 1, "SUP423", "E-86805-uTM");
         Supplier mockSupplier = new(1, "SUP0001", "Lee, Parks and Johnson", "5989 Sullivan Drives", "Apt. 996", "Port Anitaburgh", "91688", "Illinois", "Czech Republic", "Toni Barnett", "363.541.7282x36825", "LPaJ-SUP0001");
 
@@ -373,7 +379,7 @@ public class IntegrationTests
     public async Task WarehouseDeleteOrder()
     {
         Warehouse testWarehouse = new(1, "YQZZNL56", "Heemskerk cargo hub", "Karlijndreef 281", "4002 AS", "Heemskerk", "Friesland", "NL", "Fem Keijzer", "(078) 0013363", "blamore@example.net");
-        Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Delivered", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 1, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, []);
+        Order testOrder = new(1, 33, DateTime.Parse("2019-04-03T11:33:15Z"), DateTime.Parse("2019-04-07T11:33:15Z"), "ORD00001", "Bedreven arm straffen bureau.", "Pending", "Voedsel vijf vork heel.", "Buurman betalen plaats bewolkt.", "Ademen fijn volgorde scherp aardappel op leren.", 1, 0, 0, 1, 9905.13, 150.77, 372.72, 77.6, []);
 
         bool IsWarehouseAdded = await _serviceWarehouse.AddWarehouse(testWarehouse);
 

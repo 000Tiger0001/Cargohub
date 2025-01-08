@@ -567,6 +567,37 @@ namespace Cargo.Migrations
                     b.ToTable("TransferItemMovements");
                 });
 
+            modelBuilder.Entity("User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("WarehouseId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("Warehouse", b =>
                 {
                     b.Property<int>("Id")
@@ -716,6 +747,15 @@ namespace Cargo.Migrations
                         .IsRequired();
 
                     b.Navigation("Transfer");
+                });
+
+            modelBuilder.Entity("User", b =>
+                {
+                    b.HasOne("Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId");
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("Order", b =>
