@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 [Route("Cargohub")]
 public class LocationControllers : Controller
@@ -15,10 +14,8 @@ public class LocationControllers : Controller
     [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst", "Sales", "Logistics"])]
     public async Task<IActionResult> GetAllLocations()
     {
-        if (HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "supervisor" || HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "operative")
-        {
-            return Ok(await _locationAccess.GetLocationsOfUser((int)HttpContext.Session.GetInt32("UserId")!));
-        }
+        if (HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "supervisor" || HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "operative") return Ok(await _locationAccess.GetLocationsOfUser((int)HttpContext.Session.GetInt32("UserId")!));
+
         List<Location> locations = await _locationAccess.GetLocations();
         return Ok(locations);
     }

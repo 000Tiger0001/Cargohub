@@ -5,6 +5,7 @@ public class ShipmentServices
     private readonly InventoryAccess _inventoryAccess;
     private readonly ItemAccess _itemAccess;
     private readonly OrderAccess _orderAccess;
+
     public ShipmentServices(ShipmentAccess shipmentAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, InventoryAccess inventoryAccess, ItemAccess itemAccess, OrderAccess orderAccess)
     {
         _shipmentAccess = shipmentAccess;
@@ -77,11 +78,7 @@ public class ShipmentServices
                     changeInItem.Id = shipmentItemMovement.Id;
                     await _shipmentItemMovementAccess.Update(changeInItem);
                 }
-                else
-                {
-                    await _shipmentItemMovementAccess.Remove(shipmentItemMovement.Id);
-                }
-
+                else await _shipmentItemMovementAccess.Remove(shipmentItemMovement.Id);
 
                 //update inventory based on order
                 Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovement.ItemId);
@@ -95,13 +92,11 @@ public class ShipmentServices
                 if (!shipmentItemMovements.Contains(shipmentItemMovementNew))
                 {
                     await _shipmentItemMovementAccess.Add(shipmentItemMovementNew);
-
                     await _updateItemsinInventory(shipment!, inventory!, 0, shipmentItemMovementNew);
                 }
             }
             return true;
         }
-
         catch
         {
             return false;

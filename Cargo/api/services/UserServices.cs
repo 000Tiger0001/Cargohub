@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 public class UserServices
 {
 
@@ -28,6 +26,7 @@ public class UserServices
         if (users.Any(user => user.Email == email || user.Username == username)) return true;
         return false;
     }
+
     public async Task<bool> SaveUser(User user)
     {
         try

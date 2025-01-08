@@ -4,27 +4,22 @@ using Microsoft.AspNetCore.Mvc;
 public class InventoryControllers : Controller
 {
     private InventoryServices _inventoryService;
-    private UserServices _userServices;
 
-    public InventoryControllers(InventoryServices inventoryServices, UserServices userServices)
+    public InventoryControllers(InventoryServices inventoryServices)
     {
         _inventoryService = inventoryServices;
-        _userServices = userServices;
     }
 
     [HttpGet("inventories")]
     [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales", "Operative", "Supervisor"])]
     public async Task<IActionResult> GetInventories()
     {
-        if (HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "operative" || HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "supervisor")
-        {
-            return Ok(await _inventoryService.GetInventoriesforUser((int)HttpContext.Session.GetInt32("UserId")!));
-        }
+        if (HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "operative" || HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "supervisor") return Ok(await _inventoryService.GetInventoriesforUser((int)HttpContext.Session.GetInt32("UserId")!));
         return Ok(await _inventoryService.GetInventories());
     }
 
     [HttpGet("inventory/{inventoryId}")]
-    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Operative", "Floor Manager", "Supervisor", "Analyst", "Logistics", "Sales"])]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales", "Operative", "Supervisor"])]
     public async Task<IActionResult> GetInventory(int inventoryId)
     {
         if (inventoryId <= 0) return BadRequest("Cannot proccess this id. ");

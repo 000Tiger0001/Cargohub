@@ -15,6 +15,7 @@ public class InventoryServices
         _locationAccess = locationAccess;
         _locationServices = locationServices;
     }
+
     public async Task<List<Inventory>> GetInventories() => await _inventoryAccess.GetAll();
 
     public async Task<Inventory?> GetInventory(int inventoryId) => await _inventoryAccess.GetById(inventoryId);
