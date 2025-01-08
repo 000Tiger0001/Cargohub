@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Microsoft.AspNetCore.DataProtection;
+using YamlDotNet.Serialization;
+using Swashbuckle.AspNetCore.Swagger;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
@@ -79,7 +81,7 @@ builder.WebHost.ConfigureKestrel(options =>
 
 WebApplication app = builder.Build();
 
-// http://localhost:3000/swagger/v1/swagger.json
+// http://localhost:3000/swagger/v1/swagger.json - for JSON
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -87,6 +89,28 @@ if (app.Environment.IsDevelopment())
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1.0.1");
         options.RoutePrefix = string.Empty;
+    });
+
+    // For YAML - http://localhost:3000/swagger/v1/swagger.yaml
+    // For JSON - http://localhost:3000/swagger/v1/swagger.json
+    app.MapGet("/swagger/v1/swagger.yaml", async context =>
+    {
+        // Get Swagger JSON
+        var swaggerProvider = app.Services.GetRequiredService<ISwaggerProvider>();
+        var swagger = swaggerProvider.GetSwagger("v1");
+
+        // Convert JSON to YAML using YamlDotNet
+        var serializer = new SerializerBuilder().Build();
+        var yaml = serializer.Serialize(swagger);
+
+        // Save the YAML to a file
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "swagger.yaml");
+        Console.WriteLine($"Saving Swagger YAML to: {filePath}");
+        await File.WriteAllTextAsync(filePath, yaml);
+
+        // Return YAML response
+        context.Response.ContentType = "application/x-yaml";
+        await context.Response.WriteAsync(yaml);
     });
 }
 
