@@ -27,7 +27,7 @@ public class InventoryServices
     public async Task<List<Inventory>> GetInventoriesforUser(int userId)
     {
         User? user = await _userAccess.GetById(userId);
-        List<Location> locations = await _locationServices.GetLocationsInWarehouse((int)user?.Warehouse!);
+        List<Location> locations = await _locationServices.GetLocationsInWarehouse((int)user?.WarehouseId!);
         List<Inventory> inventories = await GetInventories();
         return inventories.Where(inventory => locations.Any(location => inventory.Locations!.Contains(location.Id))).ToList();
     }

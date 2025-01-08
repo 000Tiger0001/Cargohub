@@ -32,7 +32,6 @@ public class ApplicationDbContext : DbContext
                   .HasForeignKey(i => i.ItemId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
-
         modelBuilder.Entity<Location>(entity =>
         {
             entity.HasOne(l => l.Warehouse)

@@ -42,7 +42,7 @@ public class LocationServices
     {
         List<Location> locations = await GetLocations();
         User user = await _userAccess.GetById(userId);
-        return locations.Where(location => location.WarehouseId == user.Warehouse).ToList();
+        return locations.Where(location => location.WarehouseId == user.WarehouseId).ToList();
     }
 
     public async Task<bool> RemoveLocation(int locationId)

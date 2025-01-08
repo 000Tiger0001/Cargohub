@@ -22,7 +22,7 @@ public class OrderServices
     {
         User? user = await _userAccess.GetById(userId);
         List<Order> orders = await GetOrders();
-        return orders.Where(order => order.WarehouseId == user?.Warehouse).ToList()!;
+        return orders.Where(order => order.WarehouseId == user?.WarehouseId).ToList()!;
     }
 
     public async Task<List<Order>> GetOrdersInShipmentForUser(int shipmentId, int userId)
@@ -59,6 +59,7 @@ public class OrderServices
     public async Task<bool> AddOrder(Order order)
     {
         if (order is null || order.SourceId == 0 || order.OrderDate == default || order.RequestDate == default || order.Reference == "" || order.ExtraReference == "" || order.Items == null || order.Notes == "" || order.OrderDate == default || order.OrderStatus == "" || order.PickingNotes == "" || order.ShipmentId == 0 || order.ShippingNotes == "" || order.TotalAmount == 0.0 || order.TotalDiscount == 0.0 || order.TotalSurcharge == 0.0 || order.TotalTax == 0.0 || order.WarehouseId == 0) return false;
+        if (order.OrderStatus != "Delivered" && order.OrderStatus != "Packed" && order.OrderStatus != "Shipped" && order.OrderStatus != "Pending") return false;
         List<Order> orders = await GetOrders();
         Order doubleOrder = orders.FirstOrDefault(o => o.SourceId == order.SourceId && o.BillTo == order.BillTo && o.ExtraReference == order.ExtraReference && o.Items == order.Items && o.Notes == order.Notes && o.OrderDate == order.OrderDate && o.OrderStatus == order.OrderStatus && o.PickingNotes == order.PickingNotes && o.Reference == order.Reference && o.RequestDate == order.RequestDate && o.ShipmentId == order.ShipmentId && o.ShippingNotes == o.ShippingNotes && o.ShipTo == order.ShipTo && o.TotalAmount == order.TotalAmount && o.TotalDiscount == order.TotalDiscount)!;
         if (doubleOrder is not null) return false;
@@ -68,8 +69,8 @@ public class OrderServices
 
     public async Task<bool> UpdateOrder(Order order)
     {
-        if (order is null || order.Id <= 0 || order.OrderStatus == "Delivered") return false;
-        order.UpdatedAt = DateTime.Now;
+        if (order is null || order.Id <= 0) return false;
+        if (order.OrderStatus != "Delivered" && order.OrderStatus != "Packed" && order.OrderStatus != "Shipped" && order.OrderStatus != "Pending") return false; order.UpdatedAt = DateTime.Now;
         return await _orderAccess.Update(order);
     }
 

@@ -30,7 +30,14 @@ public class UserServices
     }
     public async Task<bool> SaveUser(User user)
     {
-        if (await DoesUserExist(user.Username, user.Email)) return false;
-        return await _userAccess.Add(user);
+        try
+        {
+            if (await DoesUserExist(user.Username!, user.Email!)) return false;
+            return await _userAccess.Add(user);
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

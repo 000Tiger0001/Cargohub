@@ -588,10 +588,12 @@ namespace Cargo.Migrations
                     b.Property<string>("Username")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("Warehouse")
+                    b.Property<int?>("WarehouseId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("Users");
                 });
@@ -745,6 +747,15 @@ namespace Cargo.Migrations
                         .IsRequired();
 
                     b.Navigation("Transfer");
+                });
+
+            modelBuilder.Entity("User", b =>
+                {
+                    b.HasOne("Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId");
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("Order", b =>

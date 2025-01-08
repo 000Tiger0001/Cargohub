@@ -25,8 +25,14 @@ public class User : IHasId
 
     [JsonProperty("role")]
     public string? Role { get; set; }
+
     [JsonProperty("warehouse")]
-    public int? Warehouse { get; set; }
+    public int? WarehouseId { get; set; }
+
+    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [ForeignKey("WarehouseId")]
+    public virtual Warehouse? Warehouse { get; set; }
 
     public User() { }
 
