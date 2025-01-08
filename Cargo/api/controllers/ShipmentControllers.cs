@@ -62,10 +62,7 @@ public class ShipmentControllers : Controller
     [RightsFilter(["Admin", "Warehouse Manager", "Logistics"])]
     public async Task<IActionResult> UpdateItemsInOrder([FromBody] List<ShipmentItemMovement> shipmentItemMovements, int shipmentId)
     {
-        if (await _shipmentService.UpdateItemsinShipment(shipmentId, shipmentItemMovements))
-        {
-            return Ok("Items updated");
-        }
+        if (await _shipmentService.UpdateItemsinShipment(shipmentId, shipmentItemMovements)) return Ok("Items updated");
         return BadRequest("Couldn't update items.");
     }
 
