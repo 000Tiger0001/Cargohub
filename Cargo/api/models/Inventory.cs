@@ -31,6 +31,7 @@ public class Inventory : IHasId
     }
 
     [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     [ForeignKey("ItemId")]
     public virtual Item? Item { get; set; }
 

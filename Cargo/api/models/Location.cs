@@ -13,6 +13,7 @@ public class Location : IHasId
     public int WarehouseId { get; set; }
 
     [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
     [ForeignKey("WarehouseId")]
     public virtual Warehouse? Warehouse { get; set; }
 
