@@ -131,7 +131,5 @@ int seconds = elapsedTime.Seconds;
 int milliseconds = elapsedTime.Milliseconds;
 
 Console.WriteLine($"Time taken by TransferJsonToDb: {minutes} minutes, {seconds} seconds, and {milliseconds} milliseconds");
-Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalMinutes:F2} minutes");
-Console.WriteLine($"Time taken by TransferJsonToDb: {elapsedTime.TotalSeconds:F2} seconds");
 
 app.Run();
