@@ -51,7 +51,21 @@ builder.Services.AddTransient<UserAccess>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Cargo API",
+        Version = "v1.0.1"
+    });
+
+    c.AddServer(new Microsoft.OpenApi.Models.OpenApiServer
+    {
+        Url = "https://localhost:3000"
+    });
+});
 
 // DB
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -65,13 +79,13 @@ builder.WebHost.ConfigureKestrel(options =>
 
 WebApplication app = builder.Build();
 
-
+// http://localhost:3000/swagger/v1/swagger.json
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1.0.1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1.0.1");
         options.RoutePrefix = string.Empty;
     });
 }
