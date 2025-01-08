@@ -14,7 +14,7 @@ public class ItemControllers : Controller
     [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales", "Operative", "Supervisor"])]
     public async Task<IActionResult> GetItems()
     {
-        if (HttpContext.Session.GetString("Role") == "Operative" || HttpContext.Session.GetString("Role") == "Supervisor")
+        if (HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "operative" || HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "supervisor")
         {
             return Ok(await _itemService.GetItemsforUser((int)HttpContext.Session.GetInt32("UserId")!));
         }

@@ -14,7 +14,7 @@ public class OrderControllers : Controller
     [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst", "Sales", "Logistics"])]
     public async Task<IActionResult> GetOrders()
     {
-        if (HttpContext.Session.GetString("Role") == "Operative" || HttpContext.Session.GetString("Role") == "Supervisor") return Ok(await _orderServices.GetOrdersForUser((int)HttpContext.Session.GetInt32("UserId")!));
+        if (HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "operative" || HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "supervisor") return Ok(await _orderServices.GetOrdersForUser((int)HttpContext.Session.GetInt32("UserId")!));
         return Ok(await _orderServices.GetOrders());
     }
 

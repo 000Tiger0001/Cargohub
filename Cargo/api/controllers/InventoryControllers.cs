@@ -14,7 +14,7 @@ public class InventoryControllers : Controller
     [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales", "Operative", "Supervisor"])]
     public async Task<IActionResult> GetInventories()
     {
-        if (HttpContext.Session.GetString("Role") == "Operative" || HttpContext.Session.GetString("Role") == "Supervisor") return Ok(await _inventoryService.GetInventoriesforUser((int)HttpContext.Session.GetInt32("UserId")!));
+        if (HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "operative" || HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "supervisor") return Ok(await _inventoryService.GetInventoriesforUser((int)HttpContext.Session.GetInt32("UserId")!));
         return Ok(await _inventoryService.GetInventories());
     }
 

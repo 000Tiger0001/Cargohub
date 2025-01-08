@@ -28,10 +28,10 @@ public class InventoryServices
 
     public async Task<List<Inventory>> GetInventoriesforUser(int userId)
     {
-        User? user = await _userAccess.GetById(userId);
-        List<Location> locations = await _locationServices.GetLocationsInWarehouse((int)user?.WarehouseId!);
+        List<Location> locations = await _locationServices.GetLocationsOfUser(userId);
+        List<int> locationIds = locations.Select(location => location.Id).ToList();
         List<Inventory> inventories = await GetInventories();
-        return inventories.Where(inventory => locations.Any(location => inventory.Locations!.Contains(location.Id))).ToList();
+        return inventories.Where(inventory => inventory.Locations!.Any(location => locationIds.Contains(location))).ToList();
     }
 
     public async Task<Dictionary<string, int>> GetInventoryTotalsForItem(int itemId)
