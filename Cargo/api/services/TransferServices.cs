@@ -23,7 +23,7 @@ public class TransferServices
 
     public async Task<bool> AddTransfer(Transfer transfer)
     {
-        if (transfer is null || transfer.Reference == "" || transfer.TransferStatus == "") return false;
+        if (transfer is null || transfer.Reference == "" || transfer.TransferStatus == "" || transfer.TransferStatus == "Completed") return false;
         List<Transfer> transfers = await GetTransfers();
         if (transfers.FirstOrDefault(t => t.Reference == transfer.Reference && t.TransferFrom == transfer.TransferFrom && t.TransferTo == transfer.TransferTo && t.TransferStatus == transfer.TransferStatus) is not null) return false;
         foreach (TransferItemMovement transferItemMovement in transfer.Items!) if (await _itemAccess.GetById(transferItemMovement.ItemId) is null) return false;
