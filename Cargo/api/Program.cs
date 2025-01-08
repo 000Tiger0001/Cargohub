@@ -94,7 +94,7 @@ app.UseSession();
 app.UseRouting();
 app.MapControllers();
 app.UseAuthorization();
-app.Urls.Add("http://localhost:3000");
+app.Urls.Add("https://localhost:3000");
 
 
 var stopwatch = Stopwatch.StartNew();
