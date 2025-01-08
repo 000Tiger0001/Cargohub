@@ -41,8 +41,8 @@ public class LocationServices
     public async Task<List<Location>> GetLocationsOfUser(int userId)
     {
         List<Location> locations = await GetLocations();
-        User user = await _userAccess.GetById(userId);
-        return locations.Where(location => location.WarehouseId == user.Warehouse).ToList();
+        User? user = await _userAccess.GetById(userId);
+        return locations.Where(location => location.WarehouseId == user!.Warehouse).ToList();
     }
 
     public async Task<bool> RemoveLocation(int locationId)

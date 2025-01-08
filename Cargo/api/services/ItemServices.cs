@@ -42,7 +42,12 @@ public class ItemServices
         List<Item> items = new();
         foreach (int itemId in itemsId)
         {
-            items.Add(await GetItem(itemId));
+            Item? item = await GetItem(itemId);
+            if (item is not null)
+            {
+                items.Add(item);
+            }
+
         }
         return items;
     }

@@ -13,6 +13,7 @@ public class InventoryServices
         _itemAccess = itemAccess;
         _userAccess = userAccess;
         _locationAccess = locationAccess;
+        _locationServices = locationServices;
     }
     public async Task<List<Inventory>> GetInventories() => await _inventoryAccess.GetAll();
 
