@@ -53,9 +53,9 @@ public class User : IHasId
 
     public override int GetHashCode() => Id.GetHashCode();
 
-    public async Task<bool> HasRight(List<string> rights)
+    public bool HasRight(List<string> rights)
     {
-        if (rights.Contains(Role)) return true;
+        if (rights.Contains(Role!)) return true;
         return false;
     }
 }

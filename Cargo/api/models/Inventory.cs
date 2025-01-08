@@ -30,6 +30,7 @@ public class Inventory : IHasId
         }
     }
 
+    [JsonIgnore]
     [ForeignKey("ItemId")]
     public virtual Item? Item { get; set; }
 
