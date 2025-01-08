@@ -44,11 +44,9 @@ public class ItemServices
         {
             Item? item = await GetItem(itemId);
             if (item is not null) items.Add(item);
-
         }
         return items;
     }
-
 
     public async Task<List<Item>> GetItemsForItemGroup(int itemGroupId)
     {

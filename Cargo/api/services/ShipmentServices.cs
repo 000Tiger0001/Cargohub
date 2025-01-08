@@ -5,6 +5,7 @@ public class ShipmentServices
     private readonly InventoryAccess _inventoryAccess;
     private readonly ItemAccess _itemAccess;
     private readonly OrderAccess _orderAccess;
+
     public ShipmentServices(ShipmentAccess shipmentAccess, ShipmentItemMovementAccess shipmentItemMovementAccess, InventoryAccess inventoryAccess, ItemAccess itemAccess, OrderAccess orderAccess)
     {
         _shipmentAccess = shipmentAccess;
@@ -96,7 +97,6 @@ public class ShipmentServices
             }
             return true;
         }
-
         catch
         {
             return false;

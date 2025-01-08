@@ -21,6 +21,7 @@ public class WarehouseServices
         if (doubleWarehouse is not null) return false;
         return await _warehouseAccess.Add(warehouse);
     }
+
     public async Task<bool> UpdateWarehouse(Warehouse warehouse)
     {
         if (warehouse is null || warehouse.Id <= 0) return false;

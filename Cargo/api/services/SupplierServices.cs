@@ -8,6 +8,7 @@ public class SupplierServices
         _supplierAccess = supplierAccess;
         _itemAccess = itemAccess;
     }
+
     public async Task<List<Supplier>> GetSuppliers() => await _supplierAccess.GetAll();
 
     public async Task<Supplier?> GetSupplier(int supplierId) => await _supplierAccess.GetById(supplierId);
