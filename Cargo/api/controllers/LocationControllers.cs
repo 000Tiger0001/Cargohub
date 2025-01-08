@@ -15,7 +15,6 @@ public class LocationControllers : Controller
     public async Task<IActionResult> GetAllLocations()
     {
         if (HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "supervisor" || HttpContext.Session.GetString("Role")!.ToLowerInvariant() == "operative") return Ok(await _locationAccess.GetLocationsOfUser((int)HttpContext.Session.GetInt32("UserId")!));
-
         List<Location> locations = await _locationAccess.GetLocations();
         return Ok(locations);
     }
