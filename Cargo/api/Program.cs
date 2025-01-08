@@ -49,6 +49,11 @@ builder.Services.AddTransient<TransferItemMovementAccess>();
 builder.Services.AddTransient<ShipmentItemMovementAccess>();
 builder.Services.AddTransient<UserAccess>();
 
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// DB
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -60,11 +65,15 @@ builder.WebHost.ConfigureKestrel(options =>
 
 WebApplication app = builder.Build();
 
-if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
-else
+
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1.0.1");
+        options.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseStaticFiles();
