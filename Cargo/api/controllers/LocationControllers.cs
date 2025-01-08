@@ -15,10 +15,7 @@ public class LocationControllers : Controller
     [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Operative", "Supervisor", "Analyst", "Sales", "Logistics"])]
     public async Task<IActionResult> GetAllLocations()
     {
-        if (HttpContext.Session.GetString("Role") == "Supervisor" || HttpContext.Session.GetString("Role") == "Operative")
-        {
-            return Ok(await _locationAccess.GetLocationsOfUser((int)HttpContext.Session.GetInt32("UserId")!));
-        }
+        if (HttpContext.Session.GetString("Role") == "Supervisor" || HttpContext.Session.GetString("Role") == "Operative") return Ok(await _locationAccess.GetLocationsOfUser((int)HttpContext.Session.GetInt32("UserId")!));
         List<Location> locations = await _locationAccess.GetLocations();
         return Ok(locations);
     }

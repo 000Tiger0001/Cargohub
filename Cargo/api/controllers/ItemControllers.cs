@@ -22,7 +22,7 @@ public class ItemControllers : Controller
     }
 
     [HttpGet("item/{itemId}")]
-    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Operative", "Floor Manager", "Supervisor", "Analyst", "Logistics", "Sales"])]
+    [RightsFilter(["Admin", "Warehouse Manager", "Inventory Manager", "Floor Manager", "Analyst", "Logistics", "Sales", "Operative", "Supervisor"])]
     public async Task<IActionResult> GetItem(int itemId)
     {
         if (itemId <= 0) return BadRequest("Can't proccess this id. ");

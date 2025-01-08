@@ -12,7 +12,6 @@ public class RightsFilter : Attribute, IAsyncActionFilter
     }
     public async Task OnActionExecutionAsync(ActionExecutingContext actioncontext, ActionExecutionDelegate next)
     {
-
         if (actioncontext.HttpContext.Session.GetInt32("UserId") is null)
         {
             Console.WriteLine($"You are not logged in!");
@@ -25,7 +24,6 @@ public class RightsFilter : Attribute, IAsyncActionFilter
             actioncontext.HttpContext.Response.StatusCode = 401;
             return;
         }
-
         await next.Invoke();
     }
 }
