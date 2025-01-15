@@ -13,11 +13,11 @@ public class UserControllers : Controller
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] User user)
+    public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
         try
         {
-            User LoggedInUser = await _userServices.GetUser(user.Username!, user.Password!);
+            User LoggedInUser = await _userServices.GetUser(loginRequest.Email!, loginRequest.Password!);
             if (LoggedInUser is null) return BadRequest("User not found.");
             if (HttpContext.Session.GetInt32("UserId") != null) return BadRequest("You are already logged in on this session!");
             if (HttpContext.Session.GetInt32("UserId") == LoggedInUser.Id) return BadRequest("User is already logged in. ");
