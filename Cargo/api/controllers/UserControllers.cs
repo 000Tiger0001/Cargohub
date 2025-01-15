@@ -37,7 +37,8 @@ public class UserControllers : Controller
         if (user is null) return BadRequest("This is not a user.");
         if (user.Email == "" || user.Username == "" || user.Role == "" || user.Password == "" || user.Address == "") return BadRequest("Data is not complete.");
         if (!RightsFilter.validRoles.Contains(user.Role!.ToLowerInvariant())) return BadRequest("This Role is invalid!");
-        if (user.Role.ToLowerInvariant() == "inventory manager" || user.Role.ToLowerInvariant() == "floor manager" || user.Role.ToLowerInvariant() == "operative" || user.Role.ToLowerInvariant() == "supervisor") if (user.WarehouseId is null) return BadRequest("Data is not Complete for this Role! You need a Warehouse.");
+        if (user.Role.ToLowerInvariant() == "inventory manager" || user.Role.ToLowerInvariant() == "floor manager" || user.Role.ToLowerInvariant() == "operative" ||
+         user.Role.ToLowerInvariant() == "supervisor") if (user.WarehouseId is null) return BadRequest("Data is not Complete for this Role! You need a Warehouse.");
         bool IsUserWritenToJson = await _userServices.SaveUser(user);
         if (!IsUserWritenToJson) return BadRequest("Something went wrong!");
         return Ok("User registered");
