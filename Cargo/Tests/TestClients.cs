@@ -41,6 +41,8 @@ public class ClientTests
     [Fact]
     public async Task GetClient()
     {
+        Console.WriteLine("Imagine Some logic");
+        Assert.True(1 == 2, "Showcase Error");
         Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
 
         await _service.AddClient(mockClient);
