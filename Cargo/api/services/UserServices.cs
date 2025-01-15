@@ -8,10 +8,10 @@ public class UserServices
         _userAccess = userAccess;
     }
 
-    public async Task<User> GetUser(string username, string password)
+    public async Task<User> GetUser(string email, string password)
     {
         List<User> users = await _userAccess.GetAll();
-        return users.First(user => user.Username == username && user.Password == password);
+        return users.First(user => user.Email == email && user.Password == password);
     }
 
     public async Task<User> GetUser(int id)
@@ -20,10 +20,10 @@ public class UserServices
         return users.First(user => user.Id == id);
     }
 
-    public async Task<bool> DoesUserExist(string username, string email)
+    public async Task<bool> DoesUserExist(string email)
     {
         List<User> users = await _userAccess.GetAll();
-        if (users.Any(user => user.Email == email || user.Username == username)) return true;
+        if (users.Any(user => user.Email == email)) return true;
         return false;
     }
 
@@ -31,7 +31,7 @@ public class UserServices
     {
         try
         {
-            if (await DoesUserExist(user.Username!, user.Email!)) return false;
+            if (await DoesUserExist(user.Email!)) return false;
             return await _userAccess.Add(user);
         }
         catch
