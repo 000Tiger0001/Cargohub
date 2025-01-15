@@ -60,6 +60,17 @@ public class ShipmentServices
                 return true;
             }
         }
+
+        if (shipment!.ShipmentType == 'I')
+        {
+            if (shipment!.ShipmentStatus == "Pending")
+            {
+                int changeamount = newItemMovement.Amount - oldAmount;
+                inventory.TotalExpected += changeamount;
+                await _inventoryAccess.Update(inventory);
+                return true;
+            }
+        }
         return false;
     }
 
