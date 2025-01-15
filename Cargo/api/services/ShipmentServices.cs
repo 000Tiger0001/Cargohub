@@ -80,36 +80,41 @@ public class ShipmentServices
         {
             List<ShipmentItemMovement> shipmentItemMovements = await _shipmentItemMovementAccess.GetAllByOrderId(shipmentId);
             Shipment? shipment = await _shipmentAccess.GetById(shipmentId);
-            foreach (ShipmentItemMovement? shipmentItemMovement in shipmentItemMovements)
-            {
-                ShipmentItemMovement changeInItem = items.First(item => item.Id == shipmentItemMovement!.ItemId);
 
-                if (items.Select(item => item.ItemId).Contains(shipmentItemMovement!.ItemId))
-                {
-                    changeInItem.Id = shipmentItemMovement.Id;
-                    await _shipmentItemMovementAccess.Update(changeInItem);
-                }
-                else await _shipmentItemMovementAccess.Remove(shipmentItemMovement.Id);
-
-                //update inventory based on order
-                Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovement.ItemId);
-                await _updateItemsinInventory(shipment!, inventory!, shipmentItemMovement.Amount, changeInItem);
-            }
 
             //check for new Items that were not in old
             foreach (ShipmentItemMovement shipmentItemMovementNew in items)
             {
                 Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovementNew.ItemId);
-                if (!shipmentItemMovements.Contains(shipmentItemMovementNew))
+                if (!shipmentItemMovements.Any(sim => sim.ItemId == shipmentItemMovementNew.ItemId))
                 {
+                    shipmentItemMovementNew.Shipment_Id = shipmentId;
                     await _shipmentItemMovementAccess.Add(shipmentItemMovementNew);
                     await _updateItemsinInventory(shipment!, inventory!, 0, shipmentItemMovementNew);
                 }
             }
+            foreach (ShipmentItemMovement? shipmentItemMovement in shipmentItemMovements)
+            {
+                ShipmentItemMovement changeInItem = items.FirstOrDefault(item => item.ItemId == shipmentItemMovement!.ItemId)!;
+                Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(shipmentItemMovement.ItemId);
+                if (changeInItem is null)
+                {
+                    await _shipmentItemMovementAccess.Remove(shipmentItemMovement.Id);
+                    await _updateItemsinInventory(shipment!, inventory!, shipmentItemMovement.Amount, new() { Amount = 0 });
+                    continue;
+                }
+                changeInItem.Id = shipmentItemMovement.Id;
+                changeInItem.Shipment_Id = shipmentId;
+                if (items.Select(item => item.ItemId).Contains(shipmentItemMovement!.ItemId)) await _shipmentItemMovementAccess.Update(changeInItem);
+
+                //update inventory based on order\
+                await _updateItemsinInventory(shipment!, inventory!, shipmentItemMovement.Amount, changeInItem);
+            }
             return true;
         }
-        catch
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             return false;
         }
     }

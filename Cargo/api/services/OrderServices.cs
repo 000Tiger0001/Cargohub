@@ -99,38 +99,46 @@ public class OrderServices
     {
         try
         {
-            //check for old items to update or to remove
             Order? order = await _orderAccess.GetById(orderId);
             List<OrderItemMovement> orderItemMovements = await _orderItemMovementAccess.GetAllByOrderId(orderId);
-            foreach (OrderItemMovement orderItemMovement in orderItemMovements)
-            {
-                OrderItemMovement changeInItem = items.First(item => item.Id == orderItemMovement.ItemId);
-                Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(orderItemMovement.ItemId);
-                changeInItem.Id = orderItemMovement.Id;
-
-                //update existing item and item is getting updated
-                if (items.Select(item => item.ItemId).Contains(orderItemMovement.ItemId)) await _orderItemMovementAccess.Update(changeInItem);
-                //remove item completely
-                else await _orderItemMovementAccess.Remove(orderItemMovement.Id);
-                await _updateItemsinInventory(order!, inventory!, orderItemMovement.Amount, changeInItem);
-            }
 
             //check for new Items that were not in old
             foreach (OrderItemMovement orderItemMovementNew in items)
             {
                 Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(orderItemMovementNew.ItemId);
-                if (!orderItemMovements.Contains(orderItemMovementNew))
+                if (!orderItemMovements.Any(oim => orderItemMovementNew.ItemId == oim.ItemId))
                 {
+                    orderItemMovementNew.OrderId = orderId;
                     await _orderItemMovementAccess.Add(orderItemMovementNew);
 
                     //update inventory based on order
                     await _updateItemsinInventory(order!, inventory!, 0, orderItemMovementNew);
                 }
             }
+
+            //check for old items to update or to remove
+            foreach (OrderItemMovement orderItemMovement in orderItemMovements)
+            {
+                OrderItemMovement changeInItem = items.FirstOrDefault(item => item.ItemId == orderItemMovement.ItemId)!;
+                Inventory? inventory = await _inventoryAccess.GetInventoryByItemId(orderItemMovement.ItemId);
+                if (changeInItem is null)
+                {
+                    await _orderItemMovementAccess.Remove(orderItemMovement.Id);
+                    await _updateItemsinInventory(order!, inventory!, orderItemMovement.Amount, new() { Amount = 0 });
+                    continue;
+                }
+                changeInItem.Id = orderItemMovement.Id;
+                changeInItem.OrderId = orderId;
+                //update existing item and item is getting updated
+                if (items.Select(item => item.ItemId).Contains(orderItemMovement.ItemId)) await _orderItemMovementAccess.Update(changeInItem);
+                //remove item completely
+                await _updateItemsinInventory(order!, inventory!, orderItemMovement.Amount, changeInItem);
+            }
             return true;
         }
-        catch
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             return false;
         }
     }
