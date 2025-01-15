@@ -17,13 +17,13 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
     public async Task<bool> AddMany(List<T> data)
     {
-        foreach (var entity in data)
+        foreach (T? entity in data)
         {
             if (entity == null) continue;
 
             // Detach the entity from the context if it is already being tracked
             DetachEntity(entity);
-            var existingEntity = await GetById(entity.Id);
+            T? existingEntity = await GetById(entity.Id);
 
             if (existingEntity != null) continue;
 
@@ -65,11 +65,11 @@ public abstract class BaseAccess<T> where T : class, IHasId
         // Detach the entity from the context if it is already being tracked
         DetachEntity(entity);
 
-        var existingEntity = await GetById(entity.Id!);
+        T? existingEntity = await GetById(entity.Id!);
         if (existingEntity != null) return false;
 
         await DB.AddAsync(entity);
-        var changes = await _context.SaveChangesAsync();
+        int changes = await _context.SaveChangesAsync();
 
         // Clear the change tracker after the operation
         ClearChangeTracker();
@@ -84,12 +84,12 @@ public abstract class BaseAccess<T> where T : class, IHasId
         DetachEntity(entity);
 
         // Check if the entity exists before updating
-        var existingEntity = await GetById(entity.Id!);
+        T? existingEntity = await GetById(entity.Id!);
 
         if (existingEntity == null) return false;
 
         DB.Update(entity);
-        var changes = await _context.SaveChangesAsync();
+        int changes = await _context.SaveChangesAsync();
 
         ClearChangeTracker();
         // Return true if the entity was successfully updated
@@ -98,12 +98,12 @@ public abstract class BaseAccess<T> where T : class, IHasId
 
     public async Task<bool> Remove(int id)
     {
-        var entity = await GetById(id);
+        T? entity = await GetById(id);
         // Retrieve entity to ensure it exists
         if (entity is null) return false;
 
         DB.Remove(entity);
-        var changes = await _context.SaveChangesAsync();
+        int changes = await _context.SaveChangesAsync();
         // Return true if the entity was successfully deleted
         return changes > 0;
     }
