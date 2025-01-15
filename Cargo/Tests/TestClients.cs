@@ -26,6 +26,8 @@ public class ClientTests
     [Fact]
     public async Task GetAllClients()
     {
+        Console.WriteLine("Imagine some logic here but with an error");
+        Assert.True(1 == 2, "Showcase Error");
         Client mockClient = new(1, "testName", "LOC1", "testCity", "1234AB", "testProvince", "testCountry", "testName", "testPhone", "testEmail");
 
         Assert.Empty(await _service.GetClients());
