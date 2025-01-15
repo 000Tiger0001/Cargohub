@@ -31,7 +31,7 @@ public class WarehouseTests
     public async Task GetAllWarehouses()
     {
         Warehouse mockWarehouse = new(1, "YQZZNL56", "Heemskerk cargo hub", "Karlijndreef 281", "4002 AS", "Heemskerk", "Friesland", "NL", "Fem Keijzer", "(078) 0013363", "blamore@example.net");
-        
+
         Assert.Empty(await _service.GetWarehouses());
 
         await _service.AddWarehouse(mockWarehouse);
@@ -46,6 +46,8 @@ public class WarehouseTests
     [Fact]
     public async Task GetWarehouse()
     {
+        Console.WriteLine("Imagine Some logic but with an Error");
+        Assert.True(1 == 2, "Showcase Error");
         Warehouse mockWarehouse = new(1, "YQZZNL56", "Heemskerk cargo hub", "Karlijndreef 281", "4002 AS", "Heemskerk", "Friesland", "NL", "Fem Keijzer", "(078) 0013363", "blamore@example.net");
 
         await _service.AddWarehouse(mockWarehouse);
