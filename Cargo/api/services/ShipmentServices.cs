@@ -34,7 +34,7 @@ public class ShipmentServices
         Shipment doubleShipment = shipments.FirstOrDefault(s => s.OrderId == shipment.OrderId && s.SourceId == shipment.SourceId && s.OrderDate == shipment.OrderDate && s.RequestDate == shipment.RequestDate && s.ShipmentDate == shipment.ShipmentDate && s.ShipmentType == shipment.ShipmentType && s.Notes == shipment.Notes && s.CarrierCode == shipment.CarrierCode && s.CarrierDescription == shipment.CarrierDescription && s.ServiceCode == shipment.ServiceCode && s.PaymentType == shipment.PaymentType && s.TransferMode == shipment.TransferMode && s.TotalPackageCount == shipment.TotalPackageCount && s.TotalPackageWeight == shipment.TotalPackageWeight && s.Items == shipment.Items)!;
         List<Item> items = await _itemAccess.GetAll();
         List<Order> orders = await _orderAccess.GetAll();
-        Order foundOrder = orders.FirstOrDefault(o => o.ShipmentId == shipment.Id)!;
+        Order foundOrder = orders.FirstOrDefault(o => o.OrderId == shipment.OrderId)!;
         if (doubleShipment is not null || foundOrder is null) return false;
         foreach (ShipmentItemMovement shipmentItemMovement in shipment.Items!) if (items.FirstOrDefault(i => i.Id == shipmentItemMovement.ItemId) is null) return false;
         return await _shipmentAccess.Add(shipment);
